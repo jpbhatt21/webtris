@@ -14,6 +14,7 @@ function App() {
       color: bgcol,
     }))
   ));
+  const [pieceCount,setPieceCount] = useState(0);
   const [keys,setKeys] = useState({left:false,right:false,down:false,up:false,space:false});
   // console.log(board);
   let random = Math.floor(Math.random() * bag.length);
@@ -91,8 +92,9 @@ function App() {
     let speed=1000; //smaller is faster, in ms
     let lrSpeed=100; //smaller is faster, in ms
     let upSpeed=250; //smaller is faster, in ms
-    console.log(prev);
+    console.log("star")
   inter=setInterval(()=>{
+    
     cur=new Date().getTime();
     if(cur-movClock>=lrSpeed && keys2.left && act[0][1]!==0 && act[1][1]!==0 && act[2][1]!==0 && act[3][1]!==0 && !board[act[0][0]][act[0][1]-1].occupied && !board[act[1][0]][act[1][1]-1].occupied && !board[act[2][0]][act[2][1]-1].occupied && !board[act[3][0]][act[3][1]-1].occupied){
       act[0][1]--;
@@ -118,8 +120,9 @@ function App() {
       movClock=new Date().getTime();
       setActive(prev=>[...act]);
     }
-    if(cur-rotClock>=lrSpeed && keys2.space){
-      rotClock=new Date().getTime();
+    if(cur-rotClock>=150 && keys2.space){
+      console.log("rot", cur, rotClock);
+      rotClock=cur;
       [act,rot]=rotPiece(board,shape,rot,act);
     }
     if(cur-upClock>=upSpeed && keys2.up){
@@ -129,19 +132,19 @@ function App() {
         act[2][0]++;
         act[3][0]++;
       }
-      // act.forEach((pos:number[])=>{
-      //   board[pos[0]][pos[1]].occupied=true;
-      // });
-      // setBoard(board);
-      let random = 0//Math.floor(Math.random() * bag.length);
+      act.forEach((pos:number[])=>{
+        board[pos[0]][pos[1]].occupied=true;
+      });
+      setBoard(board);
+      let random = Math.floor(Math.random() * bag.length);
       let activePos=[
         [[0,3],[0,4],[0,5],[0,6]],
         [[0,3],[1,3],[1,4],[1,5]],
-        [[1,3],[1,4],[1,5],[0,5]],
+        [[0,5],[1,5],[1,4],[1,3]],
         [[0,4],[0,5],[1,4],[1,5]],
-        [[0,4],[0,5],[1,3],[1,4]],
+        [[0,4],[0,5],[1,4],[1,3]],
+        [[0,3],[0,4],[1,4],[1,5]],
         [[0,4],[1,3],[1,4],[1,5]],
-        [[0,3],[0,4],[1,4],[1,5]]
       ]
       setActive(activePos[random]);
       shape=random;
@@ -166,12 +169,12 @@ function App() {
       let activePos=[
         [[0,3],[0,4],[0,5],[0,6]],
         [[0,3],[1,3],[1,4],[1,5]],
-        [[1,3],[1,4],[1,5],[0,5]],
+        [[0,5],[1,5],[1,4],[1,3]],
         [[0,4],[0,5],[1,4],[1,5]],
-        [[0,4],[0,5],[1,3],[1,4]],
+        [[0,4],[0,5],[1,4],[1,3]],
+        [[0,3],[0,4],[1,4],[1,5]],
         [[0,4],[1,3],[1,4],[1,5]],
-        [[0,3],[0,4],[1,4],[1,5]]
-      ]
+      ] 
       setActive(activePos[random]);
       act=JSON.parse(JSON.stringify(activePos[random]));
       shape=random;
@@ -205,15 +208,16 @@ function App() {
           ))
         ))}
         {
-          active.map((pos)=>(
+          active.map((pos,ind)=>(
             <rect
+            className="duration-100 ease-in-out"
               width={100}
               height={100}
               rx={10}
               x={5 + pos[1] * 105}
               y={5 + pos[0] * 105}
               fill={act}
-              key={`${pos[0]}-${pos[1]}`}
+              key={"act"+ind}
             />
           ))
         }

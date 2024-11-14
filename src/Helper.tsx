@@ -60,16 +60,40 @@ export function rotPiece(board:any,shape:number,rot:number,act:any):any {
                     }
                     break;
                 case 1:
-                    if(act[1][1]>0 && act[1][1]+2<10 && !board[act[1][0]][act[1][1]-1].occupied && !board[act[1][0]][act[1][1]+1].occupied && !board[act[1][0]][act[1][1]+2].occupied){
+                    if(act[1][1]-1>0 && act[1][1]+1<10 && !board[act[1][0]][act[1][1]+1].occupied && !board[act[1][0]][act[1][1]-1].occupied && !board[act[1][0]][act[1][1]-2].occupied){
+                        act[0][0]+=1
+                        act[0][1]+=1
+                        act[2][0]-=1
+                        act[2][1]-=1
+                        act[3][0]-=2
+                        act[3][1]-=2
+                        rot=2
+                    }
+                    break;  
+                case 2:
+                    if(act[1][0]-1>0 && act[1][0]+2<20 && !board[act[1][0]-1][act[1][1]].occupied && !board[act[1][0]+1][act[1][1]].occupied && !board[act[1][0]-2][act[1][1]].occupied){
                         act[0][0]+=1
                         act[0][1]-=1
                         act[2][0]-=1
                         act[2][1]+=1
                         act[3][0]-=2
                         act[3][1]+=2
+                        rot=3
+                    }
+                    break;
+                case 3:
+                    if(act[1][1]-1>0 && act[1][1]+1<9 && !board[act[1][0]][act[1][1]+1].occupied && !board[act[1][0]][act[1][1]-1].occupied && !board[act[1][0]][act[1][1]+2].occupied){
+                        act[0][0]-=1
+                        act[0][1]-=1
+                        act[2][0]+=1
+                        act[2][1]+=1
+                        act[3][0]+=2
+                        act[3][1]+=2
                         rot=0
                     }
-                    break;  
+                    break;
+
+                    
                 
                 
 
@@ -78,8 +102,7 @@ export function rotPiece(board:any,shape:number,rot:number,act:any):any {
         case 1:
             switch(rot){
                 case 0:
-                    console.log("case 0",act)
-                    if(act[2][0]>0 && act[2][0]+1<20 && act[2][1]+1<10 && !board[act[2][0]-1][act[2][1]].occupied && !board[act[2][0]+1][act[2][1]].occupied && !board[act[2][0]-1][act[2][1]+1].occupied){
+                    if(act[2][0]<19 && !board[act[2][0]-1][act[2][1]+1].occupied  && !board[act[2][0]-1][act[2][1]].occupied  && !board[act[2][0]+1][act[2][1]].occupied){
                         act[0][1]+=2
                         act[1][0]-=1
                         act[1][1]+=1
@@ -89,8 +112,8 @@ export function rotPiece(board:any,shape:number,rot:number,act:any):any {
                     }
                     break;
                 case 1:
-                    console.log("case 1",act)
-                    if(act[2][1]>0 && act[2][1]+1<10  && act[2][0]+1<20 && !board[act[2][0]+1][act[2][1]+1].occupied && !board[act[2][0]][act[2][0]+1].occupied && !board[act[2][0]][act[2][0]-1].occupied){
+                    
+                    if( act[2][1]>0 && !board[act[2][0]+1][act[2][1]+1].occupied  && !board[act[2][0]][act[2][1]+1].occupied  && !board[act[2][0]][act[2][1]-1].occupied){
                         act[0][0]+=2
                         act[1][0]+=1
                         act[1][1]+=1
@@ -100,8 +123,7 @@ export function rotPiece(board:any,shape:number,rot:number,act:any):any {
                     }
                     break;
                 case 2:
-                    console.log("case 2",act)
-                    if(act[2][0]>0 && act[2][0]+1<20  && act[2][1]-1>0 && !board[act[2][0]+1][act[2][1]].occupied && !board[act[2][0]-1][act[2][1]].occupied && !board[act[2][0]+1][act[2][1]-1].occupied){
+                    if(act[2][0]>0 && !board[act[2][0]+1][act[2][1]-1].occupied  && !board[act[2][0]+1][act[2][1]].occupied  && !board[act[2][0]-1][act[2][1]].occupied){
                         act[0][1]-=2
                         act[1][0]+=1
                         act[1][1]-=1
@@ -111,10 +133,7 @@ export function rotPiece(board:any,shape:number,rot:number,act:any):any {
                     }
                     break;
                 case 3:
-                    console.log("case 3",act)
-                    console.log(act[2][0]-1,act[2][1]-1 ,act[2][0],act[2][0]-1)
-
-                    if(act[2][1]>0 && act[2][1]+1<10  && act[2][0]>0 && !board[act[2][0]-1][act[2][1]-1].occupied && !board[act[2][0]][act[2][0]-1].occupied && !board[act[2][0]][act[2][0]+1].occupied){
+                    if(act[2][1]<9 && !board[act[2][0]-1][act[2][1]-1].occupied  && !board[act[2][0]][act[2][1]-1].occupied  && !board[act[2][0]][act[2][1]+1].occupied){
                         act[0][0]-=2
                         act[1][0]-=1
                         act[1][1]-=1
@@ -122,31 +141,196 @@ export function rotPiece(board:any,shape:number,rot:number,act:any):any {
                         act[3][1]+=1
                         rot=0
                     }
-                    break;
+                    break;  
             }
             break;
         case 2:
             switch(rot){
+                case 0:
+                    if(act[2][0]<19 && !board[act[2][0]-1][act[2][1]-1].occupied  && !board[act[2][0]-1][act[2][1]].occupied  && !board[act[2][0]+1][act[2][1]].occupied){
+                        act[0][0]+=2
+                        act[1][0]+=1
+                        act[1][1]-=1
+                        act[3][0]-=1
+                        act[3][1]+=1
+                        rot=1
+                    }
+                    break;
+                case 1:
+                    if(act[2][1]>0 && !board[act[2][0]+1][act[2][1]-1].occupied  && !board[act[2][0]][act[2][1]-1].occupied  && !board[act[2][0]][act[2][1]+1].occupied){
+                        act[0][1]-=2
+                        act[1][0]-=1
+                        act[1][1]-=1
+                        act[3][0]+=1
+                        act[3][1]+=1
+                        rot=2
+                    }
+                    break;
+                case 2:
+                    if(act[2][0]>0 && !board[act[2][0]-1][act[2][1]+1].occupied  && !board[act[2][0]-1][act[2][1]].occupied  && !board[act[2][0]+1][act[2][1]].occupied){
+                        act[0][0]-=2
+                        act[1][0]-=1
+                        act[1][1]+=1
+                        act[3][0]+=1
+                        act[3][1]-=1
+                        rot=3
+                    }
+                    break;
+                case 3:
+                    if(act[2][1]<9 && !board[act[2][0]+1][act[2][1]+1].occupied  && !board[act[2][0]][act[2][1]+1].occupied  && !board[act[2][0]][act[2][1]-1].occupied){
+                        act[0][1]+=2
+                        act[1][0]+=1
+                        act[1][1]+=1
+                        act[3][0]-=1
+                        act[3][1]-=1
+                        rot=0
+                    }
+                    break;
 
             }
-        
+            break;
         case 3:
             switch(rot){
 
             }
+            break;
         
         case 4:
             switch(rot){
+                case 0:
+                    if(act[2][0]<19 && !board[act[2][0]-1][act[2][1]+1].occupied  && !board[act[2][0]-1][act[2][1]].occupied  && !board[act[2][0]][act[2][1]-1].occupied){
+                        act[0][0]+=1
+                        act[0][1]+=1
+                        act[1][0]+=2
+                        act[3][0]-=1
+                        act[3][1]+=1
+                        rot=1
+                    }
+                    break;
+                case 1:
+                    if(act[2][1]>0 && !board[act[2][0]+1][act[2][1]-1].occupied  && !board[act[2][0]][act[2][1]-1].occupied  && !board[act[2][0]-1][act[2][1]].occupied){
+                        act[0][0]+=1
+                        act[0][1]-=1
+                        act[1][1]-=2
+                        act[3][0]+=1
+                        act[3][1]+=1
+                        rot=2
+                    }
+                    break;
+                case 2:
+                    if(act[2][0]>0 && !board[act[2][0]+1][act[2][1]-1].occupied  && !board[act[2][0]+1][act[2][1]].occupied  && !board[act[2][0]][act[2][1]+1].occupied){
+                        act[0][0]-=1
+                        act[0][1]-=1
+                        act[1][0]-=2
+                        act[3][0]+=1
+                        act[3][1]-=1
+                        rot=3
+                    }
+                    break;
+                case 3:
+                    if(act[2][1]<9 && !board[act[2][0]-1][act[2][1]+1].occupied  && !board[act[2][0]][act[2][1]+1].occupied  && !board[act[2][0]+1][act[2][1]].occupied){
+                        act[0][0]-=1
+                        act[0][1]+=1
+                        act[1][1]+=2
+                        act[3][0]-=1
+                        act[3][1]-=1
+                        rot=0
+                    }
+                    break;
 
             }
-        
+            break;
         case 5:
             switch(rot){
-
+                case 0:
+                    if(act[2][0]<19 && !board[act[2][0]-1][act[2][1]+1].occupied  && !board[act[2][0]-1][act[2][1]].occupied  && !board[act[2][0]+1][act[2][1]].occupied){
+                        act[0][1]+=2
+                        act[1][0]+=1
+                        act[1][1]+=1
+                        act[3][0]+=1
+                        act[3][1]-=1
+                        rot=1
+                    }
+                    break;
+                case 1:
+                    if(act[2][1]>0 && !board[act[2][0]+1][act[2][1]+1].occupied  && !board[act[2][0]][act[2][1]+1].occupied  && !board[act[2][0]][act[2][1]-1].occupied){
+                        act[0][0]+=2
+                        act[1][0]+=1
+                        act[1][1]-=1
+                        act[3][0]-=1
+                        act[3][1]-=1
+                        rot=2
+                    }
+                    break;
+                case 2:
+                    if(act[2][0]>0 && !board[act[2][0]+1][act[2][1]-1].occupied  && !board[act[2][0]+1][act[2][1]].occupied  && !board[act[2][0]-1][act[2][1]].occupied){
+                        act[0][1]-=2
+                        act[1][0]-=1
+                        act[1][1]-=1
+                        act[3][0]-=1
+                        act[3][1]+=1
+                        rot=3
+                    }
+                    break;
+                case 3:
+                    if(act[2][1]<9 && !board[act[2][0]-1][act[2][1]-1].occupied  && !board[act[2][0]][act[2][1]-1].occupied  && !board[act[2][0]][act[2][1]+1].occupied){
+                        act[0][0]-=2
+                        act[1][0]-=1
+                        act[1][1]+=1
+                        act[3][0]+=1
+                        act[3][1]+=1
+                        rot=0
+                    }
+                    break;
             }
+            break
 
         case 6:
             switch(rot){
+            case 0:
+                if(act[2][0]<19 && !board[act[2][0]-1][act[2][1]-1].occupied  && !board[act[2][0]-1][act[2][1]].occupied  && !board[act[2][0]+1][act[2][1]].occupied){
+                    act[0][0]+=1
+                    act[0][1]+=1
+                    act[1][0]-=1
+                    act[1][1]+=1
+                    act[3][0]+=1
+                    act[3][1]-=1
+                    rot=1
+                }
+                break;
+            case 1:
+                if(act[2][1]>0 && !board[act[2][0]+1][act[2][1]+1].occupied  && !board[act[2][0]][act[2][1]+1].occupied  && !board[act[2][0]][act[2][1]-1].occupied){
+                    act[0][0]+=1
+                    act[0][1]-=1
+                    act[1][0]+=1
+                    act[1][1]+=1
+                    act[3][0]-=1
+                    act[3][1]-=1
+                    rot=2
+                }
+                break;
+            case 2:
+                if(act[2][0]>0 && !board[act[2][0]+1][act[2][1]+1].occupied  && !board[act[2][0]+1][act[2][1]].occupied  && !board[act[2][0]-1][act[2][1]].occupied){
+                    act[0][0]-=1
+                    act[0][1]-=1
+                    act[1][0]+=1
+                    act[1][1]-=1
+                    act[3][0]-=1
+                    act[3][1]+=1
+                    rot=3
+                }
+                break;
+            case 3:
+                if(act[2][1]<9 && !board[act[2][0]-1][act[2][1]-1].occupied  && !board[act[2][0]][act[2][1]-1].occupied  && !board[act[2][0]][act[2][1]+1].occupied){
+                    act[0][0]-=1
+                    act[0][1]+=1
+                    act[1][0]-=1
+                    act[1][1]-=1
+                    act[3][0]+=1
+                    act[3][1]+=1
+                    rot=0
+                }
+                break;
             
             }
     }
