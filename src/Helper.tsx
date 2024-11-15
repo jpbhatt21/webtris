@@ -45,6 +45,8 @@ export function newPiece(board :any,sel:number):any {
     return board;
 }
 export function rotPiece(board:any,shape:number,rot:number,act:any):any {
+    let broken = false;
+    
     switch(shape){
         case 0:
             switch(rot){
@@ -82,7 +84,7 @@ export function rotPiece(board:any,shape:number,rot:number,act:any):any {
                     }
                     break;
                 case 3:
-                    if(act[1][1]-1>0 && act[1][1]+1<9 && !board[act[1][0]][act[1][1]+1].occupied && !board[act[1][0]][act[1][1]-1].occupied && !board[act[1][0]][act[1][1]+2].occupied){
+                    if(act[1][1]>0 && act[1][1]+1<9 && !board[act[1][0]][act[1][1]+1].occupied && !board[act[1][0]][act[1][1]-1].occupied && !board[act[1][0]][act[1][1]+2].occupied){
                         act[0][0]-=1
                         act[0][1]-=1
                         act[2][0]+=1
