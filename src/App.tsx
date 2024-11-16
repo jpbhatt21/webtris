@@ -477,7 +477,7 @@ function App() {
           act[3][0]++;
           downClock = new Date().getTime();
           
-        } else if (cur - downClock >= speed) {
+        } else if (cur - downClock >= speed && cur - downClock >= 1000) {
           [act,shape,rot]=createNewPiece(act,inter);
           downClock = new Date().getTime();
         }

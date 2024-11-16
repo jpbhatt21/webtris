@@ -46,7 +46,14 @@ export function newPiece(board :any,sel:number):any {
 }
 export function rotPiece(board:any,shape:number,rot:number,act:any):any {
     let broken = false;
-    
+    act.forEach((el:any) => {
+        if(el[0]<0 || el[0]>19 || el[1]<0 || el[1] > 9 ||  board[el[0]][el[1]].occupied){
+            broken = true;
+        }
+    });
+    if(broken){
+        return [act,rot]
+    }
     switch(shape){
         case 0:
             switch(rot){
