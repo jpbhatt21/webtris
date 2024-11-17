@@ -220,7 +220,6 @@ function App() {
             }
           });
           if (lines > 0) {
-            console.log(lclr)
             lcl[lines-1]++;
             setLcRect(lcl);}
           lclr += lines;
@@ -228,7 +227,6 @@ function App() {
           lv = Math.floor(lclr / 10);
           setLevel(lv);
           speed = (lv<20?form(lv):50);
-          console.log(speed);
           setLinesCleared(lclr);
           setBoard(board);
           
@@ -268,12 +266,15 @@ function App() {
        
       }
       let move=false
+      let changehold=false;
       inter = setInterval(() => {
         cur = new Date().getTime();
         if(!move){
-          automateAnalyzer(JSON.parse(JSON.stringify(board)),JSON.parse(JSON.stringify(act)),JSON.parse(JSON.stringify(shape)),JSON.parse(JSON.stringify(rot)),JSON.parse(JSON.stringify(nxt)),hld,hld>-1);
+          
+          changehold=automateAnalyzer(JSON.parse(JSON.stringify(board)),JSON.parse(JSON.stringify(act)),JSON.parse(JSON.stringify(shape)),JSON.parse(JSON.stringify(rot)),JSON.parse(JSON.stringify(nxt)),hld,hld>-1&&!held);
+          if(!changehold){
           [act, shape, rot] = automatic(JSON.parse(JSON.stringify(board)),JSON.parse(JSON.stringify(act)),JSON.parse(JSON.stringify(shape)),rot);
-          move=true;
+          move=true;}
         }
         if (
           cur - movClock >= lrSpeed &&
@@ -366,7 +367,7 @@ function App() {
                         );
                         break;
                       case 3:
-                        console.log(act);
+                        
                         [act, rot] = rotPiece(
                           board,
                           shape,
@@ -630,7 +631,10 @@ function App() {
           [act, rot] = rotPiece(board, shape, rot, act);
           [act, rot] = rotPiece(board, shape, rot, act);
         }
-        if (cur - rotClock >= 150 && keys.shift) {
+        if ((cur - rotClock >= 150 && keys.shift)||changehold) {
+          if(changehold){
+            changehold=false;
+          }
           if (hld === -1) {
             held = true;
             hld = shape;

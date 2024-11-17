@@ -472,6 +472,8 @@ export function rotPiece(
 	return [act, rot];
 }
 function analyze(board: any): number {
+    if(timecache[JSON.stringify(board)]!==undefined){
+        return timecache[JSON.stringify(board)]}
      // Constants for scoring weights
      const WEIGHTS = {
         CLEARED_LINES: 3.0,    // Reward for clearing lines
@@ -551,18 +553,27 @@ function analyze(board: any): number {
         WEIGHTS.BUMPINESS * bumpiness +
         WEIGHTS.WELLS * wells +
         WEIGHTS.BLOCKADES * blockades;
-
+    timecache[JSON.stringify(board)]=score
     return score;
 	// return 1500 * Math.pow(0.76, x) + 2.21*x;
 
 }
+let cache={}
+let timecache={}
 export function automatic(board: any, act: any, shape: any, rot: any,mode=true): any {
+    
 	let backupBoard = JSON.parse(JSON.stringify(board));
 	let backupAct = JSON.parse(JSON.stringify(act));
 	let backupShape = JSON.parse(JSON.stringify(shape));
 	let backupRot = JSON.parse(JSON.stringify(rot));
 	let scores = [];
+    if(cache[JSON.stringify(board)+JSON.stringify(shape)]!==undefined){
+     scores=cache[JSON.stringify(board)+JSON.stringify(shape)]   
+    }
+    else{
+    let initx=0
 	for (let i = 0; i < 4; i++) {
+        
         while (
             act[0][1] !== 0 &&
             act[1][1] !== 0 &&
@@ -588,7 +599,7 @@ export function automatic(board: any, act: any, shape: any, rot: any,mode=true):
             !board[act[1][0]][act[1][1]].occupied &&
             !board[act[2][0]][act[2][1]].occupied &&
             !board[act[3][0]][act[3][1]].occupied
-        ) {
+        ) { initx++
             let temp = JSON.parse(JSON.stringify(act));
             let tempBoard = JSON.parse(JSON.stringify(board));
             while (
@@ -895,7 +906,7 @@ export function automatic(board: any, act: any, shape: any, rot: any,mode=true):
             act = JSON.parse(JSON.stringify(tempAct));
           }
     }
-       
+    cache[JSON.stringify(backupBoard)+JSON.stringify(shape)]=scores}
     let max = -100000;
     let maxIndex = 0;
     scores.forEach((el,i) => {
@@ -905,7 +916,11 @@ export function automatic(board: any, act: any, shape: any, rot: any,mode=true):
         }
     });
 	if(mode)
-    return [scores[maxIndex][1],shape,scores[maxIndex][2]];
+    {  
+        if(scores.length==0){
+            return [backupAct,shape,backupRot,-100000];
+        }
+        return [scores[maxIndex][1],shape,scores[maxIndex][2],scores[maxIndex][0]];}
 	else
 	return scores
 }
@@ -954,63 +969,62 @@ let activePos = [
 	],
   ];
 export let automateAnalyzer = (board: any, act: any, shape: any, rot: any, next:any , hold:any,held:any) => {
-	console.log(held)
+
 	if(held){
 		//current + next
 		let tempBoard = JSON.parse(JSON.stringify(board));
 		let tempAct = JSON.parse(JSON.stringify(act));
 		let tempShape = JSON.parse(JSON.stringify(shape));
 		let tempRot = JSON.parse(JSON.stringify(rot));
-		let scores=automatic(tempBoard,tempAct,tempShape,tempRot,false);
+		let scores=automatic(JSON.parse(JSON.stringify(tempBoard)),JSON.parse(JSON.stringify(tempAct)),tempShape,tempRot,false);
 		let cnScore=scores[0];
 		let max=-100000;
 		let chScore=scores[0];
 		let maxCH=-100000;
-		for (let i=0;i<scores.length;i++){
-			let tempBoard2 = JSON.parse(JSON.stringify(scores[i][3]));
-			let tempSc=automatic(tempBoard2,activePos[next],next,0);
-			if(tempSc[0]>max){
-				max=tempSc[0];
-				cnScore=tempSc;
-			}
-			tempBoard2 = JSON.parse(JSON.stringify(scores[i][3]));
-			tempSc=automatic(tempBoard2,activePos[hold],hold,0);
-			if(tempSc[0]>maxCH){
-				maxCH=tempSc[0];
-				chScore=tempSc;
-			}
-			
-		}
-		let max1=cnScore[0]>chScore[0]?cnScore+"CN":chScore+"CH";
-		tempBoard = JSON.parse(JSON.stringify(board));
+        for(let i=0;i<scores.length;i++){
+            let tempBoard = JSON.parse(JSON.stringify(scores[i][3]));
+            let sc=automatic(tempBoard,JSON.parse(JSON.stringify(activePos[next])),next,0)[3];
+            if(sc>max){
+                max=sc;
+                cnScore=scores[i];
+            }
+            sc=automatic(tempBoard,JSON.parse(JSON.stringify(activePos[hold])),hold,0)[3];
+            if(sc>maxCH){
+                maxCH=sc;
+                chScore=scores[i];
+            }
+        }
+        tempBoard = JSON.parse(JSON.stringify(board));
 		tempAct = JSON.parse(JSON.stringify(act));
 		tempShape = JSON.parse(JSON.stringify(shape));
-		tempRot = JSON.parse(JSON.stringify(rot));
-		scores=automatic(tempBoard,activePos[hold],hold,0);
+		scores=automatic(tempBoard,JSON.parse(JSON.stringify(activePos[hold])),hold,0,false);
 		let hnScore=scores[0];
-		let maxHN=-100000;
+		let hnmax=-100000;
 		let hcScore=scores[0];
 		let maxHC=-100000;
-		for (let i=0;i<scores.length;i++){
-			let tempBoard2 = JSON.parse(JSON.stringify(scores[i][3]));
-			let tempSc=automatic(tempBoard2,activePos[next],next,0);
-			if(tempSc[0]>maxHN){
-				maxHN=tempSc[0];
-				hnScore=tempSc;
-			}
-			tempBoard2 = JSON.parse(JSON.stringify(scores[i][3]));
-			tempSc=automatic(tempBoard2,tempAct,tempShape,0);
-			if(tempSc[0]>maxHC){
-				maxHC=tempSc[0];
-				hcScore=tempSc;
-			}
-			
-		}
-		let max2=hnScore[0]>hcScore[0]?hnScore+"HN":hcScore+"HC";
-		console.log(max1,max2);
-		
-
+        for(let i=0;i<scores.length;i++){
+            let tempBoard = JSON.parse(JSON.stringify(scores[i][3]));
+            let sc=automatic(tempBoard,JSON.parse(JSON.stringify(activePos[next])),next,0)[3];
+            if(sc>hnmax){
+                hnmax=sc;
+                hnScore=scores[i];
+            }
+            sc=automatic(tempBoard,JSON.parse(JSON.stringify(tempAct)),tempShape,tempRot)[3];
+            if(sc>maxHC){
+                maxHC=sc;
+                hcScore=scores[i];
+            }
+        }
+        if(hnScore[0]>cnScore[0] || hnScore[0]>chScore[0] || hcScore[0]>cnScore[0] || hcScore[0]>chScore[0]){
+            console.log(true)
+           return true
+        }
+        else{
+            return false
+        }
 
 	}
-	else{}
+	else{
+        return false
+    }
 }
