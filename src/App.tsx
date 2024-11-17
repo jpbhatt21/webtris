@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { newPiece, rotPiece } from "./Helper";
+import { automateAnalyzer, automatic, newPiece, rotPiece } from "./Helper";
 let inter: any = null;
 let bag = [0, 1, 2, 3, 4, 5, 6];
 let random = bag[Math.floor(Math.random() * bag.length)];
@@ -73,6 +73,7 @@ function App() {
   );
   const [pieceCount, setPieceCount] = useState(0);
   const [score, setScore] = useState(0);
+  const [lcRect, setLcRect] = useState([0, 0, 0, 0]);
   const [active, setActive] = useState(
     JSON.parse(JSON.stringify(activePos[random]))
   );
@@ -178,12 +179,13 @@ function App() {
       });
       let held = false;
       function form(x) {
-        return 1500 * Math.pow(0.9, x) + x;
+        return 1500 * Math.pow(0.76, x) + 2.21*x;
       }
       let movClock = new Date().getTime();
       let rotClock = new Date().getTime();
       let downClock = new Date().getTime();
       let upClock = new Date().getTime();
+      let lcl=[0,0,0,0]
       let cur = new Date().getTime();
       let ghos = JSON.parse(JSON.stringify(activePos[random]));
       let speed = 1500; //smaller is faster, in ms
@@ -217,13 +219,19 @@ function App() {
               setBoard(JSON.parse(JSON.stringify(board)));
             }
           });
+          if (lines > 0) {
+            console.log(lclr)
+            lcl[lines-1]++;
+            setLcRect(lcl);}
           lclr += lines;
           setScore((prev) => prev + [0, 40, 100, 300, 1200][lines] * (lv + 1));
           lv = Math.floor(lclr / 10);
           setLevel(lv);
-          speed = form(lv);
+          speed = (lv<20?form(lv):50);
+          console.log(speed);
           setLinesCleared(lclr);
           setBoard(board);
+          
         }
         let random = nxt;
         nxt = bag[Math.floor(Math.random() * bag.length)];
@@ -256,10 +264,17 @@ function App() {
           JSON.stringify(JSON.parse(JSON.stringify(activePos[random])))
         );
         return [act, shape, rot];
+        return automatic(JSON.parse(JSON.stringify(board)),JSON.parse(JSON.stringify(act)),JSON.parse(JSON.stringify(shape)),0);
+       
       }
+      let move=false
       inter = setInterval(() => {
         cur = new Date().getTime();
-
+        if(!move){
+          automateAnalyzer(JSON.parse(JSON.stringify(board)),JSON.parse(JSON.stringify(act)),JSON.parse(JSON.stringify(shape)),JSON.parse(JSON.stringify(rot)),JSON.parse(JSON.stringify(nxt)),hld,hld>-1);
+          [act, shape, rot] = automatic(JSON.parse(JSON.stringify(board)),JSON.parse(JSON.stringify(act)),JSON.parse(JSON.stringify(shape)),rot);
+          move=true;
+        }
         if (
           cur - movClock >= lrSpeed &&
           keys.left &&
@@ -592,6 +607,22 @@ function App() {
           if (prevRot === rot) {
             act = JSON.parse(JSON.stringify(temp));
           }
+          let wrong = false;
+          act.forEach((pos) => {
+            if (
+              pos[0] < 0 ||
+              pos[0] > 19 ||
+              pos[1] < 0 ||
+              pos[1] > 9 ||
+              board[pos[0]][pos[1]].occupied
+            ) {
+              wrong = true;
+            }
+          });
+          if (wrong) {
+            act = JSON.parse(JSON.stringify(temp));
+            rot = prevRot;
+          }
         }
         if (cur - rotClock >= 150 && keys.alt) {
           rotClock = cur;
@@ -639,7 +670,8 @@ function App() {
           [act, shape, rot] = createNewPiece(act, inter);
           downClock = new Date().getTime();
         }
-        if (cur - upClock >= upSpeed && keys.up) {
+        if ((cur - upClock >= upSpeed && keys.up )||move) {
+          move=false;
           while (
             act[0][0] !== 19 &&
             act[1][0] !== 19 &&
@@ -711,6 +743,7 @@ function App() {
           <div className="h-full flex flex-col items-center justify-center text-white">
             <div>Level :{level}</div>
             <div>Lines :{linesCleared +"/"+((level+1)*10)}</div>
+            {["Single","Double","Triple","Tetris"].map((val,i)=><div>{val} : {Math.floor(lcRect[i])}</div>)}
           </div>
         </div>
         <svg
