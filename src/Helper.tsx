@@ -471,7 +471,7 @@ export function rotPiece(
 	}
 	return [act, rot];
 }
-function analyze(board: any): number {
+export function analyze(board: any): number {
     if(timecache[JSON.stringify(board)]!==undefined){
         return timecache[JSON.stringify(board)]}
      // Constants for scoring weights
@@ -553,7 +553,7 @@ function analyze(board: any): number {
         WEIGHTS.BUMPINESS * bumpiness +
         WEIGHTS.WELLS * wells +
         WEIGHTS.BLOCKADES * blockades;
-    timecache[JSON.stringify(board)]=score
+    // timecache[JSON.stringify(board)]=score
     return score;
 	// return 1500 * Math.pow(0.76, x) + 2.21*x;
 
@@ -906,7 +906,8 @@ export function automatic(board: any, act: any, shape: any, rot: any,mode=true):
             act = JSON.parse(JSON.stringify(tempAct));
           }
     }
-    cache[JSON.stringify(backupBoard)+JSON.stringify(shape)]=scores}
+    //cache[JSON.stringify(backupBoard)+JSON.stringify(shape)]=scores\
+	}
     let max = -100000;
     let maxIndex = 0;
     scores.forEach((el,i) => {
@@ -976,6 +977,9 @@ export let automateAnalyzer = (board: any, act: any, shape: any, rot: any, next:
 		let tempAct = JSON.parse(JSON.stringify(act));
 		let tempShape = JSON.parse(JSON.stringify(shape));
 		let tempRot = JSON.parse(JSON.stringify(rot));
+		let scores1=automatic(JSON.parse(JSON.stringify(tempBoard)),JSON.parse(JSON.stringify(tempAct)),tempShape,tempRot);
+		let scores2=automatic(tempBoard,JSON.parse(JSON.stringify(activePos[hold])),hold,0);
+		return scores2>scores1
 		let scores=automatic(JSON.parse(JSON.stringify(tempBoard)),JSON.parse(JSON.stringify(tempAct)),tempShape,tempRot,false);
 		let cnScore=scores[0];
 		let max=-100000;
