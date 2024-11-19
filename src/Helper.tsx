@@ -591,22 +591,30 @@ export function automatic(board: any, act: any, shape: any, rot: any,mode=true):
         }
         let tempAct = JSON.parse(JSON.stringify(act));
         while (
-            act[0][1] !== 10 &&
-            act[1][1] !== 10 &&
-            act[2][1] !== 10 &&
-            act[3][1] !== 10 &&
-            !board[act[0][0]][act[0][1]].occupied &&
-            !board[act[1][0]][act[1][1]].occupied &&
-            !board[act[2][0]][act[2][1]].occupied &&
-            !board[act[3][0]][act[3][1]].occupied
+            act[0][1] < 10 &&
+            act[1][1] < 10 &&
+            act[2][1] < 10 &&
+            act[3][1] < 10 &&
+			(
+				!(  act[0][1] < 9 &&
+					act[1][1] < 9 &&
+					act[2][1] < 9 &&
+					act[3][1] < 9)
+				||
+				(!board[act[0][0]][act[0][1]+1].occupied &&
+					!board[act[1][0]][act[1][1]+1].occupied &&
+					!board[act[2][0]][act[2][1]+1].occupied &&
+					!board[act[3][0]][act[3][1]+1].occupied)
+			)
+            
         ) { initx++
             let temp = JSON.parse(JSON.stringify(act));
             let tempBoard = JSON.parse(JSON.stringify(board));
             while (
-                act[0][0] !== 19 &&
-                act[1][0] !== 19 &&
-                act[2][0] !== 19 &&
-                act[3][0] !== 19 &&
+                act[0][0] < 19 &&
+                act[1][0] < 19 &&
+                act[2][0] < 19 &&
+                act[3][0] < 19 &&
                 !board[act[0][0] + 1][act[0][1]].occupied &&
                 !board[act[1][0] + 1][act[1][1]].occupied &&
                 !board[act[2][0] + 1][act[2][1]].occupied &&
@@ -916,6 +924,7 @@ export function automatic(board: any, act: any, shape: any, rot: any,mode=true):
             maxIndex = i;
         }
     });
+	// console.log(max,shape,scores.length)
 	if(mode)
     {  
         if(scores.length==0){
