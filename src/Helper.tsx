@@ -471,20 +471,27 @@ export function rotPiece(
 	}
 	return [act, rot];
 }
+// Variable for scoring weights
+let weights = {
+	weightedBlocks: 0.3, //weighted sum of blocks, where a block's weight is the row it's on
+	connectedHoles: 0.1, //number of vertically connected holes
+	roughness: -0.5, //sum of height differences between adjacent columns
+	pitholePercentage: 0.15, //number of pits divided by total pits and holes
+	clearAbleLines: 0.5, //number of lines that can be cleared by an I piece
+	deepestHole: 0.25, //depth of the deepest hole
+	blocks: -0.25, //number of blocks
+	colHoles: -0.75, //number of columns containing holes
+};
+export function setWeights(newWeights: any): void {
+	weights = newWeights;
+}
+export function getWeights(): any {
+	return weights;
+}
 export function analyze(board: any): number {
 	// if(timecache[JSON.stringify(board)]!==undefined){
 	//     return timecache[JSON.stringify(board)]}
-	// Constants for scoring weights
-	const weights = {
-		weightedBlocks: 0.3, //weighted sum of blocks, where a block's weight is the row it's on
-		connectedHoles: 0.1, //number of vertically connected holes
-		roughness: -0.5, //sum of height differences between adjacent columns
-		pitholePercentage: 0.15, //number of pits divided by total pits and holes
-		clearAbleLines: 0.5, //number of lines that can be cleared by an I piece
-		deepestHole: 0.25, //depth of the deepest hole
-		blocks: -0.25, //number of blocks
-		colHoles: -0.75, //number of columns containing holes
-	};
+	;
 	
 	let weightedBlocks = 0;
 	let connectedHoles = 0;
@@ -504,6 +511,7 @@ export function analyze(board: any): number {
 				weightedBlocks += j;
 				height = j;
 				block = true;
+				blocks += 1;
 			} else if (block) {
 				connectedHoles += 1;
 				hole = true;
@@ -585,7 +593,6 @@ export function analyze2(board: any): number {
         BLOCKADES: -0.3        // Penalty for blocks above holes
     };
 
-    // Calculate cleared lines (using your existing logic)
     let clearedLines = 0;
     board.forEach((row, i) => {
         if (row.every((cell) => cell.occupied)) {
@@ -593,7 +600,6 @@ export function analyze2(board: any): number {
         }
     });
 
-    // Calculate column heights
     const columnHeights = new Array(10).fill(0);
     for (let j = 0; j < 10; j++) {
         for (let i = 0; i < 20; i++) {
@@ -604,10 +610,8 @@ export function analyze2(board: any): number {
         }
     }
 
-    // Calculate maximum height
     const maxHeight = Math.max(...columnHeights);
 
-    // Calculate holes and blockades
     let holes = 0;
     let blockades = 0;
     for (let j = 0; j < 10; j++) {
@@ -628,13 +632,11 @@ export function analyze2(board: any): number {
         blockades += blockadeCount;
     }
 
-    // Calculate bumpiness (difference between adjacent columns)
     let bumpiness = 0;
     for (let j = 0; j < 9; j++) {
         bumpiness += Math.abs(columnHeights[j] - columnHeights[j + 1]);
     }
-
-    // Calculate wells (deep gaps between higher columns)
+	
     let wells = 0;
     for (let j = 0; j < 10; j++) {
         const leftHeight = j > 0 ? columnHeights[j - 1] : columnHeights[j];
@@ -646,7 +648,6 @@ export function analyze2(board: any): number {
         }
     }
 
-    // Calculate final score
     const score = 
         WEIGHTS.CLEARED_LINES * Math.pow(2, clearedLines) +
         WEIGHTS.HEIGHT * maxHeight +
