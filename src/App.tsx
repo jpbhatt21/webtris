@@ -493,7 +493,7 @@ function App() {
   ];
   let [nextShape, setNextShape] = useState(0);
   let [curShape, setCurShape] = useState(0);
-  let [holdShape, setHoldShape] = useState(0);
+  let [holdShape, setHoldShape] = useState(7);
   let timeDiff = (new Date().getTime() - initTime) / 1000;
   let sec = Math.floor(timeDiff % 60);
   let min = Math.floor(timeDiff / 60);
