@@ -505,11 +505,9 @@ export function analyze(board: any): number {
 		let hole = false;
 		let holeDepth = 0;
 		let block = false;
-		let height = 0;
 		for (let j = 0; j < 20; j++) {
 			if (board[j][i].occupied) {
 				weightedBlocks += j;
-				height = j;
 				block = true;
 				blocks += 1;
 			} else if (block) {
@@ -594,8 +592,8 @@ export function analyze2(board: any): number {
     };
 
     let clearedLines = 0;
-    board.forEach((row, i) => {
-        if (row.every((cell) => cell.occupied)) {
+    board.forEach((row:any) => {
+        if (row.every((cell:any) => cell.occupied)) {
             clearedLines++;
         }
     });
@@ -660,8 +658,8 @@ export function analyze2(board: any): number {
 	// return 1500 * Math.pow(0.76, x) + 2.21*x;
 
 }
-let cache = {};
-let timecache = {};
+// let cache = {};
+// let timecache = {};
 export function automatic(
 	board: any,
 	act: any,
@@ -669,14 +667,14 @@ export function automatic(
 	rot: any,
 	mode = true
 ): any {
-	let backupBoard = JSON.parse(JSON.stringify(board));
+	// let backupBoard = JSON.parse(JSON.stringify(board));
 	let backupAct = JSON.parse(JSON.stringify(act));
-	let backupShape = JSON.parse(JSON.stringify(shape));
+	// let backupShape = JSON.parse(JSON.stringify(shape));
 	let backupRot = JSON.parse(JSON.stringify(rot));
 	let scores = [];
-	if (cache[JSON.stringify(board) + JSON.stringify(shape)] !== undefined) {
-		scores = cache[JSON.stringify(board) + JSON.stringify(shape)];
-	} else {
+	// if (cache[JSON.stringify(board) + JSON.stringify(shape)] !== undefined) {
+	// 	scores = cache[JSON.stringify(board) + JSON.stringify(shape)];
+	// } else {
 		let initx = 0;
 		for (let i = 0; i < 4; i++) {
 			while (
@@ -756,7 +754,7 @@ export function automatic(
 											board,
 											shape,
 											rot,
-											act.map((pos) => [
+											act.map((pos:any) => [
 												pos[0],
 												pos[1] - 2,
 											])
@@ -767,7 +765,7 @@ export function automatic(
 											board,
 											shape,
 											rot,
-											act.map((pos) => [
+											act.map((pos:any) => [
 												pos[0],
 												pos[1] - 1,
 											])
@@ -778,7 +776,7 @@ export function automatic(
 											board,
 											shape,
 											rot,
-											act.map((pos) => [
+											act.map((pos:any) => [
 												pos[0],
 												pos[1] + 2,
 											])
@@ -789,7 +787,7 @@ export function automatic(
 											board,
 											shape,
 											rot,
-											act.map((pos) => [
+											act.map((pos:any) => [
 												pos[0],
 												pos[1] + 1,
 											])
@@ -804,7 +802,7 @@ export function automatic(
 											board,
 											shape,
 											rot,
-											act.map((pos) => [
+											act.map((pos:any) => [
 												pos[0],
 												pos[1] - 2,
 											])
@@ -815,7 +813,7 @@ export function automatic(
 											board,
 											shape,
 											rot,
-											act.map((pos) => [
+											act.map((pos:any) => [
 												pos[0],
 												pos[1] - 1,
 											])
@@ -826,7 +824,7 @@ export function automatic(
 											board,
 											shape,
 											rot,
-											act.map((pos) => [
+											act.map((pos:any) => [
 												pos[0],
 												pos[1] + 2,
 											])
@@ -837,7 +835,7 @@ export function automatic(
 											board,
 											shape,
 											rot,
-											act.map((pos) => [
+											act.map((pos:any) => [
 												pos[0],
 												pos[1] + 1,
 											])
@@ -852,7 +850,7 @@ export function automatic(
 											board,
 											shape,
 											rot,
-											act.map((pos) => [
+											act.map((pos:any) => [
 												pos[0] - 1,
 												pos[1] - 2,
 											])
@@ -863,7 +861,7 @@ export function automatic(
 											board,
 											shape,
 											rot,
-											act.map((pos) => [
+											act.map((pos:any) => [
 												pos[0] + 2,
 												pos[1] - 1,
 											])
@@ -874,7 +872,7 @@ export function automatic(
 											board,
 											shape,
 											rot,
-											act.map((pos) => [
+											act.map((pos:any) => [
 												pos[0] + 1,
 												pos[1] + 2,
 											])
@@ -885,7 +883,7 @@ export function automatic(
 											board,
 											shape,
 											rot,
-											act.map((pos) => [
+											act.map((pos:any) => [
 												pos[0] - 2,
 												pos[1] + 1,
 											])
@@ -900,7 +898,7 @@ export function automatic(
 											board,
 											shape,
 											rot,
-											act.map((pos) => [
+											act.map((pos:any) => [
 												pos[0] + 2,
 												pos[1] + 1,
 											])
@@ -911,7 +909,7 @@ export function automatic(
 											board,
 											shape,
 											rot,
-											act.map((pos) => [
+											act.map((pos:any) => [
 												pos[0] - 1,
 												pos[1] + 2,
 											])
@@ -922,7 +920,7 @@ export function automatic(
 											board,
 											shape,
 											rot,
-											act.map((pos) => [
+											act.map((pos:any) => [
 												pos[0] - 2,
 												pos[1] - 1,
 											])
@@ -933,7 +931,7 @@ export function automatic(
 											board,
 											shape,
 											rot,
-											act.map((pos) => [
+											act.map((pos:any) => [
 												pos[0] + 1,
 												pos[1] - 2,
 											])
@@ -954,14 +952,14 @@ export function automatic(
 										board,
 										shape,
 										rot,
-										act.map((pos) => [pos[0], pos[1] - 1])
+										act.map((pos:any) => [pos[0], pos[1] - 1])
 									);
 								} else {
 									[act, rot] = rotPiece(
 										board,
 										shape,
 										rot,
-										act.map((pos) => [pos[0], pos[1] + 1])
+										act.map((pos:any) => [pos[0], pos[1] + 1])
 									);
 								}
 								break;
@@ -972,7 +970,7 @@ export function automatic(
 											board,
 											shape,
 											rot,
-											act.map((pos) => [
+											act.map((pos:any) => [
 												pos[0] + 1,
 												pos[1] - 1,
 											])
@@ -983,7 +981,7 @@ export function automatic(
 											board,
 											shape,
 											rot,
-											act.map((pos) => [
+											act.map((pos:any) => [
 												pos[0] - 1,
 												pos[1] + 1,
 											])
@@ -994,7 +992,7 @@ export function automatic(
 											board,
 											shape,
 											rot,
-											act.map((pos) => [
+											act.map((pos:any) => [
 												pos[0] + 1,
 												pos[1] + 1,
 											])
@@ -1005,7 +1003,7 @@ export function automatic(
 											board,
 											shape,
 											rot,
-											act.map((pos) => [
+											act.map((pos:any) => [
 												pos[0] - 1,
 												pos[1] - 1,
 											])
@@ -1021,7 +1019,7 @@ export function automatic(
 											board,
 											shape,
 											rot,
-											act.map((pos) => [
+											act.map((pos:any) => [
 												pos[0] - 2,
 												pos[1],
 											])
@@ -1033,7 +1031,7 @@ export function automatic(
 											board,
 											shape,
 											rot,
-											act.map((pos) => [
+											act.map((pos:any) => [
 												pos[0] + 2,
 												pos[1],
 											])
@@ -1048,7 +1046,7 @@ export function automatic(
 											board,
 											shape,
 											rot,
-											act.map((pos) => [
+											act.map((pos:any) => [
 												pos[0] - 2,
 												pos[1] - 1,
 											])
@@ -1059,7 +1057,7 @@ export function automatic(
 											board,
 											shape,
 											rot,
-											act.map((pos) => [
+											act.map((pos:any) => [
 												pos[0] + 2,
 												pos[1] + 1,
 											])
@@ -1070,7 +1068,7 @@ export function automatic(
 											board,
 											shape,
 											rot,
-											act.map((pos) => [
+											act.map((pos:any) => [
 												pos[0] - 2,
 												pos[1] + 1,
 											])
@@ -1081,7 +1079,7 @@ export function automatic(
 											board,
 											shape,
 											rot,
-											act.map((pos) => [
+											act.map((pos:any) => [
 												pos[0] + 2,
 												pos[1] - 1,
 											])
@@ -1096,7 +1094,7 @@ export function automatic(
 			}
 		}
 		//cache[JSON.stringify(backupBoard)+JSON.stringify(shape)]=scores\
-	}
+	// }
 	let max = -100000;
 	let maxIndex = 0;
 	scores.forEach((el, i) => {
