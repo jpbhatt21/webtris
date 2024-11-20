@@ -474,6 +474,7 @@ function App() {
       }))
     )
   );
+  const [gameOver, setGameOver] = useState(false);
   const [restart, setRestart] = useState(0);
   const [score, setScore] = useState(0);
   const [lcRect, setLcRect] = useState([0, 0, 0, 0]);
@@ -503,6 +504,7 @@ function App() {
     //   setKey(key+1);
 
     if (inter == null) {
+		setGameOver(false);
       let bag = [0, 1, 2, 3, 4, 5, 6];
       let random = bag[Math.floor(Math.random() * bag.length)];
       bag = bag.filter((val) => val !== random);
@@ -539,45 +541,48 @@ function App() {
       };
       let rot = 0;
       window.addEventListener("keydown", (e) => {
-        if (e.code === "KeyA") {
-          //setKeys((prev) => ({ ...prev, left: true }));
-          keys.left = true;
-        }
+       
         if (e.code === "Backquote") {
           keys.bq = true;
         }
-        if (e.code === "KeyD") {
-          //setKeys((prev) => ({ ...prev, right: true }));
-          keys.right = true;
-        }
-        if (e.code === "KeyS") {
-          //setKeys((prev) => ({ ...prev, down: true }));
-          keys.down = true;
-        }
-        if (e.code === "KeyW") {
-          //setKeys((prev) => ({ ...prev, up: true }));
-          keys.up = true;
-        }
-        if (e.code === "Space") {
-          //setKeys((prev) => ({ ...prev, space: true }));
-          keys.space = true;
-        }
-        if (e.code === "AltLeft") {
-          //   setActive([
-          //     [-10, -10],
-          //     [-10, -10],
-          //     [-10, -10],
-          //     [-10, -10],
-          //   ]);
-          //   clearInterval(inter);
-          //   inter = -0;
-          //setKeys((prev) => ({ ...prev, alt: true }));
-          // keys.alt = true;
-        }
-        if (e.code === "ShiftLeft") {
-          //setKeys((prev) => ({ ...prev, shift: true }));
-          keys.shift = true;
-        }
+		if(!autoplay){
+			if (e.code === "KeyA") {
+				//setKeys((prev) => ({ ...prev, left: true }));
+				keys.left = true;
+			  }
+			if (e.code === "KeyD") {
+			  //setKeys((prev) => ({ ...prev, right: true }));
+			  keys.right = true;
+			}
+			if (e.code === "KeyS") {
+			  //setKeys((prev) => ({ ...prev, down: true }));
+			  keys.down = true;
+			}
+			if (e.code === "KeyW") {
+			  //setKeys((prev) => ({ ...prev, up: true }));
+			  keys.up = true;
+			}
+			if (e.code === "Space") {
+			  //setKeys((prev) => ({ ...prev, space: true }));
+			  keys.space = true;
+			}
+			if (e.code === "AltLeft") {
+			  //   setActive([
+			  //     [-10, -10],
+			  //     [-10, -10],
+			  //     [-10, -10],
+			  //     [-10, -10],
+			  //   ]);
+			  //   clearInterval(inter);
+			  //   inter = -0;
+			  //setKeys((prev) => ({ ...prev, alt: true }));
+			  // keys.alt = true;
+			}
+			if (e.code === "ShiftLeft") {
+			  //setKeys((prev) => ({ ...prev, shift: true }));
+			  keys.shift = true;
+			}
+		}
       });
       window.addEventListener("keyup", (e) => {
         if (e.code === "KeyA") {
@@ -709,6 +714,7 @@ function App() {
               [-10, -10],
             ]);
             clearInterval(inter);
+			setGameOver(true);
             inter = -0;
             break;
           }
@@ -1369,25 +1375,28 @@ function App() {
             <div
               className="bg-blank border border-bcol duration-200 border-r-0 border-l-0 shadow-lg w-[50vmin] absolute h-[20vmin]"
               style={{
-                opacity: paused ? "0.5" : "0",
+                opacity: paused || gameOver ? "0.5" : "0",
               }}
             ></div>
             <div className="w-full h-full flex flex-col text-white duration-200 absolute items-center justify-evenly py-[2vmin]"
 			 style={{
-                opacity: paused ? "1" : "0",
+                opacity: paused || gameOver ? "1" : "0",
               }}>
-              <div className="text-[3.5vmin] ">Paused</div>
+              <div className="text-[3.5vmin] "> {gameOver?"Game Over":"Paused"}</div>
 			  <div className="w-full flex text-[2vmin] items-center justify-evenly">
 				<div
-				className="bg-bcol rounded-md border border-colors-green w-[10vmin] py-[0.5vmin] text-center bg-opacity-20"
+				className="bg-post rounded-md border border-colors-green w-[10vmin] py-[0.5vmin] text-center bg-opacity-40"
 				onClick={(e) => {
 					setPaused(false);
 				}}
+				style={{
+					display:gameOver?"none":"block"
+				}}
 				>Resume</div>
 				<div
-				className="bg-bcol rounded-md border border-colors-red w-[10vmin] py-[0.5vmin] text-center bg-opacity-20"
-				onClick={(e) => {
-					
+				className="bg-post rounded-md border  border-colors-red w-[10vmin] py-[0.5vmin] text-center bg-opacity-40"
+				onClick={(e) => { 
+					setGameOver(false);
 					setBoard(
 					  Array.from({ length: 20 }, (_, i) =>
 						Array.from({ length: 10 }, (_, j) => ({
