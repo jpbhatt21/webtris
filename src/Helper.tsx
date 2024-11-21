@@ -1274,3 +1274,146 @@ export let automateAnalyzer = (
 		return false;
 	}
 };
+export const svg={
+	arr: <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+	className="h-[2vmin] aspect-square"
+  >
+    <g id="SVGRepo_bgCarrier" strokeWidth={0} />
+    <g
+      id="SVGRepo_tracerCarrier"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <g id="SVGRepo_iconCarrier">
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M4.29289 8.29289C4.68342 7.90237 5.31658 7.90237 5.70711 8.29289L12 14.5858L18.2929 8.29289C18.6834 7.90237 19.3166 7.90237 19.7071 8.29289C20.0976 8.68342 20.0976 9.31658 19.7071 9.70711L12.7071 16.7071C12.3166 17.0976 11.6834 17.0976 11.2929 16.7071L4.29289 9.70711C3.90237 9.31658 3.90237 8.68342 4.29289 8.29289Z"
+        fill="#ffffff"
+      />
+    </g>
+  </svg>,
+  kb:
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="w-[45vmin] h-[19.5vmin] 	"
+    viewBox="0 50 1500 650"
+    fill="none"
+  >
+    <rect width={90} height={90} x={40} y={90} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} ></rect>
+    <rect width={90} height={90} x={161.25} y={90} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={256.25} y={90} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={351.25} y={90} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={446.25} y={90} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={563.5} y={90} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={658.5} y={90} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={753.5} y={90} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={848.5} y={90} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={966.25} y={90} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={1061.25} y={90} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={1156.25} y={90} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={1251.25} y={90} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={1370} y={90} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={40} y={190} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={135} y={190} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={230} y={190} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={325} y={190} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={420} y={190} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={515} y={190} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={610} y={190} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={705} y={190} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={800} y={190} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={895} y={190} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={990} y={190} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={1085} y={190} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={1180} y={190} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={185} height={90} x={1275} y={190} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={135} height={90} x={40} y={285} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={180} y={285} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={275} y={285} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={370} y={285} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={465} y={285} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={560} y={285} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={655} y={285} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={750} y={285} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={845} y={285} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={940} y={285} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={1035} y={285} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={1130} y={285} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={1225} y={285} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={140} height={90} x={1320} y={285} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={160} height={90} x={40} y={380} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={205} y={380} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={300} y={380} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={395} y={380} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={490} y={380} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={585} y={380} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={680} y={380} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={775} y={380} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={870} y={380} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={965} y={380} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={1060} y={380} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={1155} y={380} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={210} height={90} x={1250} y={380} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={185} height={90} x={40} y={475} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={230} y={475} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={325} y={475} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={420} y={475} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={515} y={475} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={610} y={475} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={705} y={475} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={800} y={475} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={895} y={475} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={990} y={475} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={90} height={90} x={1085} y={475} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={280} height={90} x={1180} y={475} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={135} height={90} x={40} y={570} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={135} height={90} x={180} y={570} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={135} height={90} x={320} y={570} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={580} height={90} x={460} y={570} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={135} height={90} x={1045} y={570} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={135} height={90} x={1185} y={570} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+    <rect width={135} height={90} x={1325} y={570} rx={24} fill="#555555" stroke="#939393" strokeWidth={1} />
+  </svg>,
+  cont:<svg
+  id="Icons"
+  className="h-[4vmin]"
+  xmlns="http://www.w3.org/2000/svg"
+  xmlnsXlink="http://www.w3.org/1999/xlink"
+  viewBox="0 0 32 32"
+  xmlSpace="preserve"
+  fill="#ffffff"
+  stroke="#ffffff"
+>
+  <g id="SVGRepo_bgCarrier" strokeWidth={0} />
+  <g
+	id="SVGRepo_tracerCarrier"
+	strokeLinecap="round"
+	strokeLinejoin="round"
+  />
+  <g id="SVGRepo_iconCarrier">
+	<style type="text/css">
+	  {
+		" .st0{fill:none;stroke:#bbbbbb;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;} "
+	  }
+	</style>
+	<path
+	  className="st0"
+	  d="M23,15c-1.2,0-2.4,0.4-3.3,1h-7.4c-0.9-0.6-2.1-1-3.3-1c-3.3,0-6,2.7-6,6s2.7,6,6,6c1.2,0,2.4-0.4,3.3-1h7.4 c0.9,0.6,2.1,1,3.3,1c3.3,0,6-2.7,6-6S26.3,15,23,15z"
+	/>
+	<line className="st0" x1={9} y1={19} x2={9} y2={23} />
+	<line className="st0" x1={7} y1={21} x2={11} y2={21} />
+	<line className="st0" x1={23} y1={19} x2={23} y2={19} />
+	<line className="st0" x1={21} y1={21} x2={21} y2={21} />
+	<line className="st0" x1={25} y1={21} x2={25} y2={21} />
+	<line className="st0" x1={23} y1={23} x2={23} y2={23} />
+	<path
+	  className="st0"
+	  d="M16,16v-2c0-2.2-1.8-4-4-4H9c-2.2,0-4-1.8-4-4V3"
+	/>
+  </g>
+</svg>
+}
