@@ -473,14 +473,14 @@ export function rotPiece(
 }
 // Variable for scoring weights
 let weights = {
-	weightedBlocks: 0.3, //weighted sum of blocks, where a block's weight is the row it's on
-	connectedHoles: 0.1, //number of vertically connected holes
-	roughness: -0.5, //sum of height differences between adjacent columns
-	pitholePercentage: 0.15, //number of pits divided by total pits and holes
-	clearAbleLines: 0.5, //number of lines that can be cleared by an I piece
-	deepestHole: 0.25, //depth of the deepest hole
-	blocks: -0.25, //number of blocks
-	colHoles: -0.75, //number of columns containing holes
+	weightedBlocks: 0.25, //weighted sum of blocks, where a block's weight is the row it's on
+	connectedHoles: 0.09, //number of vertically connected holes
+	roughness: -0.63, //sum of height differences between adjacent columns
+	pitholePercentage: 0.2, //number of pits divided by total pits and holes
+	clearAbleLines: 0.41, //number of lines that can be cleared by an I piece
+	deepestHole: 0.22, //depth of the deepest hole
+	blocks: -0.36, //number of blocks
+	colHoles: -1.83, //number of columns containing holes
 };
 export function setWeights(newWeights: any): void {
 	weights = newWeights;
