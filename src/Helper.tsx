@@ -480,7 +480,7 @@ let weights = {
 	clearAbleLines: 0.41, //number of lines that can be cleared by an I piece
 	deepestHole: 0.22, //depth of the deepest hole
 	blocks: -0.36, //number of blocks
-	colHoles: -1.83, //number of columns containing holes
+	colHoles: -1.38, //number of columns containing holes
 };
 export function setWeights(newWeights: any): void {
 	weights = newWeights;
