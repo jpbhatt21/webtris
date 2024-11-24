@@ -730,7 +730,7 @@ export function automatic(
 				act.forEach((pos: number[]) => {
 					tempBoard[pos[0]][pos[1]].occupied = true;
 				});
-				scores.push([analyze(tempBoard), act, rot, tempBoard]);
+				scores.push([analyze(tempBoard), temp, rot, tempBoard]);
 				act = JSON.parse(JSON.stringify(temp));
 				act[0][1] += 1;
 				act[1][1] += 1;
