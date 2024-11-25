@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { automatic, getWeights, rotPiece, svg } from "./Helper";
-let inter: any = null;
+let inter: any =1// null;
 
 // hld = shapess[0]
 // random = shapess[1]
@@ -81,7 +81,7 @@ function App() {
   );
   const [controls, setControls] = useState(false);
   const [gameOver, setGameOver] = useState(false);
-  const [restart, setRestart] = useState(0);
+  const [restart, setRestart] = useState(new Date().getTime());
   const [score, setScore] = useState(0);
   const [lcRect, setLcRect] = useState([0, 0, 0, 0]);
   const [active, setActive] = useState(
@@ -102,7 +102,7 @@ function App() {
   let [curShape, setCurShape] = useState(7);
   let [holdShape, setHoldShape] = useState(7);
   const [autp, setAutp] = useState(false);
-  let timeDiff = (new Date().getTime() - initTime) / 1000;
+  let timeDiff = (new Date().getTime() - restart) / 1000;
   let sec = Math.floor(timeDiff % 60);
   let min = Math.floor(timeDiff / 60);
   const [paused, setPaused] = useState(false);
@@ -111,6 +111,7 @@ function App() {
     //   setBoard(newPiece(board,random));
     //   setKey(key+1);
 
+	
     if (inter == null) {
       setGameOver(false);
       let bag = [0, 1, 2, 3, 4, 5, 6];
@@ -1082,7 +1083,7 @@ function App() {
                     );
                     clearInterval(inter);
                     inter = null;
-                    setRestart(restart + 1);
+                    setRestart(new Date().getTime());
                     setPaused(false);
                   }}
                 >
@@ -1188,7 +1189,7 @@ function App() {
             <div
               className="text-[2vmin] duration-200 "
               style={{
-                marginTop: !autp ? "0" : "-12.5vmin",
+                marginTop: !autp ? "0" : "-17.25vmin",
               }}
             >
               Autoplay
@@ -1211,9 +1212,9 @@ function App() {
               ></div>
             </div>
             <div
-              className="text-[1.5vmin] lexend mb-[2vmin] duration-200 h-0 w-[20vmin] flex flex-col"
+              className="text-[1.5vmin] lexend mb-[0.75vmin] duration-200 h-0 w-[20vmin] flex flex-col"
               style={{
-                height: autp ? "12.5vmin" : "0vmin",
+                height: autp ? "12.25vmin" : "0vmin",
                 overflow: "hidden",
                 opacity: autp ? "1" : "0",
               }}
@@ -1328,14 +1329,22 @@ function App() {
                   />
                 </div>
               </div>
+			  
             </div>
-			<div className="flex flex-col mb-[2vmin] items-center justify-center">
+			<div className="flex text-[2vmin] mts gap-[0.25vmin] duration-200 flex-col mb-[2vmin] items-center justify-center"
+			style={{
+				height: autp ? "5vmin" : "0vmin",
+                overflow: "hidden",
+                opacity: autp ? "1" : "0",
+			}}
+			>
 				Speed
 				<input type="range" defaultValue={(100-(dur)/10)} min={0} max={100} onChange={(e)=>{
 					dur = (100-parseFloat(e.target.value))*10;
 
 				}}/>
 			</div>
+			
             <div className="text-[2vmin]">Time</div>
             <div className="text-[2vmin] mb-[2vmin]">
               {(min < 10 ? "0" : "") + min + ":" + (sec < 10 ? "0" : "") + sec}
