@@ -1,13 +1,15 @@
 import { useState } from "react";
 import ControlsScreen from "./Controls";
+import ThemeScreen from "./Theme";
 
 function SettingsScreen({ props }: any) {
-    const [selected,setSelected] = useState(0);
+    const [selected,setSelected] = useState(2);
 	return (
 		<>
 			<div
-				className="bg-blank border border-bcol duration-200 pointer-events-none border-r-0 border-l-0 shadow-lg w-[48vmin] absolute "
+				className="bg -blank border border-bcol duration-200 pointer-events-none border-r-0 border-l-0 shadow-lg w-[48vmin] absolute "
 				style={{
+                    backgroundColor: props.theme.background,
 					opacity: props.show ? "0.5" : "0",
 					height: props.show ? "50vmin" : "0",
 					marginTop: props.show ? "-12.5vmin" : "25vmin",
@@ -38,8 +40,9 @@ function SettingsScreen({ props }: any) {
                             })
                         }
                     </div>
-                    <div className="w-full h-full mt-[2vmin] px-[4vmin]">
+                    <div className="w-full h-[32vmin] mt-[2vmin] px-[4vmin]">
                         {selected === 0 && <ControlsScreen />}
+                        {selected === 2 && <ThemeScreen />}
                     </div>
                 </div>
 		</>

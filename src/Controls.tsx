@@ -30,8 +30,8 @@ function ControlsScreen() {
     },[])
   return (
     <>
-      <div className="w-full h-full flex flex-col items-center fadein bg -black  mb-[-1.75vmin]">
-      <div className=" text-white w-[1vmin] h-[1vmin] rotate-180 -mb-[1vmin] duration-200"
+      <div className="w-full h-full flex flex-col items-center fadein bg -black   mb-[-1.75vmin]">
+      <div className=" text-white w-[1vmin] h-[1vmin] rotate-180 -mb-[1vmin]  duration-200"
       style={{
         opacity:0!=scrollHeight?"1":"0",
       }}
@@ -42,7 +42,7 @@ function ControlsScreen() {
       id="controls"
       onScroll={(e)=>setScrollHeight(e.currentTarget.scrollTop)}
       
-      key={key} className="w-full h-full overflow-y-scroll hscb justify-center flex flex-wrap gap-[0.75vmin] text-[1.5vmin] items-center ">
+      key={key} className="w-full h-full overflow-y-scroll hscb justify-center py-[0.5vmin] px-[0.5vmin] flex flex-wrap gap-[0.75vmin] text-[1.5vmin] items-center ">
         {
           titles.map((x,i)=><div className="flex justify-between items-center w-full">
           {x}
@@ -75,7 +75,7 @@ function ControlsScreen() {
       </div>
       <div className=" text-white w-[1vmin] h-[1vmin] -mt-[1vmin] duration-200"
       style={{
-        opacity:maxScroll!=scrollHeight?"1":"0",
+        opacity:maxScroll-scrollHeight>2?"1":"0",
       }}
       >{
         svg.downChev

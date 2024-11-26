@@ -1,8 +1,9 @@
 function PauseScreen({props}:any) {
     return ( <>
             <div
-              className="bg-blank border border-bcol duration-200 border-r-0 border-l-0 shadow-lg w-[50vmin] absolute "
+              className=" border border-bcol duration-200 border-r-0 border-l-0 shadow-lg w-[50vmin] absolute "
               style={{
+                backgroundColor: props.theme.background,
                 opacity: props.show ? "0.5" : "0",
                 height: props.show ? "20vmin" : "0",
                 marginTop:
@@ -31,6 +32,7 @@ function PauseScreen({props}:any) {
                   }}
                   style={{
                     display: props.gameOver ? "none" : "block",
+                    borderColor: props.theme.accents[4],
                   }}
                 >
                   Resume
@@ -52,6 +54,9 @@ function PauseScreen({props}:any) {
                     props.setInter(null)
                     props.setRestart(new Date().getTime());
                     props.setPaused(false);
+                  }}
+                  style={{
+                    borderColor: props.theme.accents[5],
                   }}
                 >
                   Restart

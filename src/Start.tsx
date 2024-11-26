@@ -1,8 +1,11 @@
+import { getColorScheme } from "./Helper";
+
 function StartScreen({props}:any) {
     return ( <>
     <div
-              className="bg-blank border border-bcol duration-200 border-r-0 border-l-0 shadow-lg w-[50vmin] absolute "
+              className="bg-b lank border border-bcol duration-200 border-r-0 border-l-0 shadow-lg w-[50vmin] absolute "
               style={{
+                backgroundColor: props.theme.background,
                 opacity: props.show ? "0.5" : "0",
                 height: props.show ? "20vmin" : "0",
                 marginTop:
@@ -31,12 +34,16 @@ function StartScreen({props}:any) {
                   }}
                   style={{
                     display: props.gameOver ? "none" : "block",
+                    color: props.theme.accents[2]
                   }}
                 >
                   <label className="text-white">Multiplayer</label>
                 </button>
                 <div
                   className="bg-post rounded-sm duration-200  select-none brt cursor-pointer hover:text-colors-bloo text-colors-green w-[10vmin] py-[0.5vmin] text-center"
+                  style={{
+                    color: props.theme.accents[4]
+                  }}
                   onClick={() => {
                     props.setGameOver(false);
                     props.setBoard(

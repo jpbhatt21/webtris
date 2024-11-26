@@ -1305,20 +1305,20 @@ export let automateAnalyzer = (
 		return false;
 	}
 };
-const themes = {
+export const themes = {
 	// Nord Theme (Original)
 	nord: {
 		background:"#1b1b1b",
 		text:"#d8dee9",
 		backpop:"#252525",
 		accents:[
-		  "#88C0D0",
-		  "#81A1C1",
-		  "#D08770",
-		  "#EBCB8B",
-		  "#A3BE8C",
-		  "#BF616A",
-		  "#B48EAD",
+		  "#88C0D0", //blue
+		  "#81A1C1", //teal
+		  "#D08770", //orange
+		  "#EBCB8B", //yellow
+		  "#A3BE8C", //green
+		  "#BF616A", //red
+		  "#B48EAD", //purple
 		  "#00000000",
 		  "#81A1C1",
 		  "#88C0D0"
@@ -1331,13 +1331,13 @@ const themes = {
 	  text: "#F8F8F2",
 	  backpop: "#44475A",
 	  accents: [
-		"#BD93F9", // Purple
-		"#FF79C6", // Pink
-		"#50FA7B", // Green
-		"#F1FA8C", // Yellow
-		"#8BE9FD", // Cyan
-		"#FFB86C", // Orange
-		"#FF5555", // Red
+		  "#FF79C6", // Pink
+		  "#8BE9FD", // Cyan
+		  "#FFB86C", // Orange
+		  "#F1FA8C", // Yellow
+		  "#50FA7B", // Green
+		  "#FF5555", // Red
+		  "#BD93F9", // Purple
 		"#00000000", // Transparent
 		"#6272A4", // Comment Blue
 		"#6272A4"
@@ -1350,13 +1350,13 @@ const themes = {
 	  text: "#A9B1D6",
 	  backpop: "#24283B",
 	  accents: [
-		"#7AA2F7", // Blue
-		"#9ECE6A", // Green
-		"#E0AF68", // Yellow
+		  "#414868", // Dark Blue
+		  "#7AA2F7", // Blue
+		  "#7DCFFF", // Cyan
+		  "#E0AF68", // Yellow
+		  "#9ECE6A", // Green
 		"#F7768E", // Red
 		"#BB9AF7", // Purple
-		"#7DCFFF", // Cyan
-		"#414868", // Dark Blue
 		"#00000000", // Transparent
 		"#565F89", // Muted Blue
 		"#7AA2F7"
@@ -1369,13 +1369,13 @@ const themes = {
 	  text: "#93A1A1",
 	  backpop: "#073642",
 	  accents: [
+		  "#6C71C4", // Violet
 		"#268BD2", // Blue
 		"#2AA198", // Cyan
-		"#859900", // Green
 		"#B58900", // Yellow
-		"#D33682", // Magenta
+		"#859900", // Green
 		"#DC322F", // Red
-		"#6C71C4", // Violet
+		"#D33682", // Magenta
 		"#00000000", // Transparent
 		"#CB4B16", // Orange
 		"#268BD2"
@@ -1388,13 +1388,13 @@ const themes = {
 	  text: "#F8F8F2",
 	  backpop: "#3E3D32",
 	  accents: [
-		"#AE81FF", // Purple
-		"#F92672", // Pink
-		"#A6E22E", // Green
-		"#E6DB74", // Yellow
-		"#66D9EF", // Cyan
-		"#FD971F", // Orange
-		"#F83333", // Red
+		  "#F92672", // Pink
+		  "#66D9EF", // Cyan
+		  "#FD971F", // Orange
+		  "#E6DB74", // Yellow
+		  "#A6E22E", // Green
+		  "#F83333", // Red
+		  "#AE81FF", // Purple
 		"#00000000", // Transparent
 		"#75715E", // Comment Gray
 		"#AE81FF"
@@ -1407,13 +1407,13 @@ const themes = {
 	  text: "#ABB2BF",
 	  backpop: "#21252B",
 	  accents: [
-		"#61AFEF", // Blue
-		"#98C379", // Green
+		  "#61AFEF", // Blue
+		  "#56B6C2", // Cyan
+		  "#BE5046", // Dark Red
 		"#E5C07B", // Yellow
+		"#98C379", // Green
 		"#E06C75", // Red
 		"#C678DD", // Purple
-		"#56B6C2", // Cyan
-		"#BE5046", // Dark Red
 		"#00000000", // Transparent
 		"#5C6370", // Comment Gray
 		"#61AFEF"
@@ -1425,12 +1425,12 @@ const themes = {
 		backpop: "#313244",
 		accents: [
 		  "#89B4FA", // Blue
-		  "#A6E3A1", // Green
-		  "#F9E2AF", // Yellow
-		  "#F38BA8", // Red
-		  "#B4BEFE", // Lavender
 		  "#94E2D5", // Teal
 		  "#CBA6F7", // Mauve
+		  "#F9E2AF", // Yellow
+		  "#A6E3A1", // Green
+		  "#F38BA8", // Red
+		  "#B4BEFE", // Lavender
 		  "#00000000", // Transparent
 		  "#585B70", // Surface2
 		  "#89B4FA"
@@ -1443,12 +1443,12 @@ const themes = {
 		backpop: "#414559",
 		accents: [
 		  "#8CAAEE", // Blue
-		  "#A6D189", // Green
-		  "#E5C890", // Yellow
-		  "#E78284", // Red
-		  "#BABBF1", // Lavender
 		  "#81C8BE", // Teal
 		  "#F4B8E4", // Pink
+		  "#E5C890", // Yellow
+		  "#A6D189", // Green
+		  "#E78284", // Red
+		  "#BABBF1", // Lavender
 		  "#00000000", // Transparent
 		  "#626880", // Surface2
 		  "#8CAAEE"
@@ -1462,12 +1462,12 @@ const themes = {
 		backpop: "#3C3836",
 		accents: [
 		  "#458588", // Blue
-		  "#98971A", // Green
-		  "#D79921", // Yellow
-		  "#CC241D", // Red
-		  "#B16286", // Purple
 		  "#689D6A", // Aqua
 		  "#FE8019", // Orange
+		  "#D79921", // Yellow
+		  "#98971A", // Green
+		  "#CC241D", // Red
+		  "#B16286", // Purple
 		  "#00000000", // Transparent
 		  "#504945", // Dark Gray
 		  "#458588"
@@ -1481,12 +1481,12 @@ const themes = {
 		backpop: "#181A20",
 		accents: [
 		  "#82AAFF", // Blue
-		  "#C3E88D", // Green
-		  "#FFCB6B", // Yellow
-		  "#F07178", // Red
-		  "#C792EA", // Purple
 		  "#89DDFF", // Cyan
 		  "#F78C6C", // Orange
+		  "#FFCB6B", // Yellow
+		  "#C3E88D", // Green
+		  "#F07178", // Red
+		  "#C792EA", // Purple
 		  "#00000000", // Transparent
 		  "#3C435E", // Dark Blue
 		  "#82AAFF"
@@ -1500,36 +1500,19 @@ const themes = {
 		backpop: "#131721",
 		accents: [
 		  "#39BAE6", // Blue
-		  "#C2D94C", // Green
-		  "#FFB454", // Yellow
-		  "#FF6A6A", // Red
-		  "#A37ACC", // Purple
 		  "#95E6CB", // Cyan
 		  "#F29718", // Orange
+		  "#FFB454", // Yellow
+		  "#C2D94C", // Green
+		  "#FF6A6A", // Red
+		  "#A37ACC", // Purple
 		  "#00000000", // Transparent
 		  "#2D3640", // Dark Gray
 		  "#39BAE6"
 		]
 	  },
 	
-	  // Nord Light Theme
-	  nordLight: {
-		background: "#ECEFF4",
-		text: "#2E3440",
-		backpop: "#E5E9F0",
-		accents: [
-		  "#5E81AC", // Blue
-		  "#A3BE8C", // Green
-		  "#EBCB8B", // Yellow
-		  "#BF616A", // Red
-		  "#B48EAD", // Purple
-		  "#88C0D0", // Cyan
-		  "#D08770", // Orange
-		  "#00000000", // Transparent
-		  "#4C566A", // Dark Gray
-		  "#5E81AC"
-		]
-	  },
+	  
 	
 	  // Horizon Theme
 	  horizon: {
@@ -1539,11 +1522,11 @@ const themes = {
 		accents: [
 		  "#26BBD9", // Blue
 		  "#59E3E3", // Teal
+		  "#25B0BC", // Cyan
+		  "#FAB795", // Orange
 		  "#F9CEC3", // Pale Pink
 		  "#E95678", // Red
 		  "#B877DB", // Purple
-		  "#25B0BC", // Cyan
-		  "#FAB795", // Orange
 		  "#00000000", // Transparent
 		  "#6C6F74", // Gray
 		  "#26BBD9"
@@ -1557,12 +1540,12 @@ const themes = {
 		backpop: "#34374D",
 		accents: [
 		  "#82AAFF", // Blue
-		  "#C3E88D", // Green
-		  "#FFCB6B", // Yellow
-		  "#F07178", // Red
-		  "#C792EA", // Purple
 		  "#89DDFF", // Cyan
 		  "#F78C6C", // Orange
+		  "#FFCB6B", // Yellow
+		  "#C3E88D", // Green
+		  "#F07178", // Red
+		  "#C792EA", // Purple
 		  "#00000000", // Transparent
 		  "#4E5579", // Dark Blue
 		  "#82AAFF"
@@ -1576,12 +1559,12 @@ const themes = {
 		backpop: "#2C2F33",
 		accents: [
 		  "#6CA6DC", // Blue
-		  "#7FCA9F", // Green
-		  "#E6C062", // Yellow
-		  "#DC5C60", // Red
-		  "#B26FBE", // Purple
 		  "#5ED6B7", // Cyan
 		  "#F6A299", // Salmon
+		  "#E6C062", // Yellow
+		  "#7FCA9F", // Green
+		  "#DC5C60", // Red
+		  "#B26FBE", // Purple
 		  "#00000000", // Transparent
 		  "#404040", // Dark Gray
 		  "#6CA6DC"
@@ -1595,12 +1578,12 @@ const themes = {
 		backpop: "#343D46",
 		accents: [
 		  "#6699CC", // Blue
-		  "#99C794", // Green
-		  "#FAC863", // Yellow
-		  "#EC5F67", // Red
-		  "#C594C5", // Purple
 		  "#5FB3B3", // Cyan
 		  "#F99157", // Orange
+		  "#FAC863", // Yellow
+		  "#99C794", // Green
+		  "#EC5F67", // Red
+		  "#C594C5", // Purple
 		  "#00000000", // Transparent
 		  "#4F5B66", // Dark Gray
 		  "#6699CC"
@@ -1614,12 +1597,12 @@ const themes = {
 		backpop: "#1D3B53",
 		accents: [
 		  "#5F7E97", // Blue Gray
-		  "#7FCA9F", // Green
-		  "#FFEB95", // Yellow
-		  "#EF5350", // Red
-		  "#C792EA", // Purple
 		  "#7FDBCA", // Cyan
 		  "#F78C6C", // Orange
+		  "#FFEB95", // Yellow
+		  "#7FCA9F", // Green
+		  "#EF5350", // Red
+		  "#C792EA", // Purple
 		  "#00000000", // Transparent
 		  "#2A3544", // Dark Blue
 		  "#5F7E97"
@@ -1628,9 +1611,9 @@ const themes = {
   };
 type ThemeType=typeof themes
 let kys= Object.keys(themes) as (keyof ThemeType)[]
-let colorScheme=themes[kys[1]]
-  export function setColorScheme(newColorScheme:any){
-	colorScheme=newColorScheme
+let colorScheme=themes[kys[0]]
+  export function setColorScheme(val:any){
+	colorScheme=themes[kys[val]]
   }
   export function getColorScheme(){
 	return colorScheme
