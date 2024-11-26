@@ -1305,6 +1305,336 @@ export let automateAnalyzer = (
 		return false;
 	}
 };
+const themes = {
+	// Nord Theme (Original)
+	nord: {
+		background:"#1b1b1b",
+		text:"#d8dee9",
+		backpop:"#252525",
+		accents:[
+		  "#88C0D0",
+		  "#81A1C1",
+		  "#D08770",
+		  "#EBCB8B",
+		  "#A3BE8C",
+		  "#BF616A",
+		  "#B48EAD",
+		  "#00000000",
+		  "#81A1C1",
+		  "#88C0D0"
+		]
+	  },
+  
+	// Dracula Theme
+	dracula: {
+	  background: "#282A36",
+	  text: "#F8F8F2",
+	  backpop: "#44475A",
+	  accents: [
+		"#BD93F9", // Purple
+		"#FF79C6", // Pink
+		"#50FA7B", // Green
+		"#F1FA8C", // Yellow
+		"#8BE9FD", // Cyan
+		"#FFB86C", // Orange
+		"#FF5555", // Red
+		"#00000000", // Transparent
+		"#6272A4", // Comment Blue
+		"#6272A4"
+	  ]
+	},
+  
+	// Tokyo Night Theme
+	tokyoNight: {
+	  background: "#1A1B26",
+	  text: "#A9B1D6",
+	  backpop: "#24283B",
+	  accents: [
+		"#7AA2F7", // Blue
+		"#9ECE6A", // Green
+		"#E0AF68", // Yellow
+		"#F7768E", // Red
+		"#BB9AF7", // Purple
+		"#7DCFFF", // Cyan
+		"#414868", // Dark Blue
+		"#00000000", // Transparent
+		"#565F89", // Muted Blue
+		"#7AA2F7"
+	  ]
+	},
+  
+	// Solarized Dark Theme
+	solarizedDark: {
+	  background: "#002B36",
+	  text: "#93A1A1",
+	  backpop: "#073642",
+	  accents: [
+		"#268BD2", // Blue
+		"#2AA198", // Cyan
+		"#859900", // Green
+		"#B58900", // Yellow
+		"#D33682", // Magenta
+		"#DC322F", // Red
+		"#6C71C4", // Violet
+		"#00000000", // Transparent
+		"#CB4B16", // Orange
+		"#268BD2"
+	  ]
+	},
+  
+	// Monokai Theme
+	monokai: {
+	  background: "#272822",
+	  text: "#F8F8F2",
+	  backpop: "#3E3D32",
+	  accents: [
+		"#AE81FF", // Purple
+		"#F92672", // Pink
+		"#A6E22E", // Green
+		"#E6DB74", // Yellow
+		"#66D9EF", // Cyan
+		"#FD971F", // Orange
+		"#F83333", // Red
+		"#00000000", // Transparent
+		"#75715E", // Comment Gray
+		"#AE81FF"
+	  ]
+	},
+  
+	// One Dark Theme (Atom)
+	oneDark: {
+	  background: "#282C34",
+	  text: "#ABB2BF",
+	  backpop: "#21252B",
+	  accents: [
+		"#61AFEF", // Blue
+		"#98C379", // Green
+		"#E5C07B", // Yellow
+		"#E06C75", // Red
+		"#C678DD", // Purple
+		"#56B6C2", // Cyan
+		"#BE5046", // Dark Red
+		"#00000000", // Transparent
+		"#5C6370", // Comment Gray
+		"#61AFEF"
+	  ]
+	},
+	catppuccinMocha: {
+		background: "#1E1E2E",
+		text: "#CDD6F4",
+		backpop: "#313244",
+		accents: [
+		  "#89B4FA", // Blue
+		  "#A6E3A1", // Green
+		  "#F9E2AF", // Yellow
+		  "#F38BA8", // Red
+		  "#B4BEFE", // Lavender
+		  "#94E2D5", // Teal
+		  "#CBA6F7", // Mauve
+		  "#00000000", // Transparent
+		  "#585B70", // Surface2
+		  "#89B4FA"
+		]
+	  },
+	  
+	  catppuccinFrappe: {
+		background: "#303446",
+		text: "#C6D0F5",
+		backpop: "#414559",
+		accents: [
+		  "#8CAAEE", // Blue
+		  "#A6D189", // Green
+		  "#E5C890", // Yellow
+		  "#E78284", // Red
+		  "#BABBF1", // Lavender
+		  "#81C8BE", // Teal
+		  "#F4B8E4", // Pink
+		  "#00000000", // Transparent
+		  "#626880", // Surface2
+		  "#8CAAEE"
+		]
+	  },
+	
+	  // Gruvbox Theme
+	  gruvbox: {
+		background: "#282828",
+		text: "#EBDBB2",
+		backpop: "#3C3836",
+		accents: [
+		  "#458588", // Blue
+		  "#98971A", // Green
+		  "#D79921", // Yellow
+		  "#CC241D", // Red
+		  "#B16286", // Purple
+		  "#689D6A", // Aqua
+		  "#FE8019", // Orange
+		  "#00000000", // Transparent
+		  "#504945", // Dark Gray
+		  "#458588"
+		]
+	  },
+	
+	  // Material Ocean Theme
+	  materialOcean: {
+		background: "#0F111A",
+		text: "#8F93A2",
+		backpop: "#181A20",
+		accents: [
+		  "#82AAFF", // Blue
+		  "#C3E88D", // Green
+		  "#FFCB6B", // Yellow
+		  "#F07178", // Red
+		  "#C792EA", // Purple
+		  "#89DDFF", // Cyan
+		  "#F78C6C", // Orange
+		  "#00000000", // Transparent
+		  "#3C435E", // Dark Blue
+		  "#82AAFF"
+		]
+	  },
+	
+	  // Ayu Dark Theme
+	  ayuDark: {
+		background: "#0A0E14",
+		text: "#B3B1AD",
+		backpop: "#131721",
+		accents: [
+		  "#39BAE6", // Blue
+		  "#C2D94C", // Green
+		  "#FFB454", // Yellow
+		  "#FF6A6A", // Red
+		  "#A37ACC", // Purple
+		  "#95E6CB", // Cyan
+		  "#F29718", // Orange
+		  "#00000000", // Transparent
+		  "#2D3640", // Dark Gray
+		  "#39BAE6"
+		]
+	  },
+	
+	  // Nord Light Theme
+	  nordLight: {
+		background: "#ECEFF4",
+		text: "#2E3440",
+		backpop: "#E5E9F0",
+		accents: [
+		  "#5E81AC", // Blue
+		  "#A3BE8C", // Green
+		  "#EBCB8B", // Yellow
+		  "#BF616A", // Red
+		  "#B48EAD", // Purple
+		  "#88C0D0", // Cyan
+		  "#D08770", // Orange
+		  "#00000000", // Transparent
+		  "#4C566A", // Dark Gray
+		  "#5E81AC"
+		]
+	  },
+	
+	  // Horizon Theme
+	  horizon: {
+		background: "#1C1E26",
+		text: "#D5D8DA",
+		backpop: "#232530",
+		accents: [
+		  "#26BBD9", // Blue
+		  "#59E3E3", // Teal
+		  "#F9CEC3", // Pale Pink
+		  "#E95678", // Red
+		  "#B877DB", // Purple
+		  "#25B0BC", // Cyan
+		  "#FAB795", // Orange
+		  "#00000000", // Transparent
+		  "#6C6F74", // Gray
+		  "#26BBD9"
+		]
+	  },
+	
+	  // Palenight Theme
+	  palenight: {
+		background: "#292D3E",
+		text: "#A6ACCD",
+		backpop: "#34374D",
+		accents: [
+		  "#82AAFF", // Blue
+		  "#C3E88D", // Green
+		  "#FFCB6B", // Yellow
+		  "#F07178", // Red
+		  "#C792EA", // Purple
+		  "#89DDFF", // Cyan
+		  "#F78C6C", // Orange
+		  "#00000000", // Transparent
+		  "#4E5579", // Dark Blue
+		  "#82AAFF"
+		]
+	  },
+	
+	  // Spacegray Theme
+	  spacegray: {
+		background: "#1C1F26",
+		text: "#A8A8A8",
+		backpop: "#2C2F33",
+		accents: [
+		  "#6CA6DC", // Blue
+		  "#7FCA9F", // Green
+		  "#E6C062", // Yellow
+		  "#DC5C60", // Red
+		  "#B26FBE", // Purple
+		  "#5ED6B7", // Cyan
+		  "#F6A299", // Salmon
+		  "#00000000", // Transparent
+		  "#404040", // Dark Gray
+		  "#6CA6DC"
+		]
+	  },
+	
+	  // Oceanic Next Theme
+	  oceanicNext: {
+		background: "#1B2B34",
+		text: "#D8DEE9",
+		backpop: "#343D46",
+		accents: [
+		  "#6699CC", // Blue
+		  "#99C794", // Green
+		  "#FAC863", // Yellow
+		  "#EC5F67", // Red
+		  "#C594C5", // Purple
+		  "#5FB3B3", // Cyan
+		  "#F99157", // Orange
+		  "#00000000", // Transparent
+		  "#4F5B66", // Dark Gray
+		  "#6699CC"
+		]
+	  },
+	
+	  // Night Owl Theme
+	  nightOwl: {
+		background: "#011627",
+		text: "#D6DEEB",
+		backpop: "#1D3B53",
+		accents: [
+		  "#5F7E97", // Blue Gray
+		  "#7FCA9F", // Green
+		  "#FFEB95", // Yellow
+		  "#EF5350", // Red
+		  "#C792EA", // Purple
+		  "#7FDBCA", // Cyan
+		  "#F78C6C", // Orange
+		  "#00000000", // Transparent
+		  "#2A3544", // Dark Blue
+		  "#5F7E97"
+		]
+	  }
+  };
+type ThemeType=typeof themes
+let kys= Object.keys(themes) as (keyof ThemeType)[]
+let colorScheme=themes[kys[1]]
+  export function setColorScheme(newColorScheme:any){
+	colorScheme=newColorScheme
+  }
+  export function getColorScheme(){
+	return colorScheme
+  }
 export const svg={
 	arr: <svg
     viewBox="0 0 24 24"
@@ -1327,6 +1657,21 @@ export const svg={
       />
     </g>
   </svg>,
+  downChev:<svg
+  viewBox="0 0 24 24"
+  xmlns="http://www.w3.org/2000/svg"
+  fill="currentColor">
+  <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+  <g
+	  id="SVGRepo_tracerCarrier"
+	  strokeLinecap="round"
+	  strokeLinejoin="round"></g>
+  <g id="SVGRepo_iconCarrier">
+	  <path
+		  fill="currentColor"
+		  d="M22.987 10.25l-9 7.99c-.57.51-1.28.76-1.99.76s-1.42-.25-1.98-.74c0-.01-.01-.01-.01-.01l-.02-.02-8.98-7.98c-1.24-1.1-1.35-3.002-.25-4.242 1.1-1.24 3-1.35 4.23-.25l7.01 6.23 7.01-6.23c1.24-1.1 3.13-.99 4.24.25 1.1 1.24.98 3.13-.26 4.24z"></path>
+  </g>
+</svg>,
   kb:
   <svg
     xmlns="http://www.w3.org/2000/svg"

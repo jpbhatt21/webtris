@@ -6,7 +6,7 @@ function SettingsScreen({ props }: any) {
 	return (
 		<>
 			<div
-				className="bg-blank border border-bcol duration-200 pointer-events-none border-r-0 border-l-0 shadow-lg w-[50vmin] absolute "
+				className="bg-blank border border-bcol duration-200 pointer-events-none border-r-0 border-l-0 shadow-lg w-[48vmin] absolute "
 				style={{
 					opacity: props.show ? "0.5" : "0",
 					height: props.show ? "50vmin" : "0",

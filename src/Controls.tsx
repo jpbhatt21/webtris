@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type SettingsKeys = keyof typeof settings;
-import { setSettings, settings } from "./Helper";
-
+import { setSettings, settings, svg } from "./Helper";
+let maxScroll=0
 function ControlsScreen() {
   const [key,setKey]=useState(0)
   const kList = Object.keys(settings) as SettingsKeys[];
@@ -16,19 +16,46 @@ function ControlsScreen() {
     "Hold",
     "Rotate CW"
   ]
+  const [scrollHeight,setScrollHeight]=useState(0)  
+  
+  useEffect(()=>{
+    setTimeout(()=>{
+        let e=document.getElementById("controls")
+        if(e)
+        {
+            maxScroll=e.scrollHeight-e.clientHeight
+            setScrollHeight(e.scrollTop)
+        }
+    },10)
+    },[])
   return (
     <>
-      <div className="w-full h-full fadein">
-      <div key={key} className="w-full h-full overflow -y-scroll justify-center flex flex-wrap gap-[0.75vmin] text-[1.5vmin] items-center ">
+      <div className="w-full h-full flex flex-col items-center fadein bg -black  mb-[-1.75vmin]">
+      <div className=" text-white w-[1vmin] h-[1vmin] rotate-180 -mb-[1vmin] duration-200"
+      style={{
+        opacity:0!=scrollHeight?"1":"0",
+      }}
+      >{
+        svg.downChev
+      }</div>
+      <div
+      id="controls"
+      onScroll={(e)=>setScrollHeight(e.currentTarget.scrollTop)}
+      
+      key={key} className="w-full h-full overflow-y-scroll hscb justify-center flex flex-wrap gap-[0.75vmin] text-[1.5vmin] items-center ">
         {
           titles.map((x,i)=><div className="flex justify-between items-center w-full">
           {x}
           <input
             defaultValue={settings[kList[i]]}
-            className="h-[2.5vmin] w-[10vmin] cursor-pointer focus:cursor-none duration-200 outline outline-1 outline-[#0000] active:outline-none caret-transparent focus:outline-none focus:border-colors-green bg-bdark bg-opacity-20 border border-[#0000] text-center rounded-[0.5vmin]"
+            className="h-[3.5vmin] w-[10vmin] cursor-pointer focus:cursor-none duration-200 outline outline-1 outline-[#0000] active:outline-none caret-transparent focus:outline-none focus:border-colors-green bg-bdark bg-opacity-20 border border-[#0000] text-center rounded-[0.5vmin]"
             type="text"
             style={{
               outlineColor:settings.clash.includes((settings[kList[i]]).toString())?"#bf616a":""
+            }}
+            onFocus={(e) => {
+                if(i==1)
+                    e.currentTarget.blur()
             }}
             onChange={(e) => {
               e.currentTarget.value = (settings[kList[i]]).toString();
@@ -46,6 +73,13 @@ function ControlsScreen() {
         </div>)
         }
       </div>
+      <div className=" text-white w-[1vmin] h-[1vmin] -mt-[1vmin] duration-200"
+      style={{
+        opacity:maxScroll!=scrollHeight?"1":"0",
+      }}
+      >{
+        svg.downChev
+      }</div>
       </div>
     </>
   );

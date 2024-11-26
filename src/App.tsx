@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { automatic, getSettings, getWeights, rotPiece, svg } from "./Helper";
+import { automatic, getColorScheme, getSettings, getWeights, rotPiece, svg } from "./Helper";
 import PauseScreen from "./Pause";
-import ControlsScreen from "./Controls";
 import StartScreen from "./Start";
 import SettingsScreen from "./Settings";
 let inter: any = null;
@@ -19,16 +18,7 @@ let setInter = (val: any) => {
 // random = shapess[1]
 // nxt = shapess[2]
 
-let cols = [
-	"#88C0D0",
-	"#81A1C1",
-	"#D08770",
-	"#EBCB8B",
-	"#A3BE8C",
-	"#BF616A",
-	"#B48EAD",
-	"#00000000",
-];
+let theme=getColorScheme()
 let activePos = [
 	[
 		[0, 3],
@@ -167,7 +157,10 @@ function App() {
 					key = "␣"
 				}
 				if (key == settings.pauseGame && started) {
-					keys.pauseGame = true;
+					setControls((prev) => {
+            if (!prev) keys.pauseGame = true;
+            return prev
+          })
 				}
 				if (!autoplay) {
 					if (key === settings.moveLeft) {
@@ -250,7 +243,7 @@ function App() {
 					//setKeys((prev) => ({ ...prev, holdPiece: false }));
 					keys.holdPiece = false;
 				}
-				if (key === settings.pauseGame) {
+				if (key === settings.closeMenu) {
 					setControls((prev) => {
 						if (!prev) setPaused(false);
 						return false;
@@ -280,7 +273,7 @@ function App() {
 					held = false;
 					act.forEach((pos: number[]) => {
 						board[pos[0]][pos[1]].occupied = true;
-						board[pos[0]][pos[1]].color = cols[shape];
+						board[pos[0]][pos[1]].color = theme.accents[shape];
 					});
 					let lines = 0;
 					board.forEach((row, i) => {
@@ -1010,13 +1003,18 @@ function App() {
 	}, [controls]);
 	return (
 		<>
-			<div className="fixed mts gap-[2vmin] w-full h-full flex items-center justify-center">
+			<div className="fixed mts gap-[2vmin] w-full h-full flex items-center justify-center "
+      style={{
+        color:theme.text,
+        backgroundColor:theme.background
+      }}
+      >
 				<div
-					className="h-full w-[18vmin] duration-300 flex flex-col justify-center items-center  text-white"
+					className="h-full w-[18vmin] duration-300 flex flex-col justify-center items-center  "
 					style={{
 						opacity: started ? 1 : 0,
 					}}>
-					<div className="h-full w-full flex flex-col items-center justify-center text-white">
+					<div className="h-full w-full flex flex-col items-center justify-center ">
 						<div
 							onClick={() => {
 								setControls(!controls);
@@ -1027,7 +1025,11 @@ function App() {
 								Controls
 							</label>{" "}
 						</div>
-						<div className="w-full aspect-square border border-bcol rounded-[2vmin] flex flex-col items-center justify-evenly ">
+						<div className="w-full aspect-square border  rounded-[2vmin] flex flex-col items-center justify-evenly "
+            style={{
+              borderColor:theme.text
+            }}
+            >
 							<div className="w-full flex flex-col h-2/3 items-center justify-center">
 								{shapesy[holdShape].split(" ").map((row) => {
 									return (
@@ -1035,10 +1037,11 @@ function App() {
 											{row.split("").map((cell) =>
 												cell !== "0" ? (
 													<div
-														className="w-[4vmin] aspect-square rounded-[0.4vmin] border border-blank"
+														className="w-[4vmin] aspect-square rounded-[0.4vmin] border"
 														style={{
 															backgroundColor:
-																cols[holdShape],
+																theme.accents[holdShape],
+                                borderColor:theme.background
 														}}></div>
 												) : (
 													<div className="w-[4vmin] aspect-square "></div>
@@ -1051,7 +1054,7 @@ function App() {
 							Hold
 						</div>
 					</div>
-					<div className="h-full w-full flex flex-col items-center justify-center text-white">
+					<div className="h-full w-full flex flex-col items-center justify-center ">
 						<div className="text-[2vmin]">
 							Speed Lv. {level + 1}
 						</div>
@@ -1071,7 +1074,7 @@ function App() {
 									cx={100}
 									cy={100}
 									fill="transparent"
-									stroke="#252525"
+									stroke={theme.backpop}
 									strokeWidth="10px"
 									strokeDasharray="596.68px"
 									strokeDashoffset={0}
@@ -1082,48 +1085,12 @@ function App() {
 									cy={100}
 									className="duration-100 ease-in-out"
 									stroke={
-										!(linesCleared % 20 < 10)
-											? "#" +
-											  (
-													Math.floor(
-														(((linesCleared % 20) -
-															10) /
-															10) *
-															72
-													) + 163
-											  ).toString(16) +
-											  (
-													Math.floor(
-														(((linesCleared % 20) -
-															10) /
-															10) *
-															13
-													) + 190
-											  ).toString(16) +
-											  (140).toString(16)
-											: "#" +
-											  (
-													235 -
-													Math.floor(
-														((linesCleared % 20) /
-															10) *
-															72
-													)
-											  ).toString(16) +
-											  (
-													203 -
-													Math.floor(
-														((linesCleared % 20) /
-															10) *
-															13
-													)
-											  ).toString(16) +
-											  (140).toString(16)
+										theme.accents[4]
 									}
 									strokeWidth={10}
 									strokeLinecap="round"
 									strokeDashoffset={
-										(596.68 * (10 - linesCleared)) / 10
+										(596.68 * (10 - (linesCleared+10*Math.floor(linesCleared/10)))) / 10
 									}
 									fill="transparent"
 									strokeDasharray="596.68px"
@@ -1159,7 +1126,7 @@ function App() {
 											? act
 											: cell.occupied
 											? cell.color
-											: bgcol
+											: theme.backpop
 									}
 									key={`${i}-${j}`}
 								/>
@@ -1179,7 +1146,7 @@ function App() {
 								rx={10}
 								x={5 + pos[1] * 105}
 								y={5 + pos[0] * 105}
-								fill={cols[autoplay ? curShape : curShape]}
+								fill={theme.accents[autoplay ? curShape : curShape]}
 								key={"ghos" + ind+""+curShape}
 							/>
 						))}
@@ -1196,12 +1163,12 @@ function App() {
 								rx={10}
 								x={5 + pos[1] * 105}
 								y={5 + pos[0] * 105}
-								fill={cols[curShape]}
+								fill={theme.accents[curShape]}
 								key={"act" + ind+""+curShape}
 							/>
 						))}
 					</svg>
-					<div className="w-[50vmin] mt-[-5vmin] absolute h-[20vmin]">
+					<div className="w-[48vmin] mt-[-5vmin] absolute h-[20vmin]">
 						<PauseScreen
 							props={{
 								show: (paused || gameOver) && !controls && started ,
@@ -1232,12 +1199,16 @@ function App() {
 					</div>
 				</div>
 				<div
-					className="h-full w-[18vmin]  flex flex-col duration-300 justify-center items-center  text-white"
+					className="h-full w-[18vmin]  flex flex-col duration-300 justify-center items-center  "
 					style={{
 						opacity: started ? 1 : 0,
 					}}>
-					<div className="h-full w-full flex flex-col items-center justify-center text-white">
-						<div className="w-full aspect-square border border-bcol rounded-[2vmin] flex flex-col items-center justify-evenly  ">
+					<div className="h-full w-full flex flex-col items-center justify-center ">
+						<div className="w-full aspect-square border border-bcol rounded-[2vmin] flex flex-col items-center justify-evenly"
+            style={{
+              borderColor:theme.text
+            }}
+            >
 							<div className="w-full flex flex-col h-2/3 items-center justify-center">
 								{shapesy[nextShape].split(" ").map((row) => {
 									return (
@@ -1245,10 +1216,11 @@ function App() {
 											{row.split("").map((cell) =>
 												cell !== "0" ? (
 													<div
-														className="w-[4vmin] aspect-square rounded-[0.4vmin] border border-blank"
+														className="w-[4vmin] aspect-square rounded-[0.4vmin] border"
 														style={{
 															backgroundColor:
-																cols[nextShape],
+																theme.accents[nextShape],
+                                borderColor:theme.background
 														}}></div>
 												) : (
 													<div className="w-[4vmin] aspect-square "></div>
@@ -1261,7 +1233,7 @@ function App() {
 							<label className="">Next</label>
 						</div>
 					</div>
-					<div className="h-full w-full flex flex-col items-center justify-center text-white">
+					<div className="h-full w-full flex flex-col items-center justify-center ">
 						<div
 							className="text-[2vmin] duration-200 "
 							style={{
@@ -1270,11 +1242,14 @@ function App() {
 							Autoplay
 						</div>
 						<div
-							className="bg-post mb-[2vmin] h-[3vmin] duration-200 rounded-full border-bcol p-[0.25vmin] border aspect-video"
+							className="bg-post mb-[2vmin] h-[3vmin] duration-200 rounded-full  p-[0.25vmin] border aspect-video"
 							style={{
 								backgroundColor: autp&& started
-									? cols[4] + "22"
-									: cols[5] + "22",
+									? theme.accents[4] + "22"
+									: theme.accents[5] + "22",
+                  borderColor: autp&& started
+									? theme.accents[4] + "35"
+									: theme.accents[5] + "35"
 							}}
 							onClick={() => {
 								setAutp(!autp);
@@ -1283,7 +1258,7 @@ function App() {
 								className="h-full pointer-events-none aspect-square bg-bcol rounded-full duration-200"
 								style={{
 									marginLeft: autp&& started ? "50%" : "0",
-									backgroundColor: autp&& started ? cols[4] : cols[5],
+									backgroundColor: autp&& started ? theme.accents[4] : theme.accents[5],
 								}}></div>
 						</div>
 						<div
@@ -1303,7 +1278,7 @@ function App() {
 									<input
 										type="number"
 										step="0.01"
-										className="bg-black w-[4vmin] bg-opacity-0 text-center text-white"
+										className="bg-black w-[4vmin] bg-opacity-0 text-center "
 										defaultValue={weights.weightedBlocks}
 										onChange={(e) => {
 											weights.weightedBlocks = parseFloat(
@@ -1318,7 +1293,7 @@ function App() {
 									<input
 										type="number"
 										step="0.01"
-										className="bg-black w-[4vmin] bg-opacity-0 text-center text-white"
+										className="bg-black w-[4vmin] bg-opacity-0 text-center "
 										defaultValue={weights.connectedHoles}
 										onChange={(e) => {
 											weights.connectedHoles = parseFloat(
@@ -1336,7 +1311,7 @@ function App() {
 									<input
 										type="number"
 										step="0.01"
-										className="bg-black w-[4vmin] bg-opacity-0 text-center text-white"
+										className="bg-black w-[4vmin] bg-opacity-0 text-center "
 										defaultValue={weights.roughness}
 										onChange={(e) => {
 											weights.roughness = parseFloat(
@@ -1351,7 +1326,7 @@ function App() {
 									<input
 										type="number"
 										step="0.01"
-										className="bg-black w-[4vmin] bg-opacity-0 text-center text-white"
+										className="bg-black w-[4vmin] bg-opacity-0 text-center "
 										defaultValue={weights.pitholePercentage}
 										onChange={(e) => {
 											weights.pitholePercentage =
@@ -1368,7 +1343,7 @@ function App() {
 									<input
 										type="number"
 										step="0.01"
-										className="bg-black w-[4vmin] bg-opacity-0 text-center text-white"
+										className="bg-black w-[4vmin] bg-opacity-0 text-center "
 										defaultValue={weights.clearAbleLines}
 										onChange={(e) => {
 											weights.clearAbleLines = parseFloat(
@@ -1383,7 +1358,7 @@ function App() {
 									<input
 										type="number"
 										step="0.01"
-										className="bg-black w-[4vmin] bg-opacity-0 text-center text-white"
+										className="bg-black w-[4vmin] bg-opacity-0 text-center "
 										defaultValue={weights.deepestHole}
 										onChange={(e) => {
 											weights.deepestHole = parseFloat(
@@ -1401,7 +1376,7 @@ function App() {
 									<input
 										type="number"
 										step="0.01"
-										className="bg-black w-[4vmin] bg-opacity-0 text-center text-white"
+										className="bg-black w-[4vmin] bg-opacity-0 text-center "
 										defaultValue={weights.blocks}
 										onChange={(e) => {
 											weights.blocks = parseFloat(
@@ -1416,7 +1391,7 @@ function App() {
 									<input
 										type="number"
 										step="0.01"
-										className="bg-black w-[4vmin] bg-opacity-0 text-center text-white"
+										className="bg-black w-[4vmin] bg-opacity-0 text-center "
 										defaultValue={weights.colHoles}
 										onChange={(e) => {
 											weights.colHoles = parseFloat(
@@ -1468,12 +1443,12 @@ function App() {
 											((val * (i + 1)) / linesCleared) *
 												100 +
 											"%",
-										backgroundColor: cols[i],
+										backgroundColor: theme.accents[i],
 										paddingInline: val > 0 ? "0.5vmin" : "",
 									}}>
 									{val > 0 ? val : ""}
 									<div
-										className=" absolute text-white rotate-90"
+										className=" absolute  rotate-90"
 										style={{
 											marginTop:
 												i % 2 == 0
@@ -1491,7 +1466,7 @@ function App() {
 										{val > 0 ? "-" : ""}
 									</div>
 									<div
-										className=" absolute text-white"
+										className=" absolute "
 										style={{
 											marginTop:
 												i % 2 == 0
