@@ -11,11 +11,14 @@ function SettingsScreen({ props }: any) {
 					opacity: props.show ? "0.5" : "0",
 					height: props.show ? "50vmin" : "0",
 					marginTop: props.show ? "-12.5vmin" : "25vmin",
+                    pointerEvents:props.show?"auto":"none"
 				}}></div>
 			<div
 				className="w-full h-[46vmin] mt-[-10.5vmin] flex flex-col pointer-ev ents-none text-white duration-200 absolute items-center py-[2vmin]"
 				style={{
 					opacity: props.show ? "1" : "0",
+                    pointerEvents:props.show?"auto":"none"
+
 				}}>
                     <div className="text-[3vmin]">
                         Settings

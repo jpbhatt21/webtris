@@ -471,6 +471,37 @@ export function rotPiece(
 	}
 	return [act, rot];
 }
+export let settings={
+	pauseGame:"`",
+	closeMenu:"ESCAPE",
+	moveLeft:"A",
+	moveRight:"D",
+	softDrop:"S",
+	hardDrop:"W",
+	holdPiece:"SHIFT",
+	rotateCW:"␣",
+	rotateCCW:"ALT",
+	clash :[""]
+};
+export function getSettings(){
+	return settings
+}
+export function setSettings(newSettings:any){
+	settings=newSettings(settings)
+	let values= Object.values(settings)
+	let prev:any=[]
+	let clash:any=[]
+	for(let i=0;i<values.length;i++){
+		let value = values[i];
+		if(prev.includes(value)){
+			clash.push(value)
+		}
+		else{
+			prev.push(value)
+		}
+	}
+	settings.clash=clash;
+}
 // Variable for scoring weights
 let weights = {
 	weightedBlocks: 0.25, //weighted sum of blocks, where a block's weight is the row it's on

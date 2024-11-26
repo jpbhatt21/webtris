@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { automatic, getWeights, rotPiece, svg } from "./Helper";
+import { automatic, getSettings, getWeights, rotPiece, svg } from "./Helper";
 import PauseScreen from "./Pause";
 import ControlsScreen from "./Controls";
 import StartScreen from "./Start";
@@ -139,6 +139,7 @@ function App() {
 			initTime = new Date().getTime();
 			let lclr = 0;
 			let lv = 0;
+			let settings=getSettings()
 			setLinesCleared(lclr);
 			setScore(scx);
 			setLevel(lv);
@@ -149,42 +150,47 @@ function App() {
 			setCurShape(random);
 			setHoldShape(hld == -1 ? 7 : hld);
 			let keys = {
-				left: false,
-				right: false,
-				down: false,
-				up: false,
-				space: false,
-				alt: false,
-				shift: false,
-				bq: false,
+				moveLeft: false,
+				moveRight: false,
+				softDrop: false,
+				hardDrop: false,
+				rotateCW: false,
+				rotateCCW: false,
+				holdPiece: false,
+				pauseGame: false,
 			};
 			let rot = 0;
 			window.addEventListener("keydown", (e) => {
-				if (e.code === "Backquote") {
-					keys.bq = true;
+				settings=getSettings()
+				let key=(e.key).toUpperCase()
+				if(key===" "){
+					key = "␣"
+				}
+				if (key == settings.pauseGame && started) {
+					keys.pauseGame = true;
 				}
 				if (!autoplay) {
-					if (e.code === "KeyA") {
-						//setKeys((prev) => ({ ...prev, left: true }));
-						keys.left = true;
+					if (key === settings.moveLeft) {
+						//setKeys((prev) => ({ ...prev, moveLeft: true }));
+						keys.moveLeft = true;
 					}
-					if (e.code === "KeyD") {
-						//setKeys((prev) => ({ ...prev, right: true }));
-						keys.right = true;
+					if (key === settings.moveRight) {
+						//setKeys((prev) => ({ ...prev, moveRight: true }));
+						keys.moveRight = true;
 					}
-					if (e.code === "KeyS") {
-						//setKeys((prev) => ({ ...prev, down: true }));
-						keys.down = true;
+					if (key === settings.softDrop) {
+						//setKeys((prev) => ({ ...prev, softDrop: true }));
+						keys.softDrop = true;
 					}
-					if (e.code === "KeyW") {
-						//setKeys((prev) => ({ ...prev, up: true }));
-						keys.up = true;
+					if (key === settings.hardDrop) {
+						//setKeys((prev) => ({ ...prev, hardDrop: true }));
+						keys.hardDrop = true;
 					}
-					if (e.code === "Space") {
-						//setKeys((prev) => ({ ...prev, space: true }));
-						keys.space = true;
+					if (key === settings.rotateCW) {
+						//setKeys((prev) => ({ ...prev, rotateCW: true }));
+						keys.rotateCW = true;
 					}
-					if (e.code === "AltLeft") {
+					if (key === settings.rotateCCW) {
 						//   setActive([
 						//     [-10, -10],
 						//     [-10, -10],
@@ -193,53 +199,58 @@ function App() {
 						//   ]);
 						//   clearInterval(inter);
 						//   inter = -0;
-						//setKeys((prev) => ({ ...prev, alt: true }));
-						// keys.alt = true;
+						//setKeys((prev) => ({ ...prev, rotateCCW: true }));
+						// keys.rotateCCW = true;
 					}
-					if (e.code === "ShiftLeft") {
-						//setKeys((prev) => ({ ...prev, shift: true }));
-						keys.shift = true;
+					if (key === settings.holdPiece) {
+						//setKeys((prev) => ({ ...prev, holdPiece: true }));
+						keys.holdPiece = true;
 					}
 				}
 			});
 			window.addEventListener("keyup", (e) => {
-				if (e.code === "KeyA") {
-					//setKeys((prev) => ({ ...prev, left: false }));
-					keys.left = false;
+				settings=getSettings()
+				let key=(e.key).toUpperCase()
+				if(key===" "){
+					key = "␣"
+				}
+				if (key === settings.moveLeft) {
+					//setKeys((prev) => ({ ...prev, moveLeft: false }));
+					keys.moveLeft = false;
 					movClock = new Date().getTime() - lrSpeed;
 				}
-				if (e.code === "Backquote") {
-					keys.bq = false;
+				if (key === settings.pauseGame && started) {
+					keys.pauseGame = false;
 				}
-				if (e.code === "KeyD") {
-					//setKeys((prev) => ({ ...prev, right: false }));
-					keys.right = false;
+				if (key === settings.moveRight) {
+					//setKeys((prev) => ({ ...prev, moveRight: false }));
+					keys.moveRight = false;
 					movClock = new Date().getTime() - lrSpeed;
 				}
-				if (e.code === "KeyS") {
-					//setKeys((prev) => ({ ...prev, down: false }));
-					keys.down = false;
+				if (key === settings.softDrop) {
+					//setKeys((prev) => ({ ...prev, softDrop: false }));
+					keys.softDrop = false;
 				}
-				if (e.code === "KeyW") {
-					//setKeys((prev) => ({ ...prev, up: false }));
-					keys.up = false;
+				if (key === settings.hardDrop) {
+					//setKeys((prev) => ({ ...prev, hardDrop: false }));
+					keys.hardDrop = false;
 				}
-				if (e.code === "Space") {
-					//setKeys((prev) => ({ ...prev, space: false }));
-					keys.space = false;
+				if (key === settings.rotateCW) {
+					//setKeys((prev) => ({ ...prev, rotateCW: false }));
+					keys.rotateCW = false;
 					rotClock = new Date().getTime() - 150;
 				}
-				if (e.code === "AltLeft") {
+				if (key === settings.rotateCCW) {
 					e.preventDefault();
-					//setKeys((prev) => ({ ...prev, alt: false }));
-					keys.alt = false;
+					//setKeys((prev) => ({ ...prev, rotateCCW: false }));
+					keys.rotateCCW = false;
 					rotClock = new Date().getTime() - 150;
 				}
-				if (e.code === "ShiftLeft") {
-					//setKeys((prev) => ({ ...prev, shift: false }));
-					keys.shift = false;
+				if (key === settings.holdPiece) {
+					//setKeys((prev) => ({ ...prev, holdPiece: false }));
+					keys.holdPiece = false;
 				}
-				if (e.code === "Escape") {
+				if (key === settings.pauseGame) {
 					setControls((prev) => {
 						if (!prev) setPaused(false);
 						return false;
@@ -356,10 +367,10 @@ function App() {
 			inter = setInterval(async() => {
 				cur = new Date().getTime();
         if (justspawned) justspawned = false;
-				if (keys.bq) {
+				if (keys.pauseGame) {
 					ps = !ps;
 					setPaused(ps);
-					keys.bq = false;
+					keys.pauseGame = false;
 				}
 				if (ps) {
 					setPaused((prev) => {
@@ -388,7 +399,7 @@ function App() {
 				prev = cur;
 				if (
 					cur - movClock >= lrSpeed &&
-					keys.left &&
+					keys.moveLeft &&
 					act[0][1] !== 0 &&
 					act[1][1] !== 0 &&
 					act[2][1] !== 0 &&
@@ -405,7 +416,7 @@ function App() {
 					movClock = new Date().getTime();
 				} else if (
 					cur - movClock >= lrSpeed &&
-					keys.right &&
+					keys.moveRight &&
 					act[0][1] !== 9 &&
 					act[1][1] !== 9 &&
 					act[2][1] !== 9 &&
@@ -422,7 +433,7 @@ function App() {
 					movClock = new Date().getTime();
 				} else if (
 					cur - movClock >= lrSpeed &&
-					keys.down &&
+					keys.softDrop &&
 					act[0][0] != 19 &&
 					act[1][0] != 19 &&
 					act[2][0] != 19 &&
@@ -438,7 +449,7 @@ function App() {
 					act[3][0]++;
 					movClock = new Date().getTime();
 				}
-				if (cur - rotClock >= 150 && keys.space) {
+				if (cur - rotClock >= 150 && keys.rotateCW) {
 					let temp = JSON.parse(JSON.stringify(act));
 					rotClock = cur;
 					let prevRot = JSON.parse(JSON.stringify(rot));
@@ -828,13 +839,13 @@ function App() {
 						rot = prevRot;
 					}
 				}
-				if (cur - rotClock >= 150 && keys.alt) {
+				if (cur - rotClock >= 150 && keys.rotateCCW) {
 					rotClock = cur;
 					[act, rot] = rotPiece(board, shape, rot, act);
 					[act, rot] = rotPiece(board, shape, rot, act);
 					[act, rot] = rotPiece(board, shape, rot, act);
 				}
-				if ((cur - rotClock >= 150 && keys.shift) || changehold) {
+				if ((cur - rotClock >= 150 && keys.holdPiece) || changehold) {
 					if (changehold) {
 						changehold = false;
 					}
@@ -883,7 +894,7 @@ function App() {
 					downClock = new Date().getTime();
 				}
 				
-				if ((cur - upClock >= upSpeed && keys.up)||(move&&dur===0)) {
+				if ((cur - upClock >= upSpeed && keys.hardDrop)||(move&&dur===0)) {
 					let mainboard = document.getElementById("mainboard");
 					if (mainboard) {
 						mainboard.style.marginBottom = "-1.25vmin";
@@ -1193,7 +1204,7 @@ function App() {
 					<div className="w-[50vmin] mt-[-5vmin] absolute h-[20vmin]">
 						<PauseScreen
 							props={{
-								show: (paused || gameOver) && !controls ,
+								show: (paused || gameOver) && !controls && started ,
 								gameOver,
 								setPaused,
 								setGameOver,
@@ -1204,19 +1215,20 @@ function App() {
 								setRestart,
 							}}
 						/>
-						{/* <StartScreen
+
+						<StartScreen
 							props={{
-								show: inter !== null && !started && !controls,
+								show: inter !== null && !started && !controls&&!false,
 								setBoard,
 								inter,
 								setInter,
 								setRestart,
 								setPaused,
 								setGameOver,
-                setAutp
+								setAutp
 							}}
-						/> */}
-						<SettingsScreen props={{show:controls||true}}/>
+						/>
+							<SettingsScreen props={{show:controls||!true}}/>
 					</div>
 				</div>
 				<div

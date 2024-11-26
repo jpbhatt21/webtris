@@ -143,7 +143,7 @@ input[type="range"] {
 	transform: scale(0.95,0.9);
   }
   .fadein{
-	animation: fadeIn 1s;
+	animation: fadeIn 0.3s;
   }
   @keyframes fadeIn {
 	0% {
