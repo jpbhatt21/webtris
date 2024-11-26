@@ -68,11 +68,11 @@ input[type="range"] {
 	height: 1.6vmin;
 	border-radius: 1vmin;
 	width: 1.5vmin;
-	margin-top: -0.5vmin;
+	margin-top: -0.55vmin;
 	background-color: #A3BE8C;
 	
 	/*  slider progress trick  */
-	box-shadow: -407px 0 0 400px #A3BE8C;
+	box-shadow: calc(-400px - 0.8vmin) 0 0 400px #A3BE8C;
 	/* #68ff9a; */
   }
   
@@ -84,7 +84,7 @@ input[type="range"] {
 	background-color: #fff;
 	/* border: 1px solid #f50; */
 	/*  slider progress trick  */
-	box-shadow: -407px 0 0 400px #f50;
+	box-shadow: calc(-408px - 0.8vmin) 0 0 400px #f50;
   }
   
   
@@ -122,4 +122,36 @@ input[type="range"] {
 	background: #fff;
 	padding: 0px 10px;
   }
+  .brt{
+	box-shadow: 0.125vmin 0.125vmin 0 0.2vmin ;
+	margin-top: -0.125vmin;
+	margin-left: -0.125vmin;
+	margin-right: 0.125vmin;
+	margin-bottom: 0.125vmin;
+	border-radius: 0.075vmin;
+	transition-duration: 100ms;
+	transition-property: all;
+	transition-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+	
+  }
+  .brt:active{
+	box-shadow: 0px 0px 0 0.325vmin ;
+	margin-top: 0;
+	margin-left: 0;
+	margin-right: -0;
+	margin-bottom: -0;
+	transform: scale(0.95,0.9);
+  }
+  .fadein{
+	animation: fadeIn 1s;
+  }
+  @keyframes fadeIn {
+	0% {
+	  opacity: 0;
+	}
+	100% {
+	  opacity: 1;
+	}
+  }
+  
   
