@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { setColorScheme, svg, themes } from "./Helper";
+import { ind, setColorScheme, svg, themes } from "./Helper";
 
 type SettingsKeys = keyof typeof themes;
 let maxScroll = 0;
-function ThemeScreen() {
+function ThemeScreen({ setUpdate }: any) {
   const kList = Object.keys(themes) as SettingsKeys[];
 
   const titles = [
@@ -25,7 +25,7 @@ function ThemeScreen() {
     "Night Owl",
   ];
   const [scrollHeight, setScrollHeight] = useState(0);
-  const [selected, setSelected] = useState(0);
+  const [selected, setSelected] = useState(ind);
 
   useEffect(() => {
     setTimeout(() => {
@@ -40,7 +40,7 @@ function ThemeScreen() {
     <>
       <div className="w-full h-full flex flex-col items-center fadein bg -black   mb-[-1.75vmin]">
         <div
-          className=" text-white w-[1vmin] h-[1vmin] rotate-180 -mb-[1vmin]  duration-200"
+          className=" w-[1vmin] h-[1vmin] rotate-180 -mb-[1vmin]  duration-200"
           style={{
             opacity: 0 != scrollHeight ? "1" : "0",
           }}
@@ -56,7 +56,7 @@ function ThemeScreen() {
           {titles.map((x, i) => {
             let crt = themes[kList[i]];
             return (
-              <div className="flex flex-col outline-2 outline p-[0.5vmin] border rounded-[0.5vmin] w-full "
+              <div className="flex flex-col outline-[0.25vmin] duration-200 outline p-[0.5vmin] border rounded-[0.5vmin] w-full "
               style={{
                 backgroundColor:crt.background,
                 color:crt.text,
@@ -66,6 +66,7 @@ function ThemeScreen() {
                 onClick={()=>{
                     setSelected(i)
                     setColorScheme(i)
+                    setUpdate((prev:any)=>prev+1)
                     
                 }}
               >
@@ -85,7 +86,7 @@ function ThemeScreen() {
           })}
         </div>
         <div
-          className=" text-white w-[1vmin] h-[1vmin] -mt-[1vmin] duration-200"
+          className=" w-[1vmin] h-[1vmin] -mt-[1vmin] duration-200"
           style={{
             opacity: maxScroll - scrollHeight > 2 ? "1" : "0",
           }}

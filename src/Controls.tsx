@@ -31,7 +31,7 @@ function ControlsScreen() {
   return (
     <>
       <div className="w-full h-full flex flex-col items-center fadein bg -black   mb-[-1.75vmin]">
-      <div className=" text-white w-[1vmin] h-[1vmin] rotate-180 -mb-[1vmin]  duration-200"
+      <div className=" w-[1vmin] h-[1vmin] rotate-180 -mb-[1vmin]  duration-200"
       style={{
         opacity:0!=scrollHeight?"1":"0",
       }}
@@ -48,7 +48,7 @@ function ControlsScreen() {
           {x}
           <input
             defaultValue={settings[kList[i]]}
-            className="h-[3.5vmin] w-[10vmin] cursor-pointer focus:cursor-none duration-200 outline outline-1 outline-[#0000] active:outline-none caret-transparent focus:outline-none focus:border-colors-green bg-bdark bg-opacity-20 border border-[#0000] text-center rounded-[0.5vmin]"
+            className="h-[3.5vmin] w-[10vmin] text-[1.2vmin] cursor-pointer focus:cursor-none duration-200 outline outline-1 outline-[#0000] active:outline-none caret-transparent focus:outline-none focus:border-colors-green bg-bdark bg-opacity-20 border border-[#0000] text-center rounded-[0.5vmin]"
             type="text"
             style={{
               outlineColor:settings.clash.includes((settings[kList[i]]).toString())?"#bf616a":""
@@ -73,7 +73,7 @@ function ControlsScreen() {
         </div>)
         }
       </div>
-      <div className=" text-white w-[1vmin] h-[1vmin] -mt-[1vmin] duration-200"
+      <div className=" w-[1vmin] h-[1vmin] -mt-[1vmin] duration-200"
       style={{
         opacity:maxScroll-scrollHeight>2?"1":"0",
       }}
