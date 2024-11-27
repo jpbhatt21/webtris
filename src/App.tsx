@@ -13,7 +13,6 @@ import SettingsScreen from "./Settings";
 let inter: any = null;
 let autoplay = true;
 let started = !false;
-let initTime = new Date().getTime();
 let keys = {
 	moveLeft: false,
 	moveRight: false,
@@ -80,7 +79,6 @@ let scx = 0;
 let act = JSON.parse(JSON.stringify(activePos[random]));
 let shape = random;
 //   let counterx = 3;
-initTime = new Date().getTime();
 let lclr = 0;
 let lv = 0;
 let settings = getSettings();
@@ -118,7 +116,7 @@ let theme = getColorScheme();
 let dur = 20;
 let prevWeight = JSON.stringify(getWeights());
 function App() {
-	const [update, setUpdate] = useState(0);
+	const [_, setUpdate] = useState(0);
 	theme = getColorScheme();
 	let bgcol = "#353535";
 	const [linesCleared, setLinesCleared] = useState(0);
@@ -182,7 +180,6 @@ function App() {
 			act = JSON.parse(JSON.stringify(activePos[random]));
 			shape = random;
 			//   let counterx = 3;
-			initTime = new Date().getTime();
 			lclr = 0;
 			lv = 0;
 			settings = getSettings();
@@ -1258,7 +1255,7 @@ function App() {
 										: "00"),
 							}}
 							id="dismiss"
-							onClick={(e) => {
+							onClick={() => {
 								
 									if (paused) setPaused(false);
 									else if (controls) setControls(false);
