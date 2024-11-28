@@ -40,8 +40,6 @@ input[type="range"] {
 	/* removing default appearance */
 	-webkit-appearance: none;
 	appearance: none; 
-	/* creating a custom design */
-	width: 100%;
 	cursor: pointer;
 	background-color: #1b1b1b;
 	outline: none;

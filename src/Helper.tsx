@@ -503,6 +503,50 @@ export function setSettings(newSettings:any){
 	}
 	settings.clash=clash;
 }
+export let activePos = [
+	[
+		[0, 3],
+		[0, 4],
+		[0, 5],
+		[0, 6],
+	],
+	[
+		[0, 3],
+		[1, 3],
+		[1, 4],
+		[1, 5],
+	],
+	[
+		[0, 5],
+		[1, 5],
+		[1, 4],
+		[1, 3],
+	],
+	[
+		[0, 4],
+		[0, 5],
+		[1, 4],
+		[1, 5],
+	],
+	[
+		[0, 4],
+		[0, 5],
+		[1, 4],
+		[1, 3],
+	],
+	[
+		[0, 3],
+		[0, 4],
+		[1, 4],
+		[1, 5],
+	],
+	[
+		[0, 4],
+		[1, 3],
+		[1, 4],
+		[1, 5],
+	],
+];
 // Variable for scoring weights
 let weights = window.localStorage.getItem("weights")?JSON.parse(window.localStorage.getItem("weights") as string):{
 	weightedBlocks: 0.25, //weighted sum of blocks, where a block's weight is the row it's on
@@ -1148,50 +1192,7 @@ export function automatic(
 		];
 	} else return scores;
 }
-let activePos = [
-	[
-		[0, 3],
-		[0, 4],
-		[0, 5],
-		[0, 6],
-	],
-	[
-		[0, 3],
-		[1, 3],
-		[1, 4],
-		[1, 5],
-	],
-	[
-		[0, 5],
-		[1, 5],
-		[1, 4],
-		[1, 3],
-	],
-	[
-		[0, 4],
-		[0, 5],
-		[1, 4],
-		[1, 5],
-	],
-	[
-		[0, 4],
-		[0, 5],
-		[1, 4],
-		[1, 3],
-	],
-	[
-		[0, 3],
-		[0, 4],
-		[1, 4],
-		[1, 5],
-	],
-	[
-		[0, 4],
-		[1, 3],
-		[1, 4],
-		[1, 5],
-	],
-];
+
 export let automateAnalyzer = (
 	board: any,
 	act: any,

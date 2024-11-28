@@ -17,31 +17,27 @@ function StartScreen({ props }: any) {
 					opacity: props.show ? "1" : "0",
 					pointerEvents: props.show ? "all" : "none",
 				}}>
-				<div className="text-[3.5vmin] prt"> {"WEBTRIS"}</div>
-				<div className="w-full flex text-[1.5vmin] items-center justify-evenly">
+				<div className="text-[5vmin] prt"> {"WEBTRIS"}</div>
+				<div className="w-full flex text-[2vmin] items-center justify-evenly">
 					<button
 						//   className="bg-post cursor-pointer rounded-sm duration-100 select-none brt hover:text-colors-bloo text-colors-yellow w-[10vmin] h-[3.25vmin] py-[0.5vmin] text-center"
-						className="bg-post cursor-pointer rounded-[0.25vmin] active:scale-x-[0.975] active:scale-y-[0.92] active:outline-[0.35vmin] hover:outline-blue-300  duration-100 select-none outline outline-[0.1vmin]  w-[10vmin] h-[3.25vmin] py-[0.5vmin] text-center"
+						className="prt cursor-pointer duration-300 select-none  w-[10vmin] h-[3.25vmin] py-[0.5vmin] text-center"
 						onClick={() => {
 							//props.setPaused(false);
 						}}
-						style={{
-							outlineColor: props.theme.accents[2],
-							backgroundColor: props.theme.accents[2]+"10",
-						}}>
-						<label
-							style={{
-								color: props.theme.text,
-							}}>
+						onMouseEnter={(e) => {
+							e.currentTarget.style.color=props.theme.accents[2]
+						}}
+						onMouseLeave={(e) => {
+							e.currentTarget.style.color=""
+						}}
+						>
+						
 							Multiplayer
-						</label>
 					</button>
 					<div
-						className="bg-post cursor-pointer rounded-[0.25vmin] active:scale-x-[0.975] active:scale-y-[0.92] active:outline-[0.35vmin] hover:outline-blue-300  duration-100 select-none outline outline-[0.1vmin]  w-[10vmin] h-[3.25vmin] py-[0.5vmin] text-center"
-						style={{
-							outlineColor: props.theme.accents[4],
-							backgroundColor: props.theme.accents[4]+"10",
-						}}
+						className="prt cursor-pointer duration-100 select-none  w-[10vmin] h-[3.25vmin] py-[0.5vmin] text-center"
+						
 						onClick={() => {
 							props.setGameOver(false);
 							props.setBoard(
@@ -58,13 +54,15 @@ function StartScreen({ props }: any) {
 							props.setInter(null);
 							props.setRestart(new Date().getTime());
 							props.setPaused(false);
-						}}>
-						<label
-							style={{
-								color: props.theme.text,
-							}}>
+						}}
+						onMouseEnter={(e) => {
+							e.currentTarget.style.color=props.theme.accents[4]
+						}}
+						onMouseLeave={(e) => {
+							e.currentTarget.style.color=""
+						}}
+						>
 							Play
-						</label>
 					</div>
 				</div>
 			</div>
