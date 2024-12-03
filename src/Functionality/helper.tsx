@@ -988,7 +988,7 @@ export let automateAnalyzer = (
 			hcScore[0] > cnScore[0] ||
 			hcScore[0] > chScore[0]
 		) {
-			console.log(true);
+			// console.log(true);
 			return true;
 		} else {
 			return false;

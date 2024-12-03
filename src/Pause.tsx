@@ -1,83 +1,138 @@
 import { useAtom } from "jotai";
-import { gameOverAtom, resetAtom, stateAtom, themeAtom } from "./atoms";
+import { autoplayAtom, gameOverAtom, pageAtom, resetAtom, stateAtom, themeAtom } from "./atoms";
 
 function PauseScreen() {
-  const [theme] = useAtom(themeAtom);
-    const [state,setState] = useAtom(stateAtom);
-    const [gameOver] = useAtom(gameOverAtom);
-    const reset=useAtom(resetAtom)[1];
-    return ( <>
-            <div
-              className=" border border-bcol duration-200 border-r-0 border-l-0 shadow-lg w-[48vmin] absolute "
-              style={{
-                backgroundColor: theme.background,
-                borderColor: theme.text,
-                opacity: state=="pause" || state=="game over" ? "0.75" : "0",
-                height: state=="pause" || state=="game over" ? "20vmin" : "0",
-                marginTop:
-                  state=="pause" || state=="game over" ? "0vmin" : "10vmin",
-                pointerEvents:
-                  state=="pause" || state=="game over" ? "all" : "none",
-              }}
-            ></div>
-            <div
-              className="w-full h-full flex flex-col duration-200 absolute items-center justify-evenly py-[2vmin]"
-              style={{
-                opacity: state=="pause" || state=="game over" ? "1" : "0",
-                pointerEvents:
-                  state=="pause" || state=="game over" ? "all" : "none",
-              }}
-            >
-              <div className="text-[3.5vmin] ">
-                {" "}
-                {state=="game over" ? "Game Over" : "Paused"}
-              </div>
-              <div className="w-full flex text-[1.5vmin] items-center justify-evenly">
-                <div
-                  
-                  onClick={() => {
-                    setState("play");
-                    // setPaused(false);
-                  }}
-                  className="bg-post cursor-pointer rounded-[0.25vmin] active:scale-x-[0.975] active:scale-y-[0.92] active:outline-[0.35vmin] hover:outline-blue-300  duration-100 select-none outline outline-[0.1vmin]  w-[10vmin] h-[3.25vmin] py-[0.5vmin] text-center"
-						style={{
-							outlineColor: theme.accents[4],
-							backgroundColor: theme.accents[4]+"10",
-                            display:state=="game over"?"none":"block"
+	const [theme] = useAtom(themeAtom);
+	const [state, setState] = useAtom(stateAtom);
+  const [page, setPage] = useAtom(pageAtom);
+	const setAutoplay = useAtom(autoplayAtom)[1];
+  const setReset=useAtom(resetAtom)[1];
+	const [gameOver] = useAtom(gameOverAtom);
+	const reset = useAtom(resetAtom)[1];
+	return (
+		<>
+			<div
+				className="w-fit h-fit flex flex-col duration-200 prt absolute items-center justify-center py-[2vmin]"
+				style={{
+					opacity:
+						state == "pause" || state == "game over" ? "1" : "0",
+					pointerEvents:
+						state == "pause" || state == "game over"
+							? "all"
+							: "none",
+				}}>
+				<div className="text-[4vmin] cursor-default ">
+					{" "}
+					{state == "game over" ? ("Game Over").split("").map((x,i)=><span className="duration-100" onMouseEnter={(e) => {
+							e.currentTarget.style.transitionDuration="0.25s"
+							e.currentTarget.style.color=theme.accents[5]
+							
 						}}
-                >
-                  Resume
-                </div>
-                <div
-                  className="bg-post cursor-pointer rounded-[0.25vmin] active:scale-x-[0.975] active:scale-y-[0.92] active:outline-[0.35vmin] hover:outline-blue-300  duration-100 select-none outline outline-[0.1vmin]  w-[10vmin] h-[3.25vmin] py-[0.5vmin] text-center"
-                  style={{
-                      outlineColor: theme.accents[5],
-                      backgroundColor: theme.accents[5]+"10",
-                  }}
-                  onClick={() => {
-                    reset()
-                    // props.setGameOver(false);
-                    // props.setBoard(
-                    //   Array.from({ length: 20 }, (_) =>
-                    //     Array.from({ length: 10 }, (_) => ({
-                    //       occupied: false,
-                    //       active: false,
-                    //       color: props.bgcol,
-                    //     }))
-                    //   )
-                    // );
-                    // clearInterval(props.inter);
-                    // props.setInter(null)
-                    // props.setRestart(new Date().getTime());
-                    // props.setPaused(false);
-                  }}
-                 
-                >
-                  Restart
-                </div>
-              </div>
-            </div>
-    </> );
+						onMouseLeave={(e) => {
+							e.currentTarget.style.transitionDuration="5s"
+							e.currentTarget.style.color=""
+						}} >{x}</span>) : ("Paused".split("").map((x,i)=><span className="duration-100" onMouseEnter={(e) => {
+							e.currentTarget.style.transitionDuration="0.25s"
+							e.currentTarget.style.color=theme.accents[i]
+							
+						}}
+						onMouseLeave={(e) => {
+							e.currentTarget.style.transitionDuration="5s"
+							e.currentTarget.style.color=""
+						}} >{x}</span>))}
+				</div>
+				<div className="w-full flex flex-col text-[2.5vmin] mt-[1.5vmin] gap-[1.5vmin] items-center justify-center">
+					
+					<button
+						//   className="bg-post cursor-pointer rounded-sm duration-100 select-none brt hover:text-colors-bloo text-colors-yellow w-[10vmin] h-[3.25vmin] py-[0.5vmin] text-center"
+						className="prt cursor-pointer duration-300 select-none  w-[10vmin] h-[3.25vmin] py-[0.5vmin] text-center"
+						onClick={() => {
+              if(state=="play")
+                return
+							setState("play");
+						}}
+            style={{
+							display: state == "game over" ? "none" : "block",
+						}}
+						onMouseEnter={(e) => {
+							e.currentTarget.style.color=theme.accents[4]
+						}}
+						onMouseLeave={(e) => {
+							e.currentTarget.style.color=""
+						}}
+						>
+						
+							Resume
+					</button>
+          <button
+						//   className="bg-post cursor-pointer rounded-sm duration-100 select-none brt hover:text-colors-bloo text-colors-yellow w-[10vmin] h-[3.25vmin] py-[0.5vmin] text-center"
+						className="prt cursor-pointer duration-300 select-none  w-[10vmin] h-[3.25vmin] py-[0.5vmin] text-center"
+						onClick={() => {
+              if(state=="play")
+                return
+              
+							reset();
+						}}
+						onMouseEnter={(e) => {
+							e.currentTarget.style.color=theme.accents[2]
+						}}
+						onMouseLeave={(e) => {
+							e.currentTarget.style.color=""
+						}}
+						>
+						
+							Restart
+					</button>
+          <button
+						//   className="bg-post cursor-pointer rounded-sm duration-100 select-none brt hover:text-colors-bloo text-colors-yellow w-[10vmin] h-[3.25vmin] py-[0.5vmin] text-center"
+						className="prt cursor-pointer duration-300 select-none  w-[10vmin] h-[3.25vmin] py-[0.5vmin] text-center"
+						style={{
+							color:state=="settings"?theme.accents[0]:"",
+              display: state == "game over" ? "none" : "block",
+
+						}}
+						onClick={() => {
+              if(state=="play")
+                return
+							if(state=="settings"){
+								setState("play")}
+							else
+							setState("settings")
+						}}
+						onMouseEnter={(e) => {
+							e.currentTarget.style.color=theme.accents[0]
+						}}
+						onMouseLeave={(e) => {
+							e.currentTarget.style.color=state=="settings"?theme.accents[0]:""
+						}}
+						>
+						
+							Settings
+					</button>
+          <button
+						//   className="bg-post cursor-pointer rounded-sm duration-100 select-none brt hover:text-colors-bloo text-colors-yellow w-[10vmin] h-[3.25vmin] py-[0.5vmin] text-center"
+						className="prt cursor-pointer duration-300 select-none  w-[10vmin] h-[3.25vmin] py-[0.5vmin] text-center"
+						onClick={() => {
+              if(state=="play")
+                return
+							setPage("home");
+							setAutoplay(true);
+							setReset();
+						}}
+						onMouseEnter={(e) => {
+							e.currentTarget.style.color=theme.accents[5]
+						}}
+						onMouseLeave={(e) => {
+							e.currentTarget.style.color=""
+						}}
+						>
+						
+							Quit
+					</button>
+				</div>
+			</div>
+		</>
+	);
 }
 
 export default PauseScreen;

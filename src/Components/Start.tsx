@@ -6,31 +6,54 @@ function StartScreen() {
 	const [theme] = useAtom(themeAtom);
 	const [page, setPage] = useAtom(pageAtom);
 	const setAutoplay = useAtom(autoplayAtom)[1];
+	const [state, setState] = useAtom(stateAtom);
 	const [reset,setReset]=useAtom(resetAtom);
 	return (
 		<>
+			
 			<div
-				className="bg-b lank border  duration-200 border-r-0 border-l-0 shadow-lg w-[48vmin] absolute "
-				style={{
-					backgroundColor: theme.background,
-					borderColor: theme.text,
-					opacity: page=="home" ? "0.75" : "0",
-					height: page=="home" ? "20vmin" : "0",
-					marginTop: page=="home" ? "0vmin" : "10vmin",
-					pointerEvents: page=="home" ? "all" : "none",
-				}}></div>
-			<div
-				className="w-full h-full flex flex-col  duration-200 absolute items-center justify-evenly py-[2vmin]"
+				className="w-fit h-f flex flex-col  duration-200 absolute items-center justify-evenly py-[2vmin]"
 				style={{
 					opacity: page=="home" ? "1" : "0",
 					pointerEvents: page=="home" ? "all" : "none",
+					marginLeft: page=="home" ? "-40vmin" : "-80vmin",
 				}}>
-				<div className="text-[5vmin] prt"> {"WEBTRIS"}</div>
-				<div className="w-full flex text-[2vmin] items-center justify-evenly">
+				<div className="text-[7vmin] cursor-default prt"> {"WEBTRIS".split("").map((x,i)=><span className="duration-100" onMouseEnter={(e) => {
+							e.currentTarget.style.transitionDuration="0.25s"
+							e.currentTarget.style.color=theme.accents[i]
+							
+						}}
+						onMouseLeave={(e) => {
+							e.currentTarget.style.transitionDuration="5s"
+							e.currentTarget.style.color=""
+						}} >{x}</span>)}</div>
+				<div className="w-full flex flex-col text-[3vmin] mt-[2vmin] gap-[2vmin] items-center justify-evenly">
 					<button
 						//   className="bg-post cursor-pointer rounded-sm duration-100 select-none brt hover:text-colors-bloo text-colors-yellow w-[10vmin] h-[3.25vmin] py-[0.5vmin] text-center"
 						className="prt cursor-pointer duration-300 select-none  w-[10vmin] h-[3.25vmin] py-[0.5vmin] text-center"
 						onClick={() => {
+							if(page=="single")
+								return
+							setAutoplay(false);
+							setReset();
+							setPage("single");
+						}}
+						onMouseEnter={(e) => {
+							e.currentTarget.style.color=theme.accents[2]
+						}}
+						onMouseLeave={(e) => {
+							e.currentTarget.style.color=""
+						}}
+						>
+						
+							Start
+					</button>
+					<button
+						//   className="bg-post cursor-pointer rounded-sm duration-100 select-none brt hover:text-colors-bloo text-colors-yellow w-[10vmin] h-[3.25vmin] py-[0.5vmin] text-center"
+						className="prt cursor-pointer duration-300 select-none  w-[10vmin] h-[3.25vmin] py-[0.5vmin] text-center"
+						onClick={() => {
+							if(page=="single")
+								return
 							//props.setPaused(false);
 						}}
 						onMouseEnter={(e) => {
@@ -41,41 +64,33 @@ function StartScreen() {
 						}}
 						>
 						
-							Multiplayer
+							Online
 					</button>
-					<div
-						className="prt cursor-pointer duration-100 select-none  w-[10vmin] h-[3.25vmin] py-[0.5vmin] text-center"
-						
+					<button
+						//   className="bg-post cursor-pointer rounded-sm duration-100 select-none brt hover:text-colors-bloo text-colors-yellow w-[10vmin] h-[3.25vmin] py-[0.5vmin] text-center"
+						className="prt cursor-pointer duration-300 select-none  w-[10vmin] h-[3.25vmin] py-[0.5vmin] text-center"
+						style={{
+							color:state=="settings"?theme.accents[0]:""
+						}}
 						onClick={() => {
-							setAutoplay(false);
-							setReset();
-							setPage("single");
-
-							// props.setGameOver(false);
-							// props.setBoard(
-							// 	Array.from({ length: 20 }, (_) =>
-							// 		Array.from({ length: 10 }, (_) => ({
-							// 			occupied: false,
-							// 			active: false,
-							// 			color: props.bgcol,
-							// 		}))
-							// 	)
-							// );
-							// props.setAutp(false);
-							// clearInterval(props.inter);
-							// props.setInter(null);
-							// props.setRestart(new Date().getTime());
-							// props.setPaused(false);
+							if(page=="single")
+								return
+							if(state=="settings"){
+								setState("play")}
+							else
+							setState("settings")
 						}}
 						onMouseEnter={(e) => {
-							e.currentTarget.style.color=theme.accents[4]
+							e.currentTarget.style.color=theme.accents[0]
 						}}
 						onMouseLeave={(e) => {
-							e.currentTarget.style.color=""
+							e.currentTarget.style.color=state=="settings"?theme.accents[0]:""
 						}}
 						>
-							Play
-					</div>
+						
+							Settings
+					</button>
+					
 				</div>
 			</div>
 		</>

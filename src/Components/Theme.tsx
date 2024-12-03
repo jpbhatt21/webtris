@@ -38,7 +38,7 @@ function ThemeScreen() {
   }, []);
   return (
     <>
-      <div className="w-full h-full flex flex-col items-center fadein bg -black   mb-[-1.75vmin]">
+      <div className="w-full h-full  flex flex-col items-center fadein bg -black  ">
         <div
           className=" w-[1vmin] h-[1vmin] rotate-180 -mb-[1vmin]  duration-200"
           style={{
@@ -51,7 +51,7 @@ function ThemeScreen() {
           id="controls"
           onScroll={(e) => setScrollHeight(e.currentTarget.scrollTop)}
           
-          className="w-full h-full  overflow-y-scroll hscb justify-center py-[0.5vmin] px-[0.5vmin] flex flex-wrap gap-[1vmin] text-[1.5vmin] items-center "
+          className="w-full h-full  overflow-y-scroll hscb justify-center py-[0.5vmin] px-[0.5vmin] flex flex-wrap gap-[1vmin] text-[2vmin] items-center "
         >
           {titles.map((x, i) => {
             let crt = themes[themeKeys[i]];

@@ -68,6 +68,7 @@ export const getAutoplayStateAtom = atom(null, (_get, set) => {
 		_get(state),
 		_get(autoplaySpeed),
 		_get(settings),
+		_get(page)
 	];
 	return temp;
 });

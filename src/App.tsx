@@ -1,5 +1,5 @@
 import { useAtom } from "jotai";
-import { stateAtom, themeAtom } from "./atoms";
+import { pageAtom, stateAtom, themeAtom } from "./atoms";
 import StartScreen from "./Components/Start";
 import Single from "./Single";
 import SettingsScreen from "./Settings";
@@ -9,7 +9,8 @@ import PauseScreen from "./Pause";
 function App() {
 	const [theme] = useAtom(themeAtom);
 	const [state, setState] = useAtom(stateAtom);
-  useEffect(()=>{},[])
+	const[page]=useAtom(pageAtom)
+	useEffect(() => {}, []);
 	return (
 		<>
 			<div
@@ -18,25 +19,29 @@ function App() {
 					color: theme.text,
 					backgroundColor: theme.background,
 				}}>
-          <Single />
-				<div className="w-[48vmin] mt-[-5vmin] absolute h-[20vmin]">
+				<Single />
+				<div className="w-full mt-[-5vmin] absolute pointer-events-none h-full flex items-center justify-center">
 					<div
 						className="w-full bg-black h-full top-0 left-0 fixed flex items-center duration-200 justify-center "
 						style={{
-							pointerEvents:state!="play" ? "all" : "none",
+							pointerEvents: state != "play"  ? "all" : "none",
 							backgroundColor:
-								"#000000" +
-								(state!="play" ? "6B" : "00"),
+								"#000000" + (state != "play" && page=="single" ? "95" : "00"),
 						}}
 						id="dismiss"
 						onClick={() => {
-              if(state!=="game over")
-							setState("play");
+							if (state === "game over") 
+								return
+							if (state == "settings" && page=="single") 
+								setState("pause");
+							else
+								setState("play");
+							
 						}}
 					/>
-          <PauseScreen/>
-          <SettingsScreen/>
-          <StartScreen />
+					<PauseScreen />
+					<SettingsScreen />
+					<StartScreen />
 				</div>
 			</div>
 		</>

@@ -1,9 +1,10 @@
 import { useAtom } from "jotai";
-import { autoplayAtom, autoplaySpeedAtom, themeAtom, weightsAtom } from "../atoms";
+import { autoplayAtom, autoplaySpeedAtom, pageAtom, themeAtom, weightsAtom } from "../atoms";
 
 function Autoplay() {
     const [theme] = useAtom(themeAtom);
     const [autoplay,setAutoplay]=useAtom(autoplayAtom)
+	const [page] = useAtom(pageAtom);
     const [autoplaySpeed,setAutoplaySpeed] = useAtom(autoplaySpeedAtom);
     const [weights,setWeights] = useAtom(weightsAtom);
     return ( <>
@@ -11,7 +12,7 @@ function Autoplay() {
     <div
 						className="text-[2vmin] duration-200 "
 						style={{
-							marginTop: !autoplay 
+							marginTop: !autoplay || page!="single"
                             // || !started 
                             ? "0" : "-17.25vmin",
 						}}>
@@ -21,12 +22,12 @@ function Autoplay() {
 						className="bg-post mb-[2vmin] h-[3vmin] duration-200 rounded-full  p-[0.25vmin] border aspect-video"
 						style={{
 							backgroundColor:
-								autoplay 
+								autoplay  && page=="single"
                                 // && started
 									? theme.accents[4] + "22"
 									: theme.accents[5] + "22",
 							borderColor:
-								autoplay 
+								autoplay && page=="single"
                                 // && started
 									? theme.accents[4] + "35"
 									: theme.accents[5] + "35",
@@ -37,28 +38,28 @@ function Autoplay() {
 						<div
 							className="h-full pointer-events-none aspect-square bg-bcol rounded-full duration-200"
 							style={{
-								marginLeft: autoplay 
+								marginLeft: autoplay  && page=="single"
                                 // && started 
                                 ? "50%" : "0",
 								backgroundColor:
-									autoplay 
+									autoplay  && page=="single"
                                     // && started
 										? theme.accents[4]
 										: theme.accents[5],
 							}}></div>
 					</div>
 					<div
-						className="text-[1.5vmin] lexend mb-[0.75vmin] duration-200 h-0 w-[20vmin] flex flex-col"
+						className="text-[1.5vmin]  mb-[0.75vmin] duration-200 h-0 w-[20vmin] flex flex-col"
 						style={{
-							height: autoplay 
+							height: autoplay  && page=="single"
                             // && started 
                             ? "12.25vmin" : "0vmin",
 							overflow: "hidden",
-							opacity: autoplay 
+							opacity: autoplay  && page=="single"
                             // && started 
                             ? "1" : "0",
 						}}>
-						<div className="text-[2vmin] mts w-full text-center">
+						<div className="text-[2vmin]   w-full text-center">
 							Weights
 						</div>
 						<div className="w-full flex justify-between px-[0.25vmin] gap-[1.5vmin]">
@@ -189,13 +190,13 @@ function Autoplay() {
 						</div>
 					</div>
 					<div
-						className="flex text-[2vmin] mts gap-[0.25vmin] duration-200 flex-col mb-[2vmin] items-center"
+						className="flex text-[2vmin] gap-[0.25vmin] duration-200 flex-col mb-[2vmin] items-center"
 						style={{
-							height: autoplay 
+							height: autoplay  && page=="single"
                             // && started 
                             ? "5vmin" : "0vmin",
 							overflow: "hidden",
-							opacity: autoplay 
+							opacity: autoplay  && page=="single"
                             // && started 
                             ? "1" : "0",
 						}}>

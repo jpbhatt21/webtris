@@ -1,10 +1,11 @@
 import { useAtom } from "jotai";
 import { holdShapeAtom, themeAtom } from "../atoms";
 import { shapeGrid } from "../constants";
+import Rect from "./Rect";
 
 function Hold() {
-    const [theme] = useAtom(themeAtom);
-    const [holdShape] = useAtom(holdShapeAtom);
+	const [theme] = useAtom(themeAtom);
+	const [holdShape] = useAtom(holdShapeAtom);
 
 	return (
 		<>
@@ -19,13 +20,21 @@ function Hold() {
 							<div className="w-full h-[4vmin] flex justify-center ">
 								{row.split("").map((cell) =>
 									cell !== "0" ? (
-										<div
-											className="w-[4vmin] aspect-square rounded-[0.4vmin] border"
-											style={{
-												backgroundColor:
-													theme.accents[holdShape],
-												borderColor: theme.background,
-											}}></div>
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											className=" w-[4vmin] h-[4vmin] tms duration-200  mb-0 "
+											viewBox="0 0 105 105"
+											fill="none">
+											<Rect
+												x={5}
+												y={5}
+												fill={
+													theme.accents[
+														holdShape
+													]
+												}
+											/>
+										</svg>
 									) : (
 										<div className="w-[4vmin] aspect-square "></div>
 									)

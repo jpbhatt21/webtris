@@ -16,6 +16,7 @@ import {
 	linesAtom,
 	lineStackAtom,
 	nextShapeAtom,
+	pageAtom,
 	scoreAtom,
 	stateAtom,
 	themeAtom,
@@ -24,6 +25,7 @@ import {
 import { useEffect, useState } from "react";
 import { activePos, initSettings } from "../constants";
 import { automatic, rotPiece } from "../Functionality/helper";
+import Rect from "./Rect";
 let keys = {
 	moveLeft: false,
 	moveRight: false,
@@ -132,7 +134,8 @@ window.addEventListener("keyup", (e) => {
 	// 		return prev;
 	// 	});
 	}
-	else if (key == settings.pauseGame && ths.state === "play") {
+	else if (key == settings.pauseGame && ths.state === "play" && ths.page=="single") {
+		
 		ths.setState("pause");
 	}
 	if (key === settings.moveRight) {
@@ -164,7 +167,12 @@ window.addEventListener("keyup", (e) => {
 		keys.holdPiece = false;
 	}
 	if (key === settings.closeMenu) {
-		ths.setState("play");
+		if(ths.state === "game over")
+			return
+		if (ths.state == "settings" && ths.page=="single") 
+			ths.setState("pause");
+		else
+			ths.setState("play");
 		// setControls((prev: any) => {
 		// 	if (!prev) setPaused(false);
 			
@@ -189,6 +197,7 @@ function MainBoard() {
 	const [score, setScore] = useAtom(scoreAtom);
 	const [state, setState] = useAtom(stateAtom);
 	const [lines, setLines] = useAtom(linesAtom);
+	const [page]=useAtom(pageAtom)
 	const [level, setLevel] = useAtom(levelAtom);
 	const [key, setKey] = useState(0);
 	const bagRand = useAtom(bagRandAtom)[1];
@@ -208,9 +217,10 @@ function MainBoard() {
 		ths.holdShape = JSON.parse(JSON.stringify(x[2]));
 		ths.currentShape = JSON.parse(JSON.stringify(x[0]));
 		ths.nextShape = JSON.parse(JSON.stringify(x[1]));
+		ths.page=page;
 		ths.score = JSON.parse(JSON.stringify(score));
 		ths.rot = JSON.parse(JSON.stringify(0));
-		console.log(ths.holdShape);
+		// console.log(ths.holdShape);
 		ths.lines = JSON.parse(JSON.stringify(lines));
 		ths.level = JSON.parse(JSON.stringify(level));
 		ths.lineStack = [0,0,0,0]
@@ -269,6 +279,7 @@ function MainBoard() {
 					setCurrentShape(7);
 					clearInterval(inter);
 					inter = -0;
+					ths.state = "game over";
 					ths.setState("game over");
 
 					return;
@@ -397,10 +408,12 @@ function MainBoard() {
 			}
 		}, 1000 / 60);
 		let diff=0
+		if(inter) clearInterval(inter);
 		inter = setInterval(() => {
 			cur = new Date().getTime();
 			diff = cur - prev;
-			[ths.autoplay, ths.state, ths.autoplaySpeed,ths.settings] = getAutoplayState();
+			// console.log(held);
+			[ths.autoplay, ths.state, ths.autoplaySpeed,ths.settings,ths.page] = getAutoplayState();
 			if (
 				(ths.autoplay &&
 					diff < Math.min(ths.autoplaySpeed, speed)) 
@@ -411,9 +424,8 @@ function MainBoard() {
 				return;
 
 			//hold
-			if (cur - prevTickTime.hold >= ticker.hold && keys.holdPiece) {
+			if (cur - prevTickTime.hold >= ticker.hold && !held && keys.holdPiece) {
 				if (ths.holdShape == 7) {
-					held = true;
 					ths.holdShape = JSON.parse(JSON.stringify(ths.currentShape));
 					setHoldShape(ths.currentShape);
 					createNewPiece(false);
@@ -428,6 +440,8 @@ function MainBoard() {
 					setCurrentShape(ths.currentShape);
 					setActive(JSON.parse(JSON.stringify(ths.active)));
 				}
+				
+				held = true;
 				prevTickTime.hold = cur;
 			}
 
@@ -539,35 +553,33 @@ function MainBoard() {
 				className=" w-full h-full tms duration-200  mb-0 "
 				viewBox="0 0 1055 2110"
 				fill="none">
+					 <defs>
+    
+  </defs>
 				{board.map((row, i) =>
 					row.map((cell, j) => (
-						<rect
-							width={100}
-							className="duration-100 ease-in-out"
-							height={100}
-							rx={10}
-							x={5 + j * 105}
+						
+						<Rect
+						x={5 + j * 105}
 							y={5 + i * 105}
 							fill={
 								cell.occupied
 									? theme.accents[cell.color]
 									: theme.backpop
 							}
-							key={`${i}-${j}`}
+							keyx={`${i}-${j}`}
 						/>
 					))
 				)}
 				{ghost.map((pos: any, ind: any) => (
-					<rect
-						className="duration-[15ms] opacity- 0 brightness-75 "
+					<Rect
+						className="duration-[15ms] brightness-75 "
 						style={{
 							transitionDuration: autoplay
 								? Math.min(autoplaySpeed / 4, 25) + "ms"
 								: "25ms",
 						}}
-						width={100}
-						height={100}
-						rx={10}
+						
 						x={5 + pos[1] * 105}
 						y={5 + pos[0] * 105}
 						fill={
@@ -579,16 +591,13 @@ function MainBoard() {
 					/>
 				))}
 				{active.map((pos: any, ind: any) => (
-					<rect
-						className="duration-[15ms]"
+					<Rect
+						className="duration-[15ms] shadow-xl"
 						style={{
 							transitionDuration: autoplay
 								? Math.min(autoplaySpeed / 4, 25) + "ms"
 								: "25ms",
 						}}
-						width={100}
-						height={100}
-						rx={10}
 						x={5 + pos[1] * 105}
 						y={5 + pos[0] * 105}
 						fill={theme.accents[currentShape]}

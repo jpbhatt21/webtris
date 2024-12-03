@@ -7,6 +7,7 @@ let maxScroll=0
 function ControlsScreen() {
   const [key,setKey]=useState(0)
   const [settings,setSettings]=useAtom(settingsAtom)
+  const [state]=useAtom(settingsAtom)
   const titles=[
     "Pause",
     "Close Menu",
@@ -43,19 +44,19 @@ function ControlsScreen() {
       id="controls"
       onScroll={(e)=>setScrollHeight(e.currentTarget.scrollTop)}
       
-      key={key} className="w-full h-full overflow-y-scroll hscb justify-center py-[0.5vmin] px-[0.5vmin] flex flex-wrap gap-[0.75vmin] text-[1.5vmin] items-center ">
+      key={key} className="w-full h-full overflow-y-scroll hscb justify-center py-[0.5vmin] px-[0.5vmin] flex flex-wrap gap-[0.75vmin] text-[2vmin] items-center ">
         {
           titles.map((x,i)=><div className="flex justify-between items-center w-full">
           {x}
           <input
             defaultValue={settings[settingsKeys[i]]}
-            className="h-[3.5vmin] w-[10vmin] text-[1.2vmin] cursor-pointer focus:cursor-none duration-200 outline outline-1 outline-[#0000] active:outline-none caret-transparent focus:outline-none focus:border-colors-green bg-bdark bg-opacity-20 border border-[#0000] text-center rounded-[0.5vmin]"
+            className="h-[3.5vmin] w-[10vmin] text-[1.7vmin] cursor-pointer focus:cursor-none duration-200 outline outline-1 outline-[#0000] active:outline-none caret-transparent focus:outline-none focus:border-colors-green bg-bdark bg-opacity-20 border border-[#0000] text-center rounded-[0.5vmin]"
             type="text"
             style={{
               outlineColor:settings.clash.includes((settings[settingsKeys[i]]).toString())?"#bf616a":""
             }}
             onFocus={(e) => {
-                if(i==1)
+                if(i==1 || state!=="settings")
                     e.currentTarget.blur()
             }}
             onChange={(e) => {
