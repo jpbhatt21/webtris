@@ -1,6 +1,5 @@
 import { useAtom } from "jotai";
 import {  pageAtom, stateAtom } from "./atoms";
-import {  svg } from "./constants";
 import Hold from "./Components/Hold";
 import SpeedLvAndLine from "./Components/SpeedLvAndLine";
 import Next from "./Components/Next";
@@ -10,7 +9,7 @@ import MainBoard from "./Components/MainBoard";
 
 function Single() {
     const [state, setState] = useAtom(stateAtom);
-    const [page, setPage] = useAtom(pageAtom);
+    const [page] = useAtom(pageAtom);
     
 	return (
 		<>

@@ -1,5 +1,3 @@
-import { useAtom } from "jotai";
-import { store, weight, weightsAtom } from "../atoms";
 import { activePos } from "../constants";
 
 

@@ -8,7 +8,7 @@ function SettingsScreen() {
     const [selected,setSelected] = useState(0);
     const [theme] = useAtom(themeAtom);
     const [state] = useAtom(stateAtom);
-    const [page, setPage] = useAtom(pageAtom);
+    const [page,] = useAtom(pageAtom);
 
 	return (
 		<>

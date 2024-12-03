@@ -7,7 +7,7 @@ function StartScreen() {
 	const [page, setPage] = useAtom(pageAtom);
 	const setAutoplay = useAtom(autoplayAtom)[1];
 	const [state, setState] = useAtom(stateAtom);
-	const [reset,setReset]=useAtom(resetAtom);
+	const [,setReset]=useAtom(resetAtom);
 	return (
 		<>
 			

@@ -62,7 +62,7 @@ export const autoplayAtom = atom(
 	}
 );
 
-export const getAutoplayStateAtom = atom(null, (_get, set) => {
+export const getAutoplayStateAtom = atom(null, (_get) => {
 	let temp = [
 		_get(autoplay),
 		_get(state),

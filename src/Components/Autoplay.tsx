@@ -6,7 +6,7 @@ function Autoplay() {
     const [autoplay,setAutoplay]=useAtom(autoplayAtom)
 	const [page] = useAtom(pageAtom);
     const [autoplaySpeed,setAutoplaySpeed] = useAtom(autoplaySpeedAtom);
-    const [weights,setWeights] = useAtom(weightsAtom);
+    const [weights] = useAtom(weightsAtom);
     return ( <>
     
     <div

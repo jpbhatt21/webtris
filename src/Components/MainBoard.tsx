@@ -6,7 +6,6 @@ import {
 	bagRandAtom,
 	boardAtom,
 	currentShapeAtom,
-	gameOverAtom,
 	getAutoplayStateAtom,
 	ghostPieceAtom,
 	holdShapeAtom,
@@ -22,7 +21,7 @@ import {
 	themeAtom,
 	timeAtom,
 } from "../atoms";
-import { useEffect, useState } from "react";
+import { useEffect} from "react";
 import { activePos, initSettings } from "../constants";
 import { automatic, rotPiece } from "../Functionality/helper";
 import Rect from "./Rect";
@@ -36,9 +35,9 @@ let keys = {
 	holdPiece: false,
 	pauseGame: false,
 };
-function form(x: number) {
-	return 1500 * Math.pow(0.76, x) + 2.21 * x;
-}
+// function form(x: number) {
+// 	return 1500 * Math.pow(0.76, x) + 2.21 * x;
+// }
 let initTime = new Date().getTime();
 let ticker = {
 	rotate: 150,
@@ -60,15 +59,7 @@ let ths: any = {};
 function getThs() {
 	return ths;
 }
-let movClock = new Date().getTime();
-let rotClock = new Date().getTime();
-let downClock = new Date().getTime();
-let upClock = new Date().getTime();
-let speed = 1500; //smaller is faster, in ms
-let lrSpeed = 100; //smaller is faster, in ms
-let upSpeed = 250; //smaller is faster, in ms
 let eventHandler:any = null;
-let inx: any = null;
 let settings = initSettings;
 window.addEventListener("keydown", (e) => {
 	settings = getThs().settings;
@@ -125,7 +116,7 @@ window.addEventListener("keyup", (e) => {
 	if (key === settings.moveLeft) {
 		//setKeys((prev:any) => ({ ...prev, moveLeft: false }));
 		keys.moveLeft = false;
-		movClock = new Date().getTime() - lrSpeed;
+		// movClock = new Date().getTime() - lrSpeed;
 	}
 	if (key === settings.pauseGame && ths.state === "pause") {
 		ths.setState("play");
@@ -141,7 +132,7 @@ window.addEventListener("keyup", (e) => {
 	if (key === settings.moveRight) {
 		//setKeys((prev:any) => ({ ...prev, moveRight: false }));
 		keys.moveRight = false;
-		movClock = new Date().getTime() - lrSpeed;
+		// movClock = new Date().getTime() - lrSpeed;
 	}
 	if (key === settings.softDrop) {
 		//setKeys((prev:any) => ({ ...prev, softDrop: false }));
@@ -154,13 +145,13 @@ window.addEventListener("keyup", (e) => {
 	if (key === settings.rotateCW) {
 		//setKeys((prev:any) => ({ ...prev, rotateCW: false }));
 		keys.rotateCW = false;
-		rotClock = new Date().getTime() - 150;
+		// rotClock = new Date().getTime() - 150;
 	}
 	if (key === settings.rotateCCW) {
 		e.preventDefault();
 		//setKeys((prev:any) => ({ ...prev, rotateCCW: false }));
 		keys.rotateCCW = false;
-		rotClock = new Date().getTime() - 150;
+		// rotClock = new Date().getTime() - 150;
 	}
 	if (key === settings.holdPiece) {
 		//setKeys((prev:any) => ({ ...prev, holdPiece: false }));
@@ -190,16 +181,15 @@ function MainBoard() {
 	const [interval,stInterval]= useAtom(intervalAtom)
 	const setLineStack = useAtom(lineStackAtom)[1];
 	const [autoplaySpeed] = useAtom(autoplaySpeedAtom);
-	const [holdShape, setHoldShape] = useAtom(holdShapeAtom);
+	const [, setHoldShape] = useAtom(holdShapeAtom);
 	const [currentShape, setCurrentShape] = useAtom(currentShapeAtom);
-	const [nextShape, setNextShape] = useAtom(nextShapeAtom);
+	const [, setNextShape] = useAtom(nextShapeAtom);
 	const setTime= useAtom(timeAtom)[1];
 	const [score, setScore] = useAtom(scoreAtom);
 	const [state, setState] = useAtom(stateAtom);
 	const [lines, setLines] = useAtom(linesAtom);
 	const [page]=useAtom(pageAtom)
 	const [level, setLevel] = useAtom(levelAtom);
-	const [key, setKey] = useState(0);
 	const bagRand = useAtom(bagRandAtom)[1];
 	const init = useAtom(initAtom)[1];
 	const getAutoplayState = useAtom(getAutoplayStateAtom)[1];
@@ -298,7 +288,6 @@ function MainBoard() {
 
 		}
 		let move = false;
-		let changehold = false;
 		ths.time=0
 		let speed = 1500;
 		let cur :any,
@@ -479,10 +468,10 @@ function MainBoard() {
 				prevTickTime.gravity = cur;
 			}
 			if (!move && ths.autoplay) {
-				let rot, sc1, sc2, act2;
-				let prev = JSON.parse(JSON.stringify(ths.active));
-				let prevRot = JSON.parse(JSON.stringify(0));
-				[ths.active, ths.currentShape, rot, sc1] = automatic(
+				let  sc1, sc2, act2;
+				// let prev = JSON.parse(JSON.stringify(ths.active));
+				// let prevRot = JSON.parse(JSON.stringify(0));
+				[ths.active, ths.currentShape, ths.rot, sc1] = automatic(
 					JSON.parse(JSON.stringify(ths.board)),
 					JSON.parse(JSON.stringify(ths.active)),
 					JSON.parse(JSON.stringify(ths.currentShape)),

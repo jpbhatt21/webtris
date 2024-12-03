@@ -5,7 +5,7 @@ import Rect from "./Rect";
 
 function Next() {
     const [theme] = useAtom(themeAtom);
-    const [nextShape,setNextShape] = useAtom(nextShapeAtom);
+    const [nextShape] = useAtom(nextShapeAtom);
  	return (
 		<>
 			<div

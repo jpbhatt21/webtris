@@ -1,13 +1,12 @@
 import { useAtom } from "jotai";
-import { autoplayAtom, gameOverAtom, pageAtom, resetAtom, stateAtom, themeAtom } from "./atoms";
+import { autoplayAtom, pageAtom, resetAtom, stateAtom, themeAtom } from "./atoms";
 
 function PauseScreen() {
 	const [theme] = useAtom(themeAtom);
 	const [state, setState] = useAtom(stateAtom);
-  const [page, setPage] = useAtom(pageAtom);
+  const [, setPage] = useAtom(pageAtom);
 	const setAutoplay = useAtom(autoplayAtom)[1];
   const setReset=useAtom(resetAtom)[1];
-	const [gameOver] = useAtom(gameOverAtom);
 	const reset = useAtom(resetAtom)[1];
 	return (
 		<>
@@ -23,7 +22,7 @@ function PauseScreen() {
 				}}>
 				<div className="text-[4vmin] cursor-default ">
 					{" "}
-					{state == "game over" ? ("Game Over").split("").map((x,i)=><span className="duration-100" onMouseEnter={(e) => {
+					{state == "game over" ? ("Game Over").split("").map((x)=><span className="duration-100" onMouseEnter={(e) => {
 							e.currentTarget.style.transitionDuration="0.25s"
 							e.currentTarget.style.color=theme.accents[5]
 							
