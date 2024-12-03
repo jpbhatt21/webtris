@@ -1,26 +1,30 @@
 import { useState } from "react";
-import ControlsScreen from "./Controls";
-import ThemeScreen from "./Theme";
+import ThemeScreen from "./Components/Theme";
+import { useAtom } from "jotai";
+import { stateAtom, themeAtom } from "./atoms";
+import ControlsScreen from "./Components/Controls";
 
-function SettingsScreen({ props }: any) {
+function SettingsScreen() {
     const [selected,setSelected] = useState(0);
+    const [theme] = useAtom(themeAtom);
+    const [state] = useAtom(stateAtom);
 	return (
 		<>
 			<div
 				className="bg -blank border  duration-200 pointer-events-none border-r-0 border-l-0 shadow-lg w-[48vmin] absolute "
 				style={{
-                    backgroundColor: props.theme.background,
-                    borderColor: props.theme.text,
-					opacity: props.show ? "0.75" : "0",
-					height: props.show ? "50vmin" : "0",
-					marginTop: props.show ? "-12.5vmin" : "25vmin",
-                    pointerEvents:props.show?"auto":"none"
+                    backgroundColor: theme.background,
+                    borderColor: theme.text,
+					opacity: state=="settings" ? "0.75" : "0",
+					height: state=="settings" ? "50vmin" : "0",
+					marginTop: state=="settings" ? "-12.5vmin" : "25vmin",
+                    pointerEvents:state=="settings"?"auto":"none"
 				}}></div>
 			<div
 				className="w-full h-[46vmin] mt-[-10.5vmin] flex flex-col pointer-ev ents-none  duration-200 absolute items-center py-[2vmin]"
 				style={{
-					opacity: props.show ? "1" : "0",
-                    pointerEvents:props.show?"auto":"none"
+					opacity: state=="settings" ? "1" : "0",
+                    pointerEvents:state=="settings"?"auto":"none"
 
 				}}>
                     <div className="text-[3vmin]">
@@ -36,7 +40,7 @@ function SettingsScreen({ props }: any) {
                                     <div className="pointer-events-none  select-none">{v}</div>
                                     <div className="w-full duration-200 rounded-full h-[0.1vmin]" 
                                     style={{
-                                        backgroundColor:props.theme.accents[8],
+                                        backgroundColor:theme.accents[8],
                                         opacity:selected===i?"1":"0",
                                         width:selected===i?"100%":"0"
                                     }}
@@ -48,7 +52,7 @@ function SettingsScreen({ props }: any) {
                     </div>
                     <div className="w-full h-[32vmin] mt-[2vmin] px-[4vmin]">
                         {selected === 0 && <ControlsScreen />}
-                        {selected === 2 && <ThemeScreen setUpdate={props.setUpdate}/>}
+                        {selected === 2 && <ThemeScreen />}
                     </div>
                 </div>
 		</>

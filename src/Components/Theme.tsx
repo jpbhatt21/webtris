@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { ind, setColorScheme, svg, themes } from "./Helper";
+import { themeIndexAtom } from "../atoms";
+import { useAtom } from "jotai";
+import { svg, themeKeys, themes } from "../constants";
 
-type SettingsKeys = keyof typeof themes;
 let maxScroll = 0;
-function ThemeScreen({ setUpdate }: any) {
-  const kList = Object.keys(themes) as SettingsKeys[];
+function ThemeScreen() {
 
   const titles = [
     "Nord-ish",
@@ -25,7 +25,7 @@ function ThemeScreen({ setUpdate }: any) {
     "Night Owl",
   ];
   const [scrollHeight, setScrollHeight] = useState(0);
-  const [selected, setSelected] = useState(ind);
+  const [themeIndex, setThemeIndex] = useAtom(themeIndexAtom);
 
   useEffect(() => {
     setTimeout(() => {
@@ -54,19 +54,17 @@ function ThemeScreen({ setUpdate }: any) {
           className="w-full h-full  overflow-y-scroll hscb justify-center py-[0.5vmin] px-[0.5vmin] flex flex-wrap gap-[1vmin] text-[1.5vmin] items-center "
         >
           {titles.map((x, i) => {
-            let crt = themes[kList[i]];
+            let crt = themes[themeKeys[i]];
             return (
               <div className="flex flex-col outline-[0.25vmin] duration-200 outline p-[0.5vmin] border rounded-[0.5vmin] w-full "
               style={{
                 backgroundColor:crt.background,
                 color:crt.text,
                 borderColor:crt.backpop,
-                outlineColor:crt.text+(selected===i?"99":"00")
+                outlineColor:crt.text+(themeIndex===i?"99":"00")
               }}
                 onClick={()=>{
-                    setSelected(i)
-                    setColorScheme(i)
-                    setUpdate((prev:any)=>prev+1)
+                    setThemeIndex(i)
                     
                 }}
               >

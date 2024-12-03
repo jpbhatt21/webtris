@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
+import { settingsKeys, svg } from "../constants";
+import { useAtom } from "jotai";
+import { settingsAtom } from "../atoms";
 
-type SettingsKeys = keyof typeof settings;
-import { setSettings, settings, svg } from "./Helper";
 let maxScroll=0
 function ControlsScreen() {
   const [key,setKey]=useState(0)
-  const kList = Object.keys(settings) as SettingsKeys[];
+  const [settings,setSettings]=useAtom(settingsAtom)
   const titles=[
     "Pause",
     "Close Menu",
@@ -47,22 +48,22 @@ function ControlsScreen() {
           titles.map((x,i)=><div className="flex justify-between items-center w-full">
           {x}
           <input
-            defaultValue={settings[kList[i]]}
+            defaultValue={settings[settingsKeys[i]]}
             className="h-[3.5vmin] w-[10vmin] text-[1.2vmin] cursor-pointer focus:cursor-none duration-200 outline outline-1 outline-[#0000] active:outline-none caret-transparent focus:outline-none focus:border-colors-green bg-bdark bg-opacity-20 border border-[#0000] text-center rounded-[0.5vmin]"
             type="text"
             style={{
-              outlineColor:settings.clash.includes((settings[kList[i]]).toString())?"#bf616a":""
+              outlineColor:settings.clash.includes((settings[settingsKeys[i]]).toString())?"#bf616a":""
             }}
             onFocus={(e) => {
                 if(i==1)
                     e.currentTarget.blur()
             }}
             onChange={(e) => {
-              e.currentTarget.value = (settings[kList[i]]).toString();
+              e.currentTarget.value = (settings[settingsKeys[i]]).toString();
             }}
             onKeyDown={(e) => {
               setSettings((prevSettings: any) => {
-                prevSettings[kList[i]]=e.key !== " " ? e.key.toUpperCase() : "␣";
+                prevSettings[settingsKeys[i]]=e.key !== " " ? e.key.toUpperCase() : "␣";
                 return prevSettings
               });
               e.currentTarget.value = e.key; 
