@@ -14,12 +14,13 @@ function Next() {
 					borderColor: theme.text,
 				}}>
 				<div className="w-full flex flex-col h-2/3 items-center fadein justify-center" key={"next"+nextShape}>
-					{shapeGrid[nextShape].split(" ").map((row) => {
+					{shapeGrid[nextShape].split(" ").map((row,i) => {
 						return (
-							<div className="w-full h-[4vmin] flex justify-center ">
-								{row.split("").map((cell) =>
+							<div className="w-full h-[4vmin] flex justify-center " key={"nextblock"+i}>
+								{row.split("").map((cell,i) =>
 									cell !== "0" ? (
 										<svg
+											key={"nextblock2 "+i}
 											xmlns="http://www.w3.org/2000/svg"
 											className=" w-[4vmin] h-[4vmin] tms duration-200  mb-0 "
 											viewBox="0 0 105 105"
@@ -35,14 +36,16 @@ function Next() {
 											/>
 										</svg>
 									) : (
-										<div className="w-[4vmin] aspect-square "></div>
+										<div 
+										key={"nextblock2 "+i}
+										className="w-[4vmin] aspect-square "></div>
 									)
 								)}
 							</div>
 						);
 					})}
 				</div>
-				<label className="">Next</label>
+				<label className=" text-[1.5vmin]">Next</label>
 			</div>
 		</>
 	);

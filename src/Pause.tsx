@@ -17,7 +17,7 @@ function PauseScreen() {
 	return (
 		<>
 			<div
-				className="w-fit h-fit flex flex-col duration-200 absolute items-center justify-center py-[2vmin]"
+				className="w-fit h-fit flex flex-col duration-500 absolute items-center justify-center py-[2vmin]"
 				style={{
 					opacity:
 						state == "pause" || state == "game over" ? "1" : "0",
@@ -29,8 +29,9 @@ function PauseScreen() {
 				<div className="text-[5vmin]  prt  cursor-default ">
 					{" "}
 					{state == "game over"
-						? "Game Over".split("").map((x) => (
+						? "Game Over".split("").map((x,i) => (
 								<span
+									key={"gameover" + i}
 									className="duration-100"
 									onMouseEnter={(e) => {
 										e.currentTarget.style.transitionDuration =
@@ -48,6 +49,7 @@ function PauseScreen() {
 						  ))
 						: "Paused".split("").map((x, i) => (
 								<span
+									key={"paused" + i}
 									className="duration-100"
 									onMouseEnter={(e) => {
 										e.currentTarget.style.transitionDuration =

@@ -24,6 +24,7 @@ function TimeScoreAndLineCounter() {
 			<div className="w-full mt-[4vmin] overflow-hidden rounded-full flex h-[1.5vmin]">
 						{lineStack.map((val, i) => (
 							<div
+							key={"lineStack"+i}
 								className="w-full min-w-fit duration-75 text-[1.5vmin]  text h-full flex items-center justify-center bg-white bg-opacity-50"
 								style={{
 									width:

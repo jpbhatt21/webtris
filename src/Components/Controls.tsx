@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { settingsKeys, svg } from "../constants";
 import { useAtom } from "jotai";
-import { settingsAtom } from "../atoms";
+import { settingsAtom, stateAtom } from "../atoms";
 
 let maxScroll=0
 function ControlsScreen() {
   const [key,setKey]=useState(0)
   const [settings,setSettings]=useAtom(settingsAtom)
-  const [state]=useAtom(settingsAtom)
+  const [state]=useAtom(stateAtom)
   const titles=[
     "Pause",
     "Close Menu",
@@ -46,7 +46,7 @@ function ControlsScreen() {
       
       key={key} className="w-full h-full overflow-y-scroll hscb justify-center py-[0.5vmin] px-[0.5vmin] flex flex-wrap gap-[0.75vmin] text-[2vmin] items-center ">
         {
-          titles.map((x,i)=><div className="flex justify-between items-center w-full">
+          titles.map((x,i)=>{return i!=1&&<div key={"contTitles"+i} className="flex justify-between items-center w-full">
           {x}
           <input
             defaultValue={settings[settingsKeys[i]]}
@@ -56,6 +56,7 @@ function ControlsScreen() {
               outlineColor:settings.clash.includes((settings[settingsKeys[i]]).toString())?"#bf616a":""
             }}
             onFocus={(e) => {
+              console.log(state)
                 if(i==1 || state!=="settings")
                     e.currentTarget.blur()
             }}
@@ -72,7 +73,7 @@ function ControlsScreen() {
               setKey(prev=>prev+1)
             }}
           />
-        </div>)
+        </div>})
         }
       </div>
       <div className=" w-[1vmin] h-[1vmin] -mt-[1vmin] duration-200"

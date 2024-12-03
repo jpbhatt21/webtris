@@ -361,7 +361,7 @@ export let shapeGrid = [
 ];
 
 export const initSettings= window.localStorage.getItem("settings")?JSON.parse(window.localStorage.getItem("settings") as string):{
-    pauseGame:"`",
+    pauseGame:"ESCAPE",
     closeMenu:"ESCAPE",
     moveLeft:"A",
     moveRight:"D",

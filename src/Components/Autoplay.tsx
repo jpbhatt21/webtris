@@ -27,7 +27,7 @@ function Autoplay() {
 				Autoplay
 			</div>
 			<div
-				className="bg-post mb-[2vmin] h-[3vmin] duration-200 rounded-full  p-[0.25vmin] border aspect-video"
+				className="bg-post mb-[2vmin] h-[3vmin] duration-200 rounded-[1vmin]  p-[0.25vmin] border aspect-video"
 				style={{
 					backgroundColor:
 						autoplay && page == "single"
@@ -44,7 +44,7 @@ function Autoplay() {
 					setAutoplay(!autoplay);
 				}}>
 				<div
-					className="h-full pointer-events-none aspect-square bg-bcol rounded-full duration-200"
+					className="h-full pointer-events-none aspect-square bg-bcol rounded-[0.8vmin]  duration-200"
 					style={{
 						marginLeft:
 							autoplay && page == "single"
@@ -193,12 +193,12 @@ function Autoplay() {
 				</div>
 			</div>
 			<div
-				className="flex text-[2vmin] gap-[0.25vmin] duration-200 flex-col mb-[2vmin] items-center"
+				className="flex min-h-fit text-[2vmin] gap-[0.25vmin] duration-200 flex-col mb-[2vmin] items-center"
 				style={{
 					height:
 						autoplay && page == "single"
 							? // && started
-							  "5vmin"
+							  ""
 							: "0vmin",
 					overflow: "hidden",
 					opacity:
@@ -210,7 +210,7 @@ function Autoplay() {
 				Speed
 				<input
 					type="range"
-					className="w-[13vmin] opacity-0"
+					className="w-[13vmin] h-[2vmin] opacity-0"
 					defaultValue={100 - autoplaySpeed / 10}
 					min={0}
 					max={100}
@@ -220,7 +220,7 @@ function Autoplay() {
 						);
 					}}
 				/>
-				<div className="w-[14vmin] pointer-events-none px-[1vmin] -mt-[2vmin] overflow-visible min-h-[2vmin] ">
+				<div className="w-[14vmin] min-h-fit pointer-events-none px-[1vmin] -mt-[2vmin] overflow-visible  ">
 					<div
 						className="w-full h-[2vmin] pointer-events-none rounded-full border-y-[0.9vmin]"
 						style={{

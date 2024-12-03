@@ -26,6 +26,7 @@ function StartScreen() {
 					{" "}
 					{"WEBTRIS".split("").map((x, i) => (
 						<span
+							key={"webtris" + i}
 							className="duration-100"
 							onMouseEnter={(e) => {
 								e.currentTarget.style.transitionDuration =

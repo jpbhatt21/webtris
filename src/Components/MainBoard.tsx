@@ -180,6 +180,17 @@ window.addEventListener("keyup", (e) => {
 	) {
 		ths.setState("pause");
 	}
+	else if (key === settings.closeMenu) {
+		if (ths.state === "game over") return;
+		if (ths.state == "settings" && ths.page == "single")
+			ths.setState("pause");
+		else ths.setState("play");
+		// setControls((prev: any) => {
+		// 	if (!prev) setPaused(false);
+
+		// 	return false;
+		// });
+	}
 	if (key === settings.moveRight) {
 		//setKeys((prev:any) => ({ ...prev, moveRight: false }));
 		keys.moveRight = false;
@@ -208,17 +219,7 @@ window.addEventListener("keyup", (e) => {
 		//setKeys((prev:any) => ({ ...prev, holdPiece: false }));
 		keys.holdPiece = false;
 	}
-	if (key === settings.closeMenu) {
-		if (ths.state === "game over") return;
-		if (ths.state == "settings" && ths.page == "single")
-			ths.setState("pause");
-		else ths.setState("play");
-		// setControls((prev: any) => {
-		// 	if (!prev) setPaused(false);
-
-		// 	return false;
-		// });
-	}
+	
 });
 let inter: any = null;
 function MainBoard() {
@@ -663,7 +664,7 @@ function MainBoard() {
 							x={5 + j * 105}
 							y={20 + i * 105}
 							fill={theme.backpop}
-							keyx={`${i * 10 + j}blockblank`}
+							key={`${i * 10 + j}blockblank`}
 						/>
 					))
 				)}
@@ -685,7 +686,7 @@ function MainBoard() {
 											Math.max(300, speed) +
 											"ms",
 									}}
-									keyx={`${i * 10 + j}block`+currentShape}
+									key={`${i * 10 + j}block`+currentShape}
 								/>
 							)
 					)

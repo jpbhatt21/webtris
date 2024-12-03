@@ -242,6 +242,8 @@ export const settingsAtom = atom(
 		let prev: any = [];
 		let clash: any = [];
 		for (let i = 0; i < values.length; i++) {
+			if(i==1)
+				continue;
 			let value = values[i];
 			if (prev.includes(value)) {
 				clash.push(value);

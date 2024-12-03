@@ -35,6 +35,7 @@ function SettingsScreen() {
                     <div className="text-[5vmin]">
                         {"Settings".split("").map((x, i) => (
 						<span
+                            key={"settings"+i}
 							className="duration-100"
 							onMouseEnter={(e) => {
 								e.currentTarget.style.transitionDuration =
@@ -57,7 +58,9 @@ function SettingsScreen() {
                         
                         {
                             ["Controls","Gameplay","Theme"].map((v,i)=>{
-                                return <div className="flex flex-col justify-between cursor-pointer gap-[0.25vmin]   duration-200 py-[0.75vmin] px-[1.5vmin] items-center"
+                                return <div
+                                key={"settingsHeader"+i}
+                                className="flex flex-col justify-between cursor-pointer gap-[0.25vmin]   duration-200 py-[0.75vmin] px-[1.5vmin] items-center"
                                 onClick={()=>setSelected(i)}
                                 >
                                     <div className="pointer-events-none  select-none">{v}</div>

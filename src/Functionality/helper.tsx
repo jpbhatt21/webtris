@@ -1,7 +1,5 @@
 import { activePos } from "../constants";
 
-
-
 export function rotPiece(
 	board: any,
 	shape: number,
@@ -20,677 +18,714 @@ export function rotPiece(
 			broken = true;
 		}
 	});
-    let backupAct = JSON.parse(JSON.stringify(act));
-    let backupRot = JSON.parse(JSON.stringify(rot));
+	let backupAct = JSON.parse(JSON.stringify(act));
+	let backupRot = JSON.parse(JSON.stringify(rot));
 	if (broken) {
 		return [act, rot];
 	}
-	let edit=false;
-    for(let i=0;i<5 && edit==false;i++){
-        switch (shape) {
-            case 0:
-                switch (rot) {
-                    case 0:
-                        if (
-                            act[1][0] > 0 &&
-                            act[1][0] + 2 < 20 &&
-                            !board[act[1][0] - 1][act[1][1]].occupied &&
-                            !board[act[1][0] + 1][act[1][1]].occupied &&
-                            !board[act[1][0] + 2][act[1][1]].occupied
-                        ) {
-                            act[0][0] -= 1;
-                            act[0][1] += 1;
-                            act[2][0] += 1;
-                            act[2][1] -= 1;
-                            act[3][0] += 2;
-                            act[3][1] -= 2;
-                            rot = 1;
-                            edit=true;
-                        }
-                        break;
-                    case 1:
-                        if (
-                            act[1][1] - 1 > 0 &&
-                            act[1][1] + 1 < 10 &&
-                            !board[act[1][0]][act[1][1] + 1].occupied &&
-                            !board[act[1][0]][act[1][1] - 1].occupied &&
-                            !board[act[1][0]][act[1][1] - 2].occupied
-                        ) {
-                            act[0][0] += 1;
-                            act[0][1] += 1;
-                            act[2][0] -= 1;
-                            act[2][1] -= 1;
-                            act[3][0] -= 2;
-                            act[3][1] -= 2;
-                            rot = 2;
-                            edit=true;
-                        }
-                        break;
-                    case 2:
-                        if (
-                            act[1][0] - 1 > 0 &&
-                            act[1][0] + 2 < 20 &&
-                            !board[act[1][0] - 1][act[1][1]].occupied &&
-                            !board[act[1][0] + 1][act[1][1]].occupied &&
-                            !board[act[1][0] - 2][act[1][1]].occupied
-                        ) {
-                            act[0][0] += 1;
-                            act[0][1] -= 1;
-                            act[2][0] -= 1;
-                            act[2][1] += 1;
-                            act[3][0] -= 2;
-                            act[3][1] += 2;
-                            rot = 3;
-                            edit=true;
-                        }
-                        break;
-                    case 3:
-                        if (
-                            act[1][1] > 0 &&
-                            act[1][1] + 1 < 9 &&
-                            !board[act[1][0]][act[1][1] + 1].occupied &&
-                            !board[act[1][0]][act[1][1] - 1].occupied &&
-                            !board[act[1][0]][act[1][1] + 2].occupied
-                        ) {
-                            act[0][0] -= 1;
-                            act[0][1] -= 1;
-                            act[2][0] += 1;
-                            act[2][1] += 1;
-                            act[3][0] += 2;
-                            act[3][1] += 2;
-                            rot = 0;
-                            edit=true;
-                        }
-                        break;
-                }
-                break;
-            case 1:
-                switch (rot) {
-                    case 0:
-                        if (
-                            act[2][0] < 19 &&
-                            !board[act[2][0] - 1][act[2][1] + 1].occupied &&
-                            !board[act[2][0] - 1][act[2][1]].occupied &&
-                            !board[act[2][0] + 1][act[2][1]].occupied
-                        ) {
-                            act[0][1] += 2;
-                            act[1][0] -= 1;
-                            act[1][1] += 1;
-                            act[3][0] += 1;
-                            act[3][1] -= 1;
-                            rot = 1;
-                            edit=true;
-                        }
-                        break;
-                    case 1:
-                        if (
-                            act[2][1] > 0 &&
-                            !board[act[2][0] + 1][act[2][1] + 1].occupied &&
-                            !board[act[2][0]][act[2][1] + 1].occupied &&
-                            !board[act[2][0]][act[2][1] - 1].occupied
-                        ) {
-                            act[0][0] += 2;
-                            act[1][0] += 1;
-                            act[1][1] += 1;
-                            act[3][0] -= 1;
-                            act[3][1] -= 1;
-                            rot = 2;
-                            edit=true;
-                        }
-                        break;
-                    case 2:
-                        if (
-                            act[2][0] > 0 &&
-                            !board[act[2][0] + 1][act[2][1] - 1].occupied &&
-                            !board[act[2][0] + 1][act[2][1]].occupied &&
-                            !board[act[2][0] - 1][act[2][1]].occupied
-                        ) {
-                            act[0][1] -= 2;
-                            act[1][0] += 1;
-                            act[1][1] -= 1;
-                            act[3][0] -= 1;
-                            act[3][1] += 1;
-                            rot = 3;
-                            edit=true;
-                        }
-                        break;
-                    case 3:
-                        if (
-                            act[2][1] < 9 &&
-                            !board[act[2][0] - 1][act[2][1] - 1].occupied &&
-                            !board[act[2][0]][act[2][1] - 1].occupied &&
-                            !board[act[2][0]][act[2][1] + 1].occupied
-                        ) {
-                            act[0][0] -= 2;
-                            act[1][0] -= 1;
-                            act[1][1] -= 1;
-                            act[3][0] += 1;
-                            act[3][1] += 1;
-                            rot = 0;
-                            edit=true;
-                        }
-                        break;
-                }
-                break;
-            case 2:
-                switch (rot) {
-                    case 0:
-                        if (
-                            act[2][0] < 19 &&
-                            !board[act[2][0] - 1][act[2][1] - 1].occupied &&
-                            !board[act[2][0] - 1][act[2][1]].occupied &&
-                            !board[act[2][0] + 1][act[2][1]].occupied
-                        ) {
-                            act[0][0] += 2;
-                            act[1][0] += 1;
-                            act[1][1] -= 1;
-                            act[3][0] -= 1;
-                            act[3][1] += 1;
-                            rot = 1;
-                            edit=true;
-                        }
-                        break;
-                    case 1:
-                        if (
-                            act[2][1] > 0 &&
-                            !board[act[2][0] + 1][act[2][1] - 1].occupied &&
-                            !board[act[2][0]][act[2][1] - 1].occupied &&
-                            !board[act[2][0]][act[2][1] + 1].occupied
-                        ) {
-                            act[0][1] -= 2;
-                            act[1][0] -= 1;
-                            act[1][1] -= 1;
-                            act[3][0] += 1;
-                            act[3][1] += 1;
-                            rot = 2;
-                            edit=true;
-                        }
-                        break;
-                    case 2:
-                        if (
-                            act[2][0] > 0 &&
-                            !board[act[2][0] - 1][act[2][1] + 1].occupied &&
-                            !board[act[2][0] - 1][act[2][1]].occupied &&
-                            !board[act[2][0] + 1][act[2][1]].occupied
-                        ) {
-                            act[0][0] -= 2;
-                            act[1][0] -= 1;
-                            act[1][1] += 1;
-                            act[3][0] += 1;
-                            act[3][1] -= 1;
-                            rot = 3;
-                            edit=true;
-                        }
-                        break;
-                    case 3:
-                        if (
-                            act[2][1] < 9 &&
-                            !board[act[2][0] + 1][act[2][1] + 1].occupied &&
-                            !board[act[2][0]][act[2][1] + 1].occupied &&
-                            !board[act[2][0]][act[2][1] - 1].occupied
-                        ) {
-                            act[0][1] += 2;
-                            act[1][0] += 1;
-                            act[1][1] += 1;
-                            act[3][0] -= 1;
-                            act[3][1] -= 1;
-                            rot = 0;
-                            edit=true;
-                        }
-                        break;
-                }
-                break;
-            case 3:
-                switch (rot) {
-                }
-                break;
-    
-            case 4:
-                switch (rot) {
-                    case 0:
-                        if (
-                            act[2][0] < 19 &&
-                            !board[act[2][0] - 1][act[2][1] + 1].occupied &&
-                            !board[act[2][0] - 1][act[2][1]].occupied &&
-                            !board[act[2][0]][act[2][1] - 1].occupied
-                        ) {
-                            act[0][0] += 1;
-                            act[0][1] += 1;
-                            act[1][0] += 2;
-                            act[3][0] -= 1;
-                            act[3][1] += 1;
-                            rot = 1;
-                            edit=true;
-                        }
-                        break;
-                    case 1:
-                        if (
-                            act[2][1] > 0 &&
-                            !board[act[2][0] + 1][act[2][1] - 1].occupied &&
-                            !board[act[2][0]][act[2][1] - 1].occupied &&
-                            !board[act[2][0] - 1][act[2][1]].occupied
-                        ) {
-                            act[0][0] += 1;
-                            act[0][1] -= 1;
-                            act[1][1] -= 2;
-                            act[3][0] += 1;
-                            act[3][1] += 1;
-                            rot = 2;
-                            edit=true;
-                        }
-                        break;
-                    case 2:
-                        if (
-                            act[2][0] > 0 &&
-                            !board[act[2][0] + 1][act[2][1] - 1].occupied &&
-                            !board[act[2][0] + 1][act[2][1]].occupied &&
-                            !board[act[2][0]][act[2][1] + 1].occupied
-                        ) {
-                            act[0][0] -= 1;
-                            act[0][1] -= 1;
-                            act[1][0] -= 2;
-                            act[3][0] += 1;
-                            act[3][1] -= 1;
-                            rot = 3;
-                            edit=true;
-                        }
-                        break;
-                    case 3:
-                        if (
-                            act[2][1] < 9 &&
-                            !board[act[2][0] - 1][act[2][1] + 1].occupied &&
-                            !board[act[2][0]][act[2][1] + 1].occupied &&
-                            !board[act[2][0] + 1][act[2][1]].occupied
-                        ) {
-                            act[0][0] -= 1;
-                            act[0][1] += 1;
-                            act[1][1] += 2;
-                            act[3][0] -= 1;
-                            act[3][1] -= 1;
-                            rot = 0;
-                            edit=true;
-                        }
-                        break;
-                }
-                break;
-            case 5:
-                switch (rot) {
-                    case 0:
-                        if (
-                            act[2][0] < 19 &&
-                            !board[act[2][0] - 1][act[2][1] + 1].occupied &&
-                            !board[act[2][0] - 1][act[2][1]].occupied &&
-                            !board[act[2][0] + 1][act[2][1]].occupied
-                        ) {
-                            act[0][1] += 2;
-                            act[1][0] += 1;
-                            act[1][1] += 1;
-                            act[3][0] += 1;
-                            act[3][1] -= 1;
-                            rot = 1;
-                            edit=true;
-                        }
-                        break;
-                    case 1:
-                        if (
-                            act[2][1] > 0 &&
-                            !board[act[2][0] + 1][act[2][1] + 1].occupied &&
-                            !board[act[2][0]][act[2][1] + 1].occupied &&
-                            !board[act[2][0]][act[2][1] - 1].occupied
-                        ) {
-                            act[0][0] += 2;
-                            act[1][0] += 1;
-                            act[1][1] -= 1;
-                            act[3][0] -= 1;
-                            act[3][1] -= 1;
-                            rot = 2;
-                            edit=true;
-                        }
-                        break;
-                    case 2:
-                        if (
-                            act[2][0] > 0 &&
-                            !board[act[2][0] + 1][act[2][1] - 1].occupied &&
-                            !board[act[2][0] + 1][act[2][1]].occupied &&
-                            !board[act[2][0] - 1][act[2][1]].occupied
-                        ) {
-                            act[0][1] -= 2;
-                            act[1][0] -= 1;
-                            act[1][1] -= 1;
-                            act[3][0] -= 1;
-                            act[3][1] += 1;
-                            rot = 3;
-                            edit=true;
-                        }
-                        break;
-                    case 3:
-                        if (
-                            act[2][1] < 9 &&
-                            !board[act[2][0] - 1][act[2][1] - 1].occupied &&
-                            !board[act[2][0]][act[2][1] - 1].occupied &&
-                            !board[act[2][0]][act[2][1] + 1].occupied
-                        ) {
-                            act[0][0] -= 2;
-                            act[1][0] -= 1;
-                            act[1][1] += 1;
-                            act[3][0] += 1;
-                            act[3][1] += 1;
-                            rot = 0;
-                            edit=true;
-                        }
-                        break;
-                }
-                break;
-    
-            case 6:
-                switch (rot) {
-                    case 0:
-                        if (
-                            act[2][0] < 19 &&
-                            !board[act[2][0] - 1][act[2][1] - 1].occupied &&
-                            !board[act[2][0] - 1][act[2][1]].occupied &&
-                            !board[act[2][0] + 1][act[2][1]].occupied
-                        ) {
-                            act[0][0] += 1;
-                            act[0][1] += 1;
-                            act[1][0] -= 1;
-                            act[1][1] += 1;
-                            act[3][0] += 1;
-                            act[3][1] -= 1;
-                            rot = 1;
-                            edit=true;
-                        }
-                        break;
-                    case 1:
-                        if (
-                            act[2][1] > 0 &&
-                            !board[act[2][0] + 1][act[2][1] + 1].occupied &&
-                            !board[act[2][0]][act[2][1] + 1].occupied &&
-                            !board[act[2][0]][act[2][1] - 1].occupied
-                        ) {
-                            act[0][0] += 1;
-                            act[0][1] -= 1;
-                            act[1][0] += 1;
-                            act[1][1] += 1;
-                            act[3][0] -= 1;
-                            act[3][1] -= 1;
-                            rot = 2;
-                            edit=true;
-                        }
-                        break;
-                    case 2:
-                        if (
-                            act[2][0] > 0 &&
-                            !board[act[2][0] + 1][act[2][1] + 1].occupied &&
-                            !board[act[2][0] + 1][act[2][1]].occupied &&
-                            !board[act[2][0] - 1][act[2][1]].occupied
-                        ) {
-                            act[0][0] -= 1;
-                            act[0][1] -= 1;
-                            act[1][0] += 1;
-                            act[1][1] -= 1;
-                            act[3][0] -= 1;
-                            act[3][1] += 1;
-                            rot = 3;
-                            edit=true;
-                        }
-                        break;
-                    case 3:
-                        if (
-                            act[2][1] < 9 &&
-                            !board[act[2][0] - 1][act[2][1] - 1].occupied &&
-                            !board[act[2][0]][act[2][1] - 1].occupied &&
-                            !board[act[2][0]][act[2][1] + 1].occupied
-                        ) {
-                            act[0][0] -= 1;
-                            act[0][1] += 1;
-                            act[1][0] -= 1;
-                            act[1][1] -= 1;
-                            act[3][0] += 1;
-                            act[3][1] += 1;
-                            rot = 0;
-                            edit=true;
-                        }
-                        break;
-                }
-        }
-        if(edit)
-            break;
-        act=JSON.parse(JSON.stringify(backupAct));
-        switch (shape) {
-            case 0:
-                switch(i){
-                    case 0:
-                        switch (rot) {
-                            case 0:
-                                act=act.map((pos: any) => [
-                                    pos[0],
-                                    pos[1] - 2,
-                                ]);
-                                break;
-                            case 1:
-                                act=act.map((pos: any) => [
-                                    pos[0],
-                                    pos[1] - 1,
-                                ])
-                                break;
-                            case 2:
-                                act=act.map((pos: any) => [
-                                    pos[0],
-                                    pos[1] + 2,
-                                ]);
-                                break;
-                            case 3:
-                                act=act.map((pos: any) => [
-                                    pos[0],
-                                    pos[1] + 1,
-                                ]);
-                                break;
-                        }
-                        break;
-                    case 1:
-                        switch (rot) {
-                            case 0:
-                                act=act.map((pos: any) => [
-                                    pos[0],
-                                    pos[1] + 1,
-                                ]);
-                                break;
-                            case 1:
-                                act=act.map((pos: any) => [
-                                    pos[0],
-                                    pos[1] + 2,
-                                ])
-                                break;
-                            case 2:
-                                act=act.map((pos: any) => [
-                                    pos[0],
-                                    pos[1] - 1,
-                                ]);
-                                break;
-                            case 3:
-                                act=act.map((pos: any) => [
-                                    pos[0],
-                                    pos[1] - 2,
-                                ]);
-                                break;
-                        }
-                        break;
-                    case 2:
-                        switch (rot) {
-                            case 0:
-                                act=act.map((pos: any) => [
-                                    pos[0]-1,
-                                    pos[1] - 2,
-                                ]);
-                                break;
-                            case 1:
-                                act=act.map((pos: any) => [
-                                    pos[0]+2,
-                                    pos[1] - 1,
-                                ])
-                                break;
-                            case 2:
-                                act=act.map((pos: any) => [
-                                    pos[0]+1,
-                                    pos[1] + 2,
-                                ]);
-                                break;
-                            case 3:
-                                act=act.map((pos: any) => [
-                                    pos[0]-2,
-                                    pos[1] + 1,
-                                ]);
-                                break;
-                        }
-                        break;
-                    case 3:
-                        switch (rot) {
-                            case 0:
-                                act=act.map((pos: any) => [
-                                    pos[0]+2,
-                                    pos[1] + 1,
-                                ]);
-                                break;
-                            case 1:
-                                act=act.map((pos: any) => [
-                                    pos[0]-1,
-                                    pos[1] + 2,
-                                ])
-                                break;
-                            case 2:
-                                act=act.map((pos: any) => [
-                                    pos[0]-2,
-                                    pos[1] -1,
-                                ]);
-                                break;
-                            case 3:
-                                act=act.map((pos: any) => [
-                                    pos[0]+1,
-                                    pos[1] -2,
-                                ]);
-                                break;
-                        }
-                        break;
-                }
-                break;
-            default:
-                switch (i) {
-                    case 0:
-                        if (rot == 0 || rot == 3) {
-                           
-                                act=act.map((pos: any) => [pos[0], pos[1] - 1])
-                        
-                        } else {
-                            act=act.map((pos: any) => [pos[0], pos[1] + 1])
-                        
-                        }
-                        break;
-                    case 1:
-                        switch (rot) {
-                            case 0:
-                                act=act.map((pos: any) => [
-                                        pos[0] + 1,
-                                        pos[1] - 1,
-                                    ])
-                            
-                                break;
-                            case 1:
-                                act=act.map((pos: any) => [
-                                        pos[0] - 1,
-                                        pos[1] + 1,
-                                    ])
-                                
-                                break;
-                            case 2:
-                                act=act.map((pos: any) => [
-                                        pos[0] + 1,
-                                        pos[1] + 1,
-                                    ])
-                                
-                                break;
-                            case 3:
-                                act=act.map((pos: any) => [
-                                        pos[0] - 1,
-                                        pos[1] - 1,
-                                    ])
-                                
-                                break;
-                        }
-                        break;
-                    case 2:
-                        switch (rot) {
-                            case 0:
-                            case 2:
-                                act=act.map((pos: any) => [
-                                        pos[0] - 2,
-                                        pos[1],
-                                    ])
-                                
-                                break;
-                            case 1:
-                            case 3:
-                                act=act.map((pos: any) => [
-                                        pos[0] + 2,
-                                        pos[1],
-                                    ])
-                                
-                                break;
-                        }
-                        break;
-                    case 3:
-                        switch (rot) {
-                            case 0:
-                                act=act.map((pos: any) => [
-                                        pos[0] - 2,
-                                        pos[1] - 1,
-                                    ])
-                                
-                                break;
-                            case 1:
-                                act= act.map((pos: any) => [
-                                        pos[0] + 2,
-                                        pos[1] + 1,
-                                    ])
-                                
-                                break;
-                            case 2:
-                                act= act.map((pos: any) => [
-                                        pos[0] - 2,
-                                        pos[1] + 1,
-                                    ])
-                                
-                                break;
-                            case 3:
-                                act= act.map((pos: any) => [
-                                        pos[0] + 2,
-                                        pos[1] - 1,
-                                    ])
-                                
-                                break;
-                        }
-                }
-                break;
-        }
-    }
-    if (edit)
-	return [act, rot];
-    return [backupAct, backupRot];
+	let edit = false;
+	for (let i = 0; i < 5 && edit == false; i++) {
+		let tempRot = JSON.parse(JSON.stringify(rot));
+		let broken = false;
+		act.forEach((el: any) => {
+			if (
+				el[0] < 0 ||
+				el[0] > 19 ||
+				el[1] < 0 ||
+				el[1] > 9 ||
+				board[el[0]][el[1]].occupied
+			) {
+				broken = true;
+			}
+		});
+		if (broken) act = JSON.parse(JSON.stringify(backupAct));
+		switch (shape) {
+			case 0:
+				switch (rot) {
+					case 0:
+						if (
+							act[1][0] > 0 &&
+							act[1][0] + 2 < 20 &&
+							!board[act[1][0] - 1][act[1][1]].occupied &&
+							!board[act[1][0] + 1][act[1][1]].occupied &&
+							!board[act[1][0] + 2][act[1][1]].occupied
+						) {
+							act[0][0] -= 1;
+							act[0][1] += 1;
+							act[2][0] += 1;
+							act[2][1] -= 1;
+							act[3][0] += 2;
+							act[3][1] -= 2;
+							rot = 1;
+							edit = true;
+						}
+						break;
+					case 1:
+						if (
+							act[1][1] - 1 > 0 &&
+							act[1][1] + 1 < 10 &&
+							!board[act[1][0]][act[1][1] + 1].occupied &&
+							!board[act[1][0]][act[1][1] - 1].occupied &&
+							!board[act[1][0]][act[1][1] - 2].occupied
+						) {
+							act[0][0] += 1;
+							act[0][1] += 1;
+							act[2][0] -= 1;
+							act[2][1] -= 1;
+							act[3][0] -= 2;
+							act[3][1] -= 2;
+							rot = 2;
+							edit = true;
+						}
+						break;
+					case 2:
+						if (
+							act[1][0] - 1 > 0 &&
+							act[1][0] + 2 < 20 &&
+							!board[act[1][0] - 1][act[1][1]].occupied &&
+							!board[act[1][0] + 1][act[1][1]].occupied &&
+							!board[act[1][0] - 2][act[1][1]].occupied
+						) {
+							act[0][0] += 1;
+							act[0][1] -= 1;
+							act[2][0] -= 1;
+							act[2][1] += 1;
+							act[3][0] -= 2;
+							act[3][1] += 2;
+							rot = 3;
+							edit = true;
+						}
+						break;
+					case 3:
+						if (
+							act[1][1] > 0 &&
+							act[1][1] + 1 < 9 &&
+							!board[act[1][0]][act[1][1] + 1].occupied &&
+							!board[act[1][0]][act[1][1] - 1].occupied &&
+							!board[act[1][0]][act[1][1] + 2].occupied
+						) {
+							act[0][0] -= 1;
+							act[0][1] -= 1;
+							act[2][0] += 1;
+							act[2][1] += 1;
+							act[3][0] += 2;
+							act[3][1] += 2;
+							rot = 0;
+							edit = true;
+						}
+						break;
+				}
+				break;
+			case 1:
+				switch (rot) {
+					case 0:
+						if (
+							act[2][0] < 19 &&
+							!board[act[2][0] - 1][act[2][1] + 1].occupied &&
+							!board[act[2][0] - 1][act[2][1]].occupied &&
+							!board[act[2][0] + 1][act[2][1]].occupied
+						) {
+							act[0][1] += 2;
+							act[1][0] -= 1;
+							act[1][1] += 1;
+							act[3][0] += 1;
+							act[3][1] -= 1;
+							rot = 1;
+							edit = true;
+						}
+						break;
+					case 1:
+						if (
+							act[2][1] > 0 &&
+							!board[act[2][0] + 1][act[2][1] + 1].occupied &&
+							!board[act[2][0]][act[2][1] + 1].occupied &&
+							!board[act[2][0]][act[2][1] - 1].occupied
+						) {
+							act[0][0] += 2;
+							act[1][0] += 1;
+							act[1][1] += 1;
+							act[3][0] -= 1;
+							act[3][1] -= 1;
+							rot = 2;
+							edit = true;
+						}
+						break;
+					case 2:
+						if (
+							act[2][0] > 0 &&
+							!board[act[2][0] + 1][act[2][1] - 1].occupied &&
+							!board[act[2][0] + 1][act[2][1]].occupied &&
+							!board[act[2][0] - 1][act[2][1]].occupied
+						) {
+							act[0][1] -= 2;
+							act[1][0] += 1;
+							act[1][1] -= 1;
+							act[3][0] -= 1;
+							act[3][1] += 1;
+							rot = 3;
+							edit = true;
+						}
+						break;
+					case 3:
+						if (
+							act[2][1] < 9 &&
+							!board[act[2][0] - 1][act[2][1] - 1].occupied &&
+							!board[act[2][0]][act[2][1] - 1].occupied &&
+							!board[act[2][0]][act[2][1] + 1].occupied
+						) {
+							act[0][0] -= 2;
+							act[1][0] -= 1;
+							act[1][1] -= 1;
+							act[3][0] += 1;
+							act[3][1] += 1;
+							rot = 0;
+							edit = true;
+						}
+						break;
+				}
+				break;
+			case 2:
+				switch (rot) {
+					case 0:
+						if (
+							act[2][0] < 19 &&
+							!board[act[2][0] - 1][act[2][1] - 1].occupied &&
+							!board[act[2][0] - 1][act[2][1]].occupied &&
+							!board[act[2][0] + 1][act[2][1]].occupied
+						) {
+							act[0][0] += 2;
+							act[1][0] += 1;
+							act[1][1] -= 1;
+							act[3][0] -= 1;
+							act[3][1] += 1;
+							rot = 1;
+							edit = true;
+						}
+						break;
+					case 1:
+						if (
+							act[2][1] > 0 &&
+							!board[act[2][0] + 1][act[2][1] - 1].occupied &&
+							!board[act[2][0]][act[2][1] - 1].occupied &&
+							!board[act[2][0]][act[2][1] + 1].occupied
+						) {
+							act[0][1] -= 2;
+							act[1][0] -= 1;
+							act[1][1] -= 1;
+							act[3][0] += 1;
+							act[3][1] += 1;
+							rot = 2;
+							edit = true;
+						}
+						break;
+					case 2:
+						if (
+							act[2][0] > 0 &&
+							!board[act[2][0] - 1][act[2][1] + 1].occupied &&
+							!board[act[2][0] - 1][act[2][1]].occupied &&
+							!board[act[2][0] + 1][act[2][1]].occupied
+						) {
+							act[0][0] -= 2;
+							act[1][0] -= 1;
+							act[1][1] += 1;
+							act[3][0] += 1;
+							act[3][1] -= 1;
+							rot = 3;
+							edit = true;
+						}
+						break;
+					case 3:
+						if (
+							act[2][1] < 9 &&
+							!board[act[2][0] + 1][act[2][1] + 1].occupied &&
+							!board[act[2][0]][act[2][1] + 1].occupied &&
+							!board[act[2][0]][act[2][1] - 1].occupied
+						) {
+							act[0][1] += 2;
+							act[1][0] += 1;
+							act[1][1] += 1;
+							act[3][0] -= 1;
+							act[3][1] -= 1;
+							rot = 0;
+							edit = true;
+						}
+						break;
+				}
+				break;
+			case 3:
+				switch (rot) {
+				}
+				break;
+
+			case 4:
+				switch (rot) {
+					case 0:
+						if (
+							act[2][0] < 19 &&
+							!board[act[2][0] - 1][act[2][1] + 1].occupied &&
+							!board[act[2][0] - 1][act[2][1]].occupied &&
+							!board[act[2][0]][act[2][1] - 1].occupied
+						) {
+							act[0][0] += 1;
+							act[0][1] += 1;
+							act[1][0] += 2;
+							act[3][0] -= 1;
+							act[3][1] += 1;
+							rot = 1;
+							edit = true;
+						}
+						break;
+					case 1:
+						if (
+							act[2][1] > 0 &&
+							!board[act[2][0] + 1][act[2][1] - 1].occupied &&
+							!board[act[2][0]][act[2][1] - 1].occupied &&
+							!board[act[2][0] - 1][act[2][1]].occupied
+						) {
+							act[0][0] += 1;
+							act[0][1] -= 1;
+							act[1][1] -= 2;
+							act[3][0] += 1;
+							act[3][1] += 1;
+							rot = 2;
+							edit = true;
+						}
+						break;
+					case 2:
+						if (
+							act[2][0] > 0 &&
+							!board[act[2][0] + 1][act[2][1] - 1].occupied &&
+							!board[act[2][0] + 1][act[2][1]].occupied &&
+							!board[act[2][0]][act[2][1] + 1].occupied
+						) {
+							act[0][0] -= 1;
+							act[0][1] -= 1;
+							act[1][0] -= 2;
+							act[3][0] += 1;
+							act[3][1] -= 1;
+							rot = 3;
+							edit = true;
+						}
+						break;
+					case 3:
+						if (
+							act[2][1] < 9 &&
+							!board[act[2][0] - 1][act[2][1] + 1].occupied &&
+							!board[act[2][0]][act[2][1] + 1].occupied &&
+							!board[act[2][0] + 1][act[2][1]].occupied
+						) {
+							act[0][0] -= 1;
+							act[0][1] += 1;
+							act[1][1] += 2;
+							act[3][0] -= 1;
+							act[3][1] -= 1;
+							rot = 0;
+							edit = true;
+						}
+						break;
+				}
+				break;
+			case 5:
+				switch (rot) {
+					case 0:
+						if (
+							act[2][0] < 19 &&
+							!board[act[2][0] - 1][act[2][1] + 1].occupied &&
+							!board[act[2][0] - 1][act[2][1]].occupied &&
+							!board[act[2][0] + 1][act[2][1]].occupied
+						) {
+							act[0][1] += 2;
+							act[1][0] += 1;
+							act[1][1] += 1;
+							act[3][0] += 1;
+							act[3][1] -= 1;
+							rot = 1;
+							edit = true;
+						}
+						break;
+					case 1:
+						if (
+							act[2][1] > 0 &&
+							!board[act[2][0] + 1][act[2][1] + 1].occupied &&
+							!board[act[2][0]][act[2][1] + 1].occupied &&
+							!board[act[2][0]][act[2][1] - 1].occupied
+						) {
+							act[0][0] += 2;
+							act[1][0] += 1;
+							act[1][1] -= 1;
+							act[3][0] -= 1;
+							act[3][1] -= 1;
+							rot = 2;
+							edit = true;
+						}
+						break;
+					case 2:
+						if (
+							act[2][0] > 0 &&
+							!board[act[2][0] + 1][act[2][1] - 1].occupied &&
+							!board[act[2][0] + 1][act[2][1]].occupied &&
+							!board[act[2][0] - 1][act[2][1]].occupied
+						) {
+							act[0][1] -= 2;
+							act[1][0] -= 1;
+							act[1][1] -= 1;
+							act[3][0] -= 1;
+							act[3][1] += 1;
+							rot = 3;
+							edit = true;
+						}
+						break;
+					case 3:
+						if (
+							act[2][1] < 9 &&
+							!board[act[2][0] - 1][act[2][1] - 1].occupied &&
+							!board[act[2][0]][act[2][1] - 1].occupied &&
+							!board[act[2][0]][act[2][1] + 1].occupied
+						) {
+							act[0][0] -= 2;
+							act[1][0] -= 1;
+							act[1][1] += 1;
+							act[3][0] += 1;
+							act[3][1] += 1;
+							rot = 0;
+							edit = true;
+						}
+						break;
+				}
+				break;
+
+			case 6:
+				switch (rot) {
+					case 0:
+						if (
+							act[2][0] < 19 &&
+							!board[act[2][0] - 1][act[2][1] - 1].occupied &&
+							!board[act[2][0] - 1][act[2][1]].occupied &&
+							!board[act[2][0] + 1][act[2][1]].occupied
+						) {
+							act[0][0] += 1;
+							act[0][1] += 1;
+							act[1][0] -= 1;
+							act[1][1] += 1;
+							act[3][0] += 1;
+							act[3][1] -= 1;
+							rot = 1;
+							edit = true;
+						}
+						break;
+					case 1:
+						if (
+							act[2][1] > 0 &&
+							!board[act[2][0] + 1][act[2][1] + 1].occupied &&
+							!board[act[2][0]][act[2][1] + 1].occupied &&
+							!board[act[2][0]][act[2][1] - 1].occupied
+						) {
+							act[0][0] += 1;
+							act[0][1] -= 1;
+							act[1][0] += 1;
+							act[1][1] += 1;
+							act[3][0] -= 1;
+							act[3][1] -= 1;
+							rot = 2;
+							edit = true;
+						}
+						break;
+					case 2:
+						if (
+							act[2][0] > 0 &&
+							!board[act[2][0] + 1][act[2][1] + 1].occupied &&
+							!board[act[2][0] + 1][act[2][1]].occupied &&
+							!board[act[2][0] - 1][act[2][1]].occupied
+						) {
+							act[0][0] -= 1;
+							act[0][1] -= 1;
+							act[1][0] += 1;
+							act[1][1] -= 1;
+							act[3][0] -= 1;
+							act[3][1] += 1;
+							rot = 3;
+							edit = true;
+						}
+						break;
+					case 3:
+						if (
+							act[2][1] < 9 &&
+							!board[act[2][0] - 1][act[2][1] - 1].occupied &&
+							!board[act[2][0]][act[2][1] - 1].occupied &&
+							!board[act[2][0]][act[2][1] + 1].occupied
+						) {
+							act[0][0] -= 1;
+							act[0][1] += 1;
+							act[1][0] -= 1;
+							act[1][1] -= 1;
+							act[3][0] += 1;
+							act[3][1] += 1;
+							rot = 0;
+							edit = true;
+						}
+						break;
+				}
+		}
+		broken = false;
+		act.forEach((el: any) => {
+			if (
+				el[0] < 0 ||
+				el[0] > 19 ||
+				el[1] < 0 ||
+				el[1] > 9 ||
+				board[el[0]][el[1]].occupied
+			) {
+				broken = true;
+			}
+		});
+		if (!broken && edit) break;
+
+		rot = tempRot;
+		act = JSON.parse(JSON.stringify(backupAct));
+		switch (shape) {
+			case 0:
+				switch (i) {
+					case 0:
+						switch (rot) {
+							case 0:
+								act = act.map((pos: any) => [
+									pos[0],
+									pos[1] - 2,
+								]);
+								break;
+							case 1:
+								act = act.map((pos: any) => [
+									pos[0],
+									pos[1] - 1,
+								]);
+								break;
+							case 2:
+								act = act.map((pos: any) => [
+									pos[0],
+									pos[1] + 2,
+								]);
+								break;
+							case 3:
+								act = act.map((pos: any) => [
+									pos[0],
+									pos[1] + 1,
+								]);
+								break;
+						}
+						break;
+					case 1:
+						switch (rot) {
+							case 0:
+								act = act.map((pos: any) => [
+									pos[0],
+									pos[1] + 1,
+								]);
+								break;
+							case 1:
+								act = act.map((pos: any) => [
+									pos[0],
+									pos[1] + 2,
+								]);
+								break;
+							case 2:
+								act = act.map((pos: any) => [
+									pos[0],
+									pos[1] - 1,
+								]);
+								break;
+							case 3:
+								act = act.map((pos: any) => [
+									pos[0],
+									pos[1] - 2,
+								]);
+								break;
+						}
+						break;
+					case 2:
+						switch (rot) {
+							case 0:
+								act = act.map((pos: any) => [
+									pos[0] - 1,
+									pos[1] - 2,
+								]);
+								break;
+							case 1:
+								act = act.map((pos: any) => [
+									pos[0] + 2,
+									pos[1] - 1,
+								]);
+								break;
+							case 2:
+								act = act.map((pos: any) => [
+									pos[0] + 1,
+									pos[1] + 2,
+								]);
+								break;
+							case 3:
+								act = act.map((pos: any) => [
+									pos[0] - 2,
+									pos[1] + 1,
+								]);
+								break;
+						}
+						break;
+					case 3:
+						switch (rot) {
+							case 0:
+								act = act.map((pos: any) => [
+									pos[0] + 2,
+									pos[1] + 1,
+								]);
+								break;
+							case 1:
+								act = act.map((pos: any) => [
+									pos[0] - 1,
+									pos[1] + 2,
+								]);
+								break;
+							case 2:
+								act = act.map((pos: any) => [
+									pos[0] - 2,
+									pos[1] - 1,
+								]);
+								break;
+							case 3:
+								act = act.map((pos: any) => [
+									pos[0] + 1,
+									pos[1] - 2,
+								]);
+								break;
+						}
+						break;
+				}
+				break;
+			default:
+				switch (i) {
+					case 0:
+						if (rot == 0 || rot == 3) {
+							act = act.map((pos: any) => [pos[0], pos[1] - 1]);
+						} else {
+							act = act.map((pos: any) => [pos[0], pos[1] + 1]);
+						}
+						break;
+					case 1:
+						switch (rot) {
+							case 0:
+								act = act.map((pos: any) => [
+									pos[0] + 1,
+									pos[1] - 1,
+								]);
+
+								break;
+							case 1:
+								act = act.map((pos: any) => [
+									pos[0] - 1,
+									pos[1] + 1,
+								]);
+
+								break;
+							case 2:
+								act = act.map((pos: any) => [
+									pos[0] + 1,
+									pos[1] + 1,
+								]);
+
+								break;
+							case 3:
+								act = act.map((pos: any) => [
+									pos[0] - 1,
+									pos[1] - 1,
+								]);
+
+								break;
+						}
+						break;
+					case 2:
+						switch (rot) {
+							case 0:
+							case 2:
+								act = act.map((pos: any) => [
+									pos[0] - 2,
+									pos[1],
+								]);
+
+								break;
+							case 1:
+							case 3:
+								act = act.map((pos: any) => [
+									pos[0] + 2,
+									pos[1],
+								]);
+
+								break;
+						}
+						break;
+					case 3:
+						switch (rot) {
+							case 0:
+								act = act.map((pos: any) => [
+									pos[0] - 2,
+									pos[1] - 1,
+								]);
+
+								break;
+							case 1:
+								act = act.map((pos: any) => [
+									pos[0] + 2,
+									pos[1] + 1,
+								]);
+
+								break;
+							case 2:
+								act = act.map((pos: any) => [
+									pos[0] - 2,
+									pos[1] + 1,
+								]);
+
+								break;
+							case 3:
+								act = act.map((pos: any) => [
+									pos[0] + 2,
+									pos[1] - 1,
+								]);
+
+								break;
+						}
+				}
+				break;
+		}
+	}
+	broken = false;
+	act.forEach((el: any) => {
+		if (
+			el[0] < 0 ||
+			el[0] > 19 ||
+			el[1] < 0 ||
+			el[1] > 9 ||
+			board[el[0]][el[1]].occupied
+		) {
+			broken = true;
+		}
+	});
+	if (edit && !broken) {
+		return [act, rot];
+	}
+	return [backupAct, backupRot];
 }
 export function analyze(board: any): number {
-    const weights={
-        weightedBlocks: 0.25, //weighted sum of blocks, where a block's weight is the row it's on
-        connectedHoles: 0.09, //number of vertically connected holes
-        roughness: -0.63, //sum of height differences between adjacent columns
-        pitholePercentage: 0.2, //number of pits divided by total pits and holes
-        clearAbleLines: 0.41, //number of lines that can be cleared by an I piece
-        deepestHole: 0.22, //depth of the deepest hole
-        blocks: -0.36, //number of blocks
-        colHoles: -1.38, //number of columns containing holes
-  }
+	const weights = {
+		weightedBlocks: 0.25, //weighted sum of blocks, where a block's weight is the row it's on
+		connectedHoles: 0.09, //number of vertically connected holes
+		roughness: -0.63, //sum of height differences between adjacent columns
+		pitholePercentage: 0.2, //number of pits divided by total pits and holes
+		clearAbleLines: 0.41, //number of lines that can be cleared by an I piece
+		deepestHole: 0.22, //depth of the deepest hole
+		blocks: -0.36, //number of blocks
+		colHoles: -1.38, //number of columns containing holes
+	};
 	// if(timecache[JSON.stringify(board)]!==undefined){
 	//     return timecache[JSON.stringify(board)]}
-	
+
 	let weightedBlocks = 0;
 	let connectedHoles = 0;
 	let roughness = 0;
@@ -773,7 +808,6 @@ export function analyze(board: any): number {
 		weights.blocks * blocks +
 		weights.colHoles * colHoles;
 
-
 	return score;
 	// return 1500 * Math.pow(0.76, x) + 2.21*x;
 }
@@ -792,73 +826,72 @@ export function automatic(
 	// if (cache[JSON.stringify(board) + JSON.stringify(shape)] !== undefined) {
 	// 	scores = cache[JSON.stringify(board) + JSON.stringify(shape)];
 	// } else {
-		let initx = 0;
-		for (let i = 0; i < 4; i++) {
-			while (
-				act[0][1] !== 0 &&
-				act[1][1] !== 0 &&
-				act[2][1] !== 0 &&
-				act[3][1] !== 0 &&
-				!board[act[0][0]][act[0][1] - 1].occupied &&
-				!board[act[1][0]][act[1][1] - 1].occupied &&
-				!board[act[2][0]][act[2][1] - 1].occupied &&
-				!board[act[3][0]][act[3][1] - 1].occupied
-			) {
-				act[0][1] -= 1;
-				act[1][1] -= 1;
-				act[2][1] -= 1;
-				act[3][1] -= 1;
-			}
-			let tempAct = JSON.parse(JSON.stringify(act));
-			while (
-				act[0][1] < 10 &&
-				act[1][1] < 10 &&
-				act[2][1] < 10 &&
-				act[3][1] < 10 &&
-				(!(
-					act[0][1] < 9 &&
-					act[1][1] < 9 &&
-					act[2][1] < 9 &&
-					act[3][1] < 9
-				) ||
-					(!board[act[0][0]][act[0][1] + 1].occupied &&
-						!board[act[1][0]][act[1][1] + 1].occupied &&
-						!board[act[2][0]][act[2][1] + 1].occupied &&
-						!board[act[3][0]][act[3][1] + 1].occupied))
-			) {
-				initx++;
-				let temp = JSON.parse(JSON.stringify(act));
-				let tempBoard = JSON.parse(JSON.stringify(board));
-				while (
-					act[0][0] < 19 &&
-					act[1][0] < 19 &&
-					act[2][0] < 19 &&
-					act[3][0] < 19 &&
-					!board[act[0][0] + 1][act[0][1]].occupied &&
-					!board[act[1][0] + 1][act[1][1]].occupied &&
-					!board[act[2][0] + 1][act[2][1]].occupied &&
-					!board[act[3][0] + 1][act[3][1]].occupied
-				) {
-					act[0][0]++;
-					act[1][0]++;
-					act[2][0]++;
-					act[3][0]++;
-				}
-				act.forEach((pos: number[]) => {
-					tempBoard[pos[0]][pos[1]].occupied = true;
-				});
-				scores.push([analyze(tempBoard), temp, rot, tempBoard]);
-				act = JSON.parse(JSON.stringify(temp));
-				act[0][1] += 1;
-				act[1][1] += 1;
-				act[2][1] += 1;
-				act[3][1] += 1;
-			}
-			act = JSON.parse(JSON.stringify(tempAct));
-			[act, rot] = rotPiece(board, shape, rot, act);
-			
+	let initx = 0;
+	for (let i = 0; i < 4; i++) {
+		while (
+			act[0][1] !== 0 &&
+			act[1][1] !== 0 &&
+			act[2][1] !== 0 &&
+			act[3][1] !== 0 &&
+			!board[act[0][0]][act[0][1] - 1].occupied &&
+			!board[act[1][0]][act[1][1] - 1].occupied &&
+			!board[act[2][0]][act[2][1] - 1].occupied &&
+			!board[act[3][0]][act[3][1] - 1].occupied
+		) {
+			act[0][1] -= 1;
+			act[1][1] -= 1;
+			act[2][1] -= 1;
+			act[3][1] -= 1;
 		}
-		//cache[JSON.stringify(backupBoard)+JSON.stringify(shape)]=scores\
+		let tempAct = JSON.parse(JSON.stringify(act));
+		while (
+			act[0][1] < 10 &&
+			act[1][1] < 10 &&
+			act[2][1] < 10 &&
+			act[3][1] < 10 &&
+			(!(
+				act[0][1] < 9 &&
+				act[1][1] < 9 &&
+				act[2][1] < 9 &&
+				act[3][1] < 9
+			) ||
+				(!board[act[0][0]][act[0][1] + 1].occupied &&
+					!board[act[1][0]][act[1][1] + 1].occupied &&
+					!board[act[2][0]][act[2][1] + 1].occupied &&
+					!board[act[3][0]][act[3][1] + 1].occupied))
+		) {
+			initx++;
+			let temp = JSON.parse(JSON.stringify(act));
+			let tempBoard = JSON.parse(JSON.stringify(board));
+			while (
+				act[0][0] < 19 &&
+				act[1][0] < 19 &&
+				act[2][0] < 19 &&
+				act[3][0] < 19 &&
+				!board[act[0][0] + 1][act[0][1]].occupied &&
+				!board[act[1][0] + 1][act[1][1]].occupied &&
+				!board[act[2][0] + 1][act[2][1]].occupied &&
+				!board[act[3][0] + 1][act[3][1]].occupied
+			) {
+				act[0][0]++;
+				act[1][0]++;
+				act[2][0]++;
+				act[3][0]++;
+			}
+			act.forEach((pos: number[]) => {
+				tempBoard[pos[0]][pos[1]].occupied = true;
+			});
+			scores.push([analyze(tempBoard), temp, rot, tempBoard]);
+			act = JSON.parse(JSON.stringify(temp));
+			act[0][1] += 1;
+			act[1][1] += 1;
+			act[2][1] += 1;
+			act[3][1] += 1;
+		}
+		act = JSON.parse(JSON.stringify(tempAct));
+		[act, rot] = rotPiece(board, shape, rot, act);
+	}
+	//cache[JSON.stringify(backupBoard)+JSON.stringify(shape)]=scores\
 	// }
 	let max = -100000;
 	let maxIndex = 0;
