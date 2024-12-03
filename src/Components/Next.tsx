@@ -13,7 +13,7 @@ function Next() {
 				style={{
 					borderColor: theme.text,
 				}}>
-				<div className="w-full flex flex-col h-2/3 items-center justify-center">
+				<div className="w-full flex flex-col h-2/3 items-center fadein justify-center" key={"next"+nextShape}>
 					{shapeGrid[nextShape].split(" ").map((row) => {
 						return (
 							<div className="w-full h-[4vmin] flex justify-center ">
@@ -25,7 +25,7 @@ function Next() {
 											viewBox="0 0 105 105"
 											fill="none">
 											<Rect
-												x={5}
+												x={-520}
 												y={5}
 												fill={
 													theme.accents[

@@ -21,7 +21,7 @@ import {
 	themeAtom,
 	timeAtom,
 } from "../atoms";
-import { useEffect} from "react";
+import { useEffect, useState } from "react";
 import { activePos, initSettings } from "../constants";
 import { automatic, rotPiece } from "../Functionality/helper";
 import Rect from "./Rect";
@@ -35,9 +35,57 @@ let keys = {
 	holdPiece: false,
 	pauseGame: false,
 };
-// function form(x: number) {
-// 	return 1500 * Math.pow(0.76, x) + 2.21 * x;
-// }
+function form(x: number) {
+	// let speed=960
+	return 960 * Math.pow(Math.E,-0.2*x)
+	// switch (x) {
+	// 	case 0:
+	// 		speed=960
+	// 		break;
+	// 	case 1:
+	// 		speed = 860;
+	// 		break;
+	// 	case 2:
+	// 		speed= 760
+	// 		break;
+	// 	case 3:
+	// 		speed = 660;
+	// 		break;
+	// 	case 4:
+	// 		speed = 560;
+	// 		break;
+	// 	case 5:
+	// 		speed = 460;
+	// 		break;
+	// 	case 6:
+	// 		speed = 360;
+	// 		break;
+	// 	case 7:
+	// 		speed = 260;
+	// 		break;
+	// 	case 8:
+	// 		speed = 160;
+	// 		break;
+	// 	case 9:
+	// 		speed = 120;
+	// 		break;
+	// 	default:
+	// 		if(x<13)
+	// 		speed = 100;
+	// 		else if(x<16)
+	// 		speed = 80;
+	// 		else if(x<19)
+	// 		speed = 60;
+	// 		else if(x<29)
+	// 		speed = 40;
+	// 		else
+	// 		speed = 20;
+	// 		break;
+
+	// }
+	// return speed
+	// return 1500 * Math.pow(0.76, x) + 2.21 * x;
+}
 let initTime = new Date().getTime();
 let ticker = {
 	rotate: 150,
@@ -59,7 +107,8 @@ let ths: any = {};
 function getThs() {
 	return ths;
 }
-let eventHandler:any = null;
+let speed =960;
+let eventHandler: any = null;
 let settings = initSettings;
 window.addEventListener("keydown", (e) => {
 	settings = getThs().settings;
@@ -67,7 +116,7 @@ window.addEventListener("keydown", (e) => {
 	if (key === " ") {
 		key = "␣";
 	}
-	
+
 	if (!ths.autoplay) {
 		if (key === settings.moveLeft) {
 			//setKeys((prev:any) => ({ ...prev, moveLeft: true }));
@@ -120,13 +169,15 @@ window.addEventListener("keyup", (e) => {
 	}
 	if (key === settings.pauseGame && ths.state === "pause") {
 		ths.setState("play");
-	// 	setControls((prev: any) => {
-	// 		if (!prev) keys.pauseGame = false;
-	// 		return prev;
-	// 	});
-	}
-	else if (key == settings.pauseGame && ths.state === "play" && ths.page=="single") {
-		
+		// 	setControls((prev: any) => {
+		// 		if (!prev) keys.pauseGame = false;
+		// 		return prev;
+		// 	});
+	} else if (
+		key == settings.pauseGame &&
+		ths.state === "play" &&
+		ths.page == "single"
+	) {
 		ths.setState("pause");
 	}
 	if (key === settings.moveRight) {
@@ -158,48 +209,50 @@ window.addEventListener("keyup", (e) => {
 		keys.holdPiece = false;
 	}
 	if (key === settings.closeMenu) {
-		if(ths.state === "game over")
-			return
-		if (ths.state == "settings" && ths.page=="single") 
+		if (ths.state === "game over") return;
+		if (ths.state == "settings" && ths.page == "single")
 			ths.setState("pause");
-		else
-			ths.setState("play");
+		else ths.setState("play");
 		// setControls((prev: any) => {
 		// 	if (!prev) setPaused(false);
-			
+
 		// 	return false;
 		// });
 	}
 });
-let inter:any =null;
+let inter: any = null;
 function MainBoard() {
 	const [board, setBoard] = useAtom(boardAtom);
 	const [active, setActive] = useAtom(activePieceAtom);
 	const [ghost, setGhost] = useAtom(ghostPieceAtom);
 	const [theme] = useAtom(themeAtom);
 	const [autoplay] = useAtom(autoplayAtom);
-	const [interval,stInterval]= useAtom(intervalAtom)
+	const [interval, stInterval] = useAtom(intervalAtom);
 	const setLineStack = useAtom(lineStackAtom)[1];
 	const [autoplaySpeed] = useAtom(autoplaySpeedAtom);
 	const [, setHoldShape] = useAtom(holdShapeAtom);
 	const [currentShape, setCurrentShape] = useAtom(currentShapeAtom);
 	const [, setNextShape] = useAtom(nextShapeAtom);
-	const setTime= useAtom(timeAtom)[1];
+	const setTime = useAtom(timeAtom)[1];
 	const [score, setScore] = useAtom(scoreAtom);
 	const [state, setState] = useAtom(stateAtom);
 	const [lines, setLines] = useAtom(linesAtom);
-	const [page]=useAtom(pageAtom)
+	const [page] = useAtom(pageAtom);
 	const [level, setLevel] = useAtom(levelAtom);
 	const bagRand = useAtom(bagRandAtom)[1];
 	const init = useAtom(initAtom)[1];
 	const getAutoplayState = useAtom(getAutoplayStateAtom)[1];
+	const [lineDissapear, setLineDissapear] = useState([]);
+	const [moveDown, setMoveDown] = useState(Array(20).fill(0));
 	function startMainGameLoop() {
 		let x = init();
 		let held = false;
+		ths.npc = false;
 		ths.board = JSON.parse(JSON.stringify(board));
 		ths.active = JSON.parse(JSON.stringify(activePos[x[0]]));
 		ths.state = state;
-		ths.setState=setState;
+		speed=960
+		ths.setState = setState;
 		setActive(activePos[x[0]]);
 		ths.ghost = JSON.parse(JSON.stringify(ghost));
 		ths.autoplay = JSON.parse(JSON.stringify(autoplay));
@@ -207,24 +260,67 @@ function MainBoard() {
 		ths.holdShape = JSON.parse(JSON.stringify(x[2]));
 		ths.currentShape = JSON.parse(JSON.stringify(x[0]));
 		ths.nextShape = JSON.parse(JSON.stringify(x[1]));
-		ths.page=page;
+		ths.page = page;
 		ths.score = JSON.parse(JSON.stringify(score));
 		ths.rot = JSON.parse(JSON.stringify(0));
 		// console.log(ths.holdShape);
 		ths.lines = JSON.parse(JSON.stringify(lines));
 		ths.level = JSON.parse(JSON.stringify(level));
-		ths.lineStack = [0,0,0,0]
-		function createNewPiece(hldr: boolean = true) {
+		ths.lineStack = [0, 0, 0, 0];
+		async function createNewPiece(hldr: boolean = true) {
+			let line = 0;
+			ths.npc = true;
 			if (hldr) {
+				setActive([
+					[-10, -10],
+					[-10, -10],
+					[-10, -10],
+					[-10, -10],
+				]);
+				setCurrentShape(7);
+				setGhost([
+					[-10, -10],
+					[-10, -10],
+					[-10, -10],
+					[-10, -10],
+				]);
 				held = false;
 				ths.active.forEach((pos: number[]) => {
 					ths.board[pos[0]][pos[1]].occupied = true;
 					ths.board[pos[0]][pos[1]].color = ths.currentShape;
 				});
-				let line = 0;
+
+				let lineDissapear: any = [];
+				let moveDown: any = Array(20).fill(0);
 				ths.board.forEach((row: any, i: number) => {
 					if (row.every((cell: any) => cell.occupied)) {
+						lineDissapear.push(i);
+						for (let j = 0; j < i; j++) {
+							moveDown[j]++;
+						}
 						line++;
+					}
+				});
+				setLineDissapear(lineDissapear);
+				setMoveDown(moveDown);
+
+				if (line > 0) {
+					ths.lineStack[line - 1]++;
+					setLineStack(ths.lineStack);
+				}
+				// lclr += lines;
+				ths.score += [0, 40, 100, 300, 1200][line] * (ths.level + 1);
+				setScore(ths.score);
+				ths.lines += line;
+				setLines(ths.lines);
+				ths.level = Math.min(Math.floor(ths.lines / 20),29)
+				setLevel(ths.level);
+				if (line > 0 && !(ths.autoplay && ths.page == "single"))
+					await new Promise((resolve) =>
+						setTimeout(resolve, Math.max(150, speed / 2))
+					);
+				ths.board.forEach((row: any, i: number) => {
+					if (row.every((cell: any) => cell.occupied)) {
 						row.forEach((cell: any) => {
 							cell.occupied = false;
 						});
@@ -236,22 +332,13 @@ function MainBoard() {
 								color: 0,
 							}))
 						);
-						setBoard(JSON.parse(JSON.stringify(ths.board)));
 					}
 				});
-				if (line > 0) {
-					ths.lineStack[line- 1]++;
-					setLineStack(ths.lineStack);
-				}
-				// lclr += lines;
-				ths.score += [0, 40, 100, 300, 1200][line] * (ths.level + 1);
-				setScore(ths.score);
-				ths.lines += line;
-				setLines(ths.lines);
-				ths.level = Math.floor(ths.lines / 10);
-				setLevel(ths.level);
-				// speed = lv < 20 ? form(lv) : 50;
+
 				setBoard(ths.board);
+				setLineDissapear([]);
+				setMoveDown(Array(20).fill(0));
+				speed = form(ths.level)
 			}
 
 			for (let i = 0; i < 4; i++) {
@@ -269,8 +356,10 @@ function MainBoard() {
 					setCurrentShape(7);
 					clearInterval(inter);
 					inter = -0;
-					ths.state = "game over";
-					ths.setState("game over");
+					if (ths.page == "single") {
+						ths.state = "game over";
+						ths.setState("game over");
+					}
 
 					return;
 				}
@@ -280,17 +369,19 @@ function MainBoard() {
 			ths.active = JSON.parse(
 				JSON.stringify(activePos[ths.currentShape])
 			);
+
 			setCurrentShape(ths.currentShape);
 			setActive(ths.active);
 			ths.nextShape = bagRand();
-			ths.rot=0
+			ths.rot = 0;
 			setNextShape(ths.nextShape);
 
+			ths.npc = false;
 		}
 		let move = false;
-		ths.time=0
-		let speed = 1500;
-		let cur :any,
+		ths.time = 0;
+
+		let cur: any,
 			prev = new Date().getTime();
 		keys = {
 			moveLeft: false,
@@ -304,6 +395,7 @@ function MainBoard() {
 		};
 		if (eventHandler) clearInterval(eventHandler);
 		eventHandler = setInterval(async () => {
+			if (ths.npc) return;
 			if (
 				cur - prevTickTime.moveLeft >= ticker.moveLRSpeed &&
 				keys.moveLeft &&
@@ -323,7 +415,7 @@ function MainBoard() {
 				ths.active[2][1]--;
 				ths.active[3][1]--;
 				prevTickTime.moveLeft = new Date().getTime();
-			}  
+			}
 			if (
 				cur - prevTickTime.moveRight >= ticker.moveLRSpeed &&
 				keys.moveRight &&
@@ -343,9 +435,9 @@ function MainBoard() {
 				ths.active[2][1]++;
 				ths.active[3][1]++;
 				prevTickTime.moveRight = new Date().getTime();
-			}  
+			}
 			if (
-				cur -prevTickTime.softDrop >= ticker.softDrop &&
+				cur - prevTickTime.softDrop >= ticker.softDrop &&
 				keys.softDrop &&
 				ths.active[0][0] != 19 &&
 				ths.active[1][0] != 19 &&
@@ -373,9 +465,12 @@ function MainBoard() {
 					ths.active[1][0] !== 19 &&
 					ths.active[2][0] !== 19 &&
 					ths.active[3][0] !== 19 &&
-					!ths.board[ths.active[0][0] + 1][ths.active[0][1]].occupied &&
-					!ths.board[ths.active[1][0] + 1][ths.active[1][1]].occupied &&
-					!ths.board[ths.active[2][0] + 1][ths.active[2][1]].occupied &&
+					!ths.board[ths.active[0][0] + 1][ths.active[0][1]]
+						.occupied &&
+					!ths.board[ths.active[1][0] + 1][ths.active[1][1]]
+						.occupied &&
+					!ths.board[ths.active[2][0] + 1][ths.active[2][1]]
+						.occupied &&
 					!ths.board[ths.active[3][0] + 1][ths.active[3][1]].occupied
 				) {
 					ths.active[0][0]++;
@@ -384,52 +479,70 @@ function MainBoard() {
 					ths.active[3][0]++;
 				}
 				prevTickTime.hardDrop = new Date().getTime();
-				prevTickTime.gravity = -100
+				prevTickTime.gravity = -100;
 			}
-			if(
+			if (
 				cur - prevTickTime.rotate >= ticker.rotate &&
 				keys.rotateCW &&
 				ths.state === "play"
-			){
-				[ths.active, ths.rot] = rotPiece(ths.board, ths.currentShape, ths.rot, ths.active);
+			) {
+				[ths.active, ths.rot] = rotPiece(
+					ths.board,
+					ths.currentShape,
+					ths.rot,
+					ths.active
+				);
 				setActive(JSON.parse(JSON.stringify(ths.active)));
 				prevTickTime.rotate = new Date().getTime();
 			}
 		}, 1000 / 60);
-		let diff=0
-		if(inter) clearInterval(inter);
-		inter = setInterval(() => {
+		let diff = 0;
+		if (inter) clearInterval(inter);
+		inter = setInterval(async () => {
 			cur = new Date().getTime();
 			diff = cur - prev;
 			// console.log(held);
-			[ths.autoplay, ths.state, ths.autoplaySpeed,ths.settings,ths.page] = getAutoplayState();
-			if (
-				(ths.autoplay &&
-					diff < Math.min(ths.autoplaySpeed, speed)) 
-			)
+			[
+				ths.autoplay,
+				ths.state,
+				ths.autoplaySpeed,
+				ths.settings,
+				ths.page,
+			] = getAutoplayState();
+			if (ths.autoplay && diff < Math.min(ths.autoplaySpeed, speed))
 				return;
-			prev = cur;
-			if(ths.state !== "play")
-				return;
+			if (ths.state !== "play" || ths.npc){
+				prev = cur;
+				return;}
 
 			//hold
-			if (cur - prevTickTime.hold >= ticker.hold && !held && keys.holdPiece) {
+			if (
+				cur - prevTickTime.hold >= ticker.hold &&
+				!held &&
+				keys.holdPiece
+			) {
 				if (ths.holdShape == 7) {
-					ths.holdShape = JSON.parse(JSON.stringify(ths.currentShape));
+					ths.holdShape = JSON.parse(
+						JSON.stringify(ths.currentShape)
+					);
 					setHoldShape(ths.currentShape);
 					createNewPiece(false);
 				} else if (!held) {
 					held = true;
 					let temp = JSON.parse(JSON.stringify(ths.holdShape));
-					ths.holdShape = JSON.parse(JSON.stringify(ths.currentShape));
+					ths.holdShape = JSON.parse(
+						JSON.stringify(ths.currentShape)
+					);
 					ths.currentShape = temp;
-					ths.rot=0
-					ths.active = JSON.parse(JSON.stringify(activePos[ths.currentShape]));
+					ths.rot = 0;
+					ths.active = JSON.parse(
+						JSON.stringify(activePos[ths.currentShape])
+					);
 					setHoldShape(ths.holdShape);
 					setCurrentShape(ths.currentShape);
 					setActive(JSON.parse(JSON.stringify(ths.active)));
 				}
-				
+
 				held = true;
 				prevTickTime.hold = cur;
 			}
@@ -462,13 +575,13 @@ function MainBoard() {
 				cur - prevTickTime.gravity >=
 					(ths.autoplay ? Math.min(ths.autoplaySpeed, 1000) : 1000)
 			) {
-				createNewPiece();
+				await createNewPiece();
 				move = false;
 				// justspawned = true;
 				prevTickTime.gravity = cur;
 			}
 			if (!move && ths.autoplay) {
-				let  sc1, sc2, act2;
+				let sc1, sc2, act2;
 				// let prev = JSON.parse(JSON.stringify(ths.active));
 				// let prevRot = JSON.parse(JSON.stringify(0));
 				[ths.active, ths.currentShape, ths.rot, sc1] = automatic(
@@ -523,14 +636,15 @@ function MainBoard() {
 				ghos[3][0]++;
 			}
 			setGhost(() => JSON.parse(JSON.stringify(ghos)));
-			ths.time+=diff/2000
-			setTime(ths.time)
+			
+			ths.time += diff / 1000;
+			setTime(ths.time);
+			prev = cur;
 		}, 0);
 		stInterval(inter);
-		
 	}
 	useEffect(() => {
-		if (interval===null) {
+		if (interval === null) {
 			startMainGameLoop();
 		}
 	}, [interval]);
@@ -539,56 +653,72 @@ function MainBoard() {
 			<svg
 				id="mainboard"
 				xmlns="http://www.w3.org/2000/svg"
-				className=" w-full h-full tms duration-200  mb-0 "
-				viewBox="0 0 1055 2110"
+				className=" w-full  h-full tms duration-200  mb-0 "
+				viewBox="0 0 2110 2215"
 				fill="none">
-					 <defs>
-    
-  </defs>
+				<rect x="515" y="5" rx={7} height="2125" width="1075" stroke={theme.text}/>
 				{board.map((row, i) =>
-					row.map((cell, j) => (
-						
+					row.map((_, j) => (
 						<Rect
-						x={5 + j * 105}
-							y={5 + i * 105}
-							fill={
-								cell.occupied
-									? theme.accents[cell.color]
-									: theme.backpop
-							}
-							keyx={`${i}-${j}`}
+							x={5 + j * 105}
+							y={20 + i * 105}
+							fill={theme.backpop}
+							keyx={`${i * 10 + j}blockblank`}
 						/>
 					))
 				)}
-				{ghost.map((pos: any, ind: any) => (
-					<Rect
-						className="duration-[15ms] brightness-75 "
-						style={{
-							transitionDuration: autoplay
-								? Math.min(autoplaySpeed / 4, 25) + "ms"
-								: "25ms",
-						}}
-						
-						x={5 + pos[1] * 105}
-						y={5 + pos[0] * 105}
-						fill={
-							theme.accents[
-								autoplay ? currentShape : currentShape
-							]
-						}
-						key={"ghos" + ind + "" + currentShape}
-					/>
-				))}
+				{board.map((row, i) =>
+					row.map(
+						(cell, j) =>
+							cell.occupied && (
+								<Rect
+									x={5 + j * 105}
+									y={20 + i * 105}
+									fill={theme.accents[cell.color]}
+									style={{
+										animation:
+											(lineDissapear.filter((x) => x == i)
+												.length > 0
+												? "clear"
+												: "down" + moveDown[i]) +
+											" " +
+											Math.max(300, speed) +
+											"ms",
+									}}
+									keyx={`${i * 10 + j}block`+currentShape}
+								/>
+							)
+					)
+				)}
+				{!autoplay &&
+					ghost.map((pos: any, ind: any) => (
+						<Rect
+							className="duration-[15ms] fadein brightness-75 "
+							style={{
+								transitionDuration: autoplay
+									? Math.min(autoplaySpeed / 4, 25) + "ms"
+									: "25ms",
+							}}
+							x={5 + pos[1] * 105}
+							y={20 + pos[0] * 105}
+							fill={
+								theme.accents[
+									autoplay ? currentShape : currentShape
+								]
+							}
+							key={"ghos" + ind + "" + currentShape}
+						/>
+					))}
 				{active.map((pos: any, ind: any) => (
 					<Rect
-						className="duration-[15ms] shadow-xl"
+						className="duration-[15ms] fadein shadow-xl"
 						style={{
 							transitionDuration: autoplay
 								? Math.min(autoplaySpeed / 4, 25) + "ms"
 								: "25ms",
 						}}
 						x={5 + pos[1] * 105}
-						y={5 + pos[0] * 105}
+						y={20 + pos[0] * 105}
 						fill={theme.accents[currentShape]}
 						key={"active" + ind + "" + currentShape}
 					/>

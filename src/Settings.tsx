@@ -27,15 +27,33 @@ function SettingsScreen() {
 				style={{
 					opacity: state=="settings" ? "1" : "0",
                     pointerEvents:state=="settings"?"auto":"none",
-                    marginLeft: page=="single" ?"":state=="settings"?"80vmin":"20vmin"
+                    marginLeft: page=="single" ?"":state=="settings"?"70vmin":"20vmin"
 
 				}}
                 
                 >
-                    <div className="text-[4vmin]">
-                        Settings
+                    <div className="text-[5vmin]">
+                        {"Settings".split("").map((x, i) => (
+						<span
+							className="duration-100"
+							onMouseEnter={(e) => {
+								e.currentTarget.style.transitionDuration =
+									"0.25s";
+								e.currentTarget.style.color = theme.accents[i<3?i:i-1];
+							}}
+							onMouseLeave={(e) => {
+								e.currentTarget.style.transitionDuration = "5s";
+								e.currentTarget.style.color = "";
+								setTimeout(() => {
+									e.currentTarget.style.transitionDuration =
+										"0.25s";
+								}, 5000);
+							}}>
+							{x}
+						</span>
+					))}
                     </div>
-                    <div className="w-full flex mt-[2vmin] gap-[0.75vmin] text-[2vmin]  items-center justify-around ">
+                    <div className="w-full flex mt-[2vmin] gap-[0.75vmin] text-[2vmin] lexend  items-center justify-around ">
                         
                         {
                             ["Controls","Gameplay","Theme"].map((v,i)=>{
@@ -55,7 +73,7 @@ function SettingsScreen() {
                             })
                         }
                     </div>
-                    <div className="w-[calc(100%-8vmin)] h-[45vmin]   mt-[2vmin] py-[0.5vmin] ">
+                    <div className="w-[calc(100%-8vmin)] h-[45vmin] mts  mt-[2vmin] py-[0.5vmin] ">
                         {selected === 0 && <ControlsScreen />}
                         {selected === 2 && <ThemeScreen />}
                     </div>

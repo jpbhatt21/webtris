@@ -1,5 +1,5 @@
 import { atom, createStore } from "jotai";
-import { activePos, initSettings, themeKeys, themes } from "./constants";
+import { activePos, initScale, initSettings, themeKeys, themes } from "./constants";
 let act: number = window.localStorage.getItem("colorScheme")
 	? parseInt(window.localStorage.getItem("colorScheme") as string)
 	: 0;
@@ -148,7 +148,7 @@ export const ghostPieceAtom = atom(
 	}
 );
 
-const autoplaySpeed = atom(50);
+const autoplaySpeed = atom(100);
 export const autoplaySpeedAtom = atom(
 	(get) => get(autoplaySpeed),
 	(_get, set, update: number) => {
@@ -225,6 +225,14 @@ export const resetAtom = atom(null, (_get, set) => {
 	set(autoplaySpeed, 50);
 });
 
+const scale = atom(initScale);
+export const scaleAtom = atom(
+	(get) => get(scale),
+	(_get, set, update: number) => {
+		set(scale, update);
+		window.localStorage.setItem("scale", update.toString());
+	}
+);
 const settings = atom(initSettings);
 export const settingsAtom = atom(
 	(get) => get(settings),

@@ -3,11 +3,11 @@ function Rect({ width=100,className="duration-100 ease-in-out",height=100,rx=10,
 		<>
 			<rect
 				width={width}
-				className={className}
+				className={className+ " lranim"}
 				height={height}
                 style={style}
 				rx={rx}
-				x={x}
+				x={x+525}
 				y={y}
 				fill={fill}
 				key={keyx}

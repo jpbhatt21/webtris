@@ -14,10 +14,12 @@ function Hold() {
 				style={{
 					borderColor: theme.text,
 				}}>
-				<div className="w-full flex flex-col h-2/3 items-center justify-center">
+				<div className="w-full flex flex-col h-2/3 items-center justify-center" key={"held"+holdShape}>
 					{shapeGrid[holdShape].split(" ").map((row) => {
 						return (
-							<div className="w-full h-[4vmin] flex justify-center ">
+							<div className="w-full h-[4vmin] fadein flex justify-center "
+							
+							>
 								{row.split("").map((cell) =>
 									cell !== "0" ? (
 										<svg
@@ -26,7 +28,7 @@ function Hold() {
 											viewBox="0 0 105 105"
 											fill="none">
 											<Rect
-												x={5}
+												x={-520}
 												y={5}
 												fill={
 													theme.accents[

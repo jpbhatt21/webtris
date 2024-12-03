@@ -35,8 +35,8 @@ function SpeedLvAndLine() {
 						strokeLinecap="round"
 						strokeDashoffset={
 							(596.68 *
-								(10 - (lines + 10 * Math.floor(lines / 10)))) /
-							10
+								(20 - (lines + 20 * Math.floor(lines / 20)))) /
+							20
 						}
 						fill="transparent"
 						strokeDasharray="596.68px"
@@ -45,7 +45,7 @@ function SpeedLvAndLine() {
 				<div className="w-fit h-fit flex flex-col items-center justify-center">
 					<div>{lines}</div>
 					<div className="w-full h-[1px] bg-white"></div>
-					<div>{(level + 1) * 10}</div>
+					<div>{(level + 1) * 20}</div>
 				</div>
 			</div>
 		</>

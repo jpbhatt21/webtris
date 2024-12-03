@@ -2,8 +2,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-.tms{
-    transition-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1)
+.tms {
+	transition-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 .mts {
 	font-family: "Montserrat", sans-serif;
@@ -18,7 +18,7 @@
 	font-family: "Protest Revolution", sans-serif;
 	font-weight: 400;
 	font-style: normal;
-  }
+}
 .lexend {
 	font-family: "Lexend", sans-serif;
 	font-optical-sizing: auto;
@@ -27,33 +27,92 @@
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+	-webkit-appearance: none;
+	margin: 0;
 }
-input[type=number] {
-  -moz-appearance: textfield;
+input[type="number"] {
+	-moz-appearance: textfield;
 }
-button:focus{
+button:focus {
 	outline: none;
 }
-.fadein{
+.fadein {
 	animation: fadeIn 0.3s;
-  }
-  @keyframes fadeIn {
+}
+@keyframes fadeIn {
 	0% {
-	  opacity: 0;
+		opacity: 0;
 	}
 	100% {
-	  opacity: 1;
+		opacity: 1;
 	}
-  }
-  
-  .hscb::-webkit-scrollbar {
+}
+
+.hscb::-webkit-scrollbar {
 	display: none;
-  }
-  
-  /* Hide scrollbar for IE, Edge and Firefox */
-  .hscb {
-	-ms-overflow-style: none;  /* IE and Edge */
-	scrollbar-width: none;  /* Firefox */
-  }
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.hscb {
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
+}
+.down1 {
+	animation: down1 2s;
+}
+@keyframes down1 {
+	0% {
+		transform: translateY(0px);
+	}
+	50%,100% {
+		transform: translateY(105px);
+	}
+}
+.down2 {
+	animation: down2 2s;
+}
+@keyframes down2 {
+	0% {
+		transform: translateY(0px);
+	}
+	50%,100% {
+		transform: translateY(210px);
+	}
+}
+.down3 {
+	animation: down3 2s;
+}
+@keyframes down3 {
+	0% {
+		transform: translateY(0px);
+	}
+	50%,100% {
+		transform: translateY(315px);
+	}
+}
+.down4 {
+	animation: down4 2s;
+}
+@keyframes down4 {
+	0% {
+		transform: translateY(0px);
+	}
+	50%,100% {
+		transform: translateY(420px);
+	}
+}
+.clear{
+	animation: clear 2s;
+}
+@keyframes clear {
+	0% {
+		transform: translateY(0px);
+		opacity: 100%;
+	}
+	50%,100% {
+		transform: translateX(-50%) translateY(-75%) scale(2);
+		opacity: 0%;
+
+	}
+}
+
