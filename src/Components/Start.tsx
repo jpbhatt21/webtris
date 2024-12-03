@@ -39,7 +39,7 @@ function StartScreen() {
 							setPage("single");
 						}}
 						onMouseEnter={(e) => {
-							e.currentTarget.style.color=theme.accents[2]
+							e.currentTarget.style.color=theme.accents[4]
 						}}
 						onMouseLeave={(e) => {
 							e.currentTarget.style.color=""
