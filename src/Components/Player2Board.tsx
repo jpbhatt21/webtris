@@ -1,5 +1,6 @@
 import { useAtom } from "jotai";
 import {
+	garbageLinesAtom,
 	messageAtom,
 	nextBagAtom,
 	stateAtom,
@@ -10,6 +11,7 @@ import Rect from "./Rect";
 import { useEffect, useState } from "react";
 import {  socket } from "../constants";
 let animTimeout:any=null
+let prevLines=0
 function Player2Board() {
 	const [board, setBoard] = useState(
 		Array.from({ length: 20 }, (_) =>
@@ -35,7 +37,9 @@ function Player2Board() {
 	const [speed, setSpeed] = useState(960);
 	const setMessage = useAtom(messageAtom)[1];
 	const [user] = useAtom(userAtom);
+	const addGarbageLines = useAtom(garbageLinesAtom)[1];
 	useEffect(() => {
+		prevLines=0
 		socket.on("getBag",(data:any)=>{
 			setNextBag(data.bag)
 		})
@@ -62,6 +66,10 @@ function Player2Board() {
 			if(data.nextShape && data.sender!== user.sid){
 				if(animTimeout)clearTimeout(animTimeout)
 				// console.log(data.currentShape)
+			if(data.lines!==prevLines){
+				addGarbageLines({type:"add",lines:data.lines-prevLines})
+				prevLines=data.lines
+			}
 				setBoard(data.board)
 				setActive(data.active)
 				setCurrentShape(data.currentShape)
@@ -77,7 +85,9 @@ function Player2Board() {
 	
 	return (
 		<>
-			<svg
+			<label className=" absolute top-[-3vmin]">
+			{user.opponent}
+	</label>			<svg
 				id="mainboard"
 				xmlns="http://www.w3.org/2000/svg"
 				className=" w-full absolute h-full tms duration-200  mb-0 "
@@ -94,6 +104,7 @@ function Player2Board() {
 						/>
 					))
 				)}
+				
 				{board.map((row, i) =>
 					row.map(
 						(cell, j) =>

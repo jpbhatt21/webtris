@@ -6,6 +6,7 @@ import {
 	bagRandAtom,
 	boardAtom,
 	currentShapeAtom,
+	garbageLinesAtom,
 	getAutoplayStateAtom,
 	ghostPieceAtom,
 	holdShapeAtom,
@@ -239,6 +240,11 @@ function MainBoard() {
 	const [currentShape, setCurrentShape] = useAtom(currentShapeAtom);
 	const [, setNextShape] = useAtom(nextShapeAtom);
 	const setTime = useAtom(timeAtom)[1];
+	const [garbageLines, setGarbageLines] = useAtom(garbageLinesAtom);
+	useEffect(() => {
+		console.log(garbageLines);
+		ths.garbageLines = garbageLines;
+	}, [garbageLines]);
 	const [score, setScore] = useAtom(scoreAtom);
 	const [state, setState] = useAtom(stateAtom);
 	const [lines, setLines] = useAtom(linesAtom);
@@ -266,6 +272,7 @@ function MainBoard() {
 		ths.board = JSON.parse(JSON.stringify(board));
 		ths.active = JSON.parse(JSON.stringify(activePos[x[0]]));
 		ths.state = state;
+		ths.garbageLines = 0;
 		speed = 960;
 		setSpeed(speed);
 		ths.setState = setState;
@@ -370,7 +377,22 @@ function MainBoard() {
 						);
 					}
 				});
-
+				if(ths.garbageLines[0]>3){
+					for (let i=0;i<ths.garbageLines[0];i++){
+						ths.board.shift()
+						ths.board.push(
+							Array.from({ length: 10 }, (_,j:any) => ({
+								occupied:j!==ths.garbageLines[1]?true:false,
+								color: 1,
+							}))
+						)
+					}
+					ths.garbageLines=[0, Math.floor(Math.random() * 10)]
+					setGarbageLines({
+						type: "set",
+						value: ths.garbageLines ,
+					})
+				}
 				setBoard(ths.board);
 				ths.lineDissapear = [];
 				ths.moveDown = Array(20).fill(0);

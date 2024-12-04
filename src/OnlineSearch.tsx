@@ -66,7 +66,7 @@ const tetrisFacts = [
 	"Tetris is a testament to innovative and elegant game design.",
 ];
 let inter: any = null;
-let localUser = { name: "Guest",sid:-1, count: "-",room:"" };
+let localUser = { name: "Guest",sid:-1, count: "-",room:"",opponent:"" };
 function OnlineSearch() {
 	const [selected, setSelected] = useState(0);
     const [tried, setTried] = useState(false);
@@ -109,6 +109,12 @@ function OnlineSearch() {
                 });
                 socket.on("joinRoom",(data:any)=>{
                     localUser.room = data.room;
+					if(data.users[0]==localUser.name){
+						localUser.opponent = data.users[1];
+					}
+					else{
+						localUser.opponent = data.users[0];
+					}
                     setUser(localUser)
                     setAutoplay(false);
                     setBag(data.bag)
@@ -127,7 +133,7 @@ function OnlineSearch() {
 			clearInterval(inter);
 			setTimer(0);
            if(localUser.room==""){
-            localUser = { name: "Guest",sid:-1, count: "-",room:"" };
+            localUser = { name: "Guest",sid:-1, count: "-",room:"" ,opponent:""};
             setUser(localUser);
             setTried(false);
             socket.disconnect();

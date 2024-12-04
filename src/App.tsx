@@ -99,6 +99,7 @@ function App() {
 								}
 							}
 						}}>
+							
 						<Player2Board />
 					</div>
 				)}

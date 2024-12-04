@@ -378,6 +378,7 @@ export const lineStackAtom = atom(
 export const initAtom = atom(null, (_get, set) => {
 	
 	let tempBag = [0, 1, 2, 3, 4, 5, 6];
+	set(garbageLines, [0,parseInt((Math.random()*10).toString())]);
 	let tempCurSh:any = tempBag[Math.floor(Math.random() * tempBag.length)];
 	tempBag = tempBag.filter((v) => v !== tempCurSh);
 	let tempNxtSh:any = tempBag[Math.floor(Math.random() * tempBag.length)];
@@ -405,7 +406,18 @@ export const initAtom = atom(null, (_get, set) => {
 	return [tempCurSh, tempNxtSh, tempHoldSh];
 });
 
-const user = atom({ name: "Guest", sid: "0", count :"-",room:"" });
+const garbageLines=atom([0,Math.floor(Math.random() * 10)]); // [0,5] means 0 lines of garbage and hole at column index 5
+export const garbageLinesAtom=atom(
+	(get)=>get(garbageLines),
+	(_get,set,update:any)=>{
+		if(update.type=="add")
+			set(garbageLines,[_get(garbageLines)[0]+update.lines,_get(garbageLines)[1]]);
+		else
+			set(garbageLines,update.value);
+	}
+);
+
+const user = atom({ name: "Guest", sid: "0", count :"-",room:"",opponent:"" });
 export const userAtom = atom(
 	(get) => get(user),
 	(_get, set, update: any) => {
