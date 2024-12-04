@@ -39,6 +39,15 @@ function Player2Board() {
 		socket.on("getBag",(data:any)=>{
 			setNextBag(data.bag)
 		})
+		socket.on("gameOver",()=>{
+			setState("pause")
+			setMessage({
+				active:true,
+				heading:"Victory",
+				body:"You Won!",
+			})
+			console.log("opponentDisconnected")
+		})
 		socket.on("opponentDisconnected",()=>{
 			setState("pause")
 			setMessage({

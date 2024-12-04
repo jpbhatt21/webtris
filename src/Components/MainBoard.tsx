@@ -15,6 +15,7 @@ import {
 	lineDissapearAtom,
 	linesAtom,
 	lineStackAtom,
+	messageAtom,
 	moveDownAtom,
 	nextShapeAtom,
 	pageAtom,
@@ -248,6 +249,7 @@ function MainBoard() {
 	const [lineDissapear, setLineDissapear] = useAtom(lineDissapearAtom);
 	const [moveDown, setMoveDown] = useAtom(moveDownAtom);
 	const setSpeed = useAtom(speedAtom)[1];
+	const setMessage = useAtom(messageAtom)[1];
 	const [user] = useAtom(userAtom);
 	function startMainGameLoop() {
 		let x = init();
@@ -274,6 +276,7 @@ function MainBoard() {
 		// console.log(ths.holdShape);
 		ths.lines = JSON.parse(JSON.stringify(lines));
 		ths.level = JSON.parse(JSON.stringify(level));
+		
 		ths.lineStack = [0, 0, 0, 0];
 		async function createNewPiece(hldr: boolean = true) {
 			let line = 0;
@@ -388,6 +391,17 @@ function MainBoard() {
 					if (ths.page == "single") {
 						ths.state = "game over";
 						ths.setState("game over");
+					}
+					else if(ths.page == "multi"){
+						socket.emit("gameOver",{room:user.room,name:user.name})
+						setMessage({
+							active: true,
+							heading: "Defeat",
+							body: "Better luck next time!",
+						});
+						ths.setState("pause");
+						ths.state = "game over";
+
 					}
 
 					return;

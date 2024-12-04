@@ -64,7 +64,7 @@ function PauseScreen() {
 										e.currentTarget.style.transitionDuration =
 											"0.25s";
 										e.currentTarget.style.color =
-											theme.accents[i];
+											theme.accents[message.heading=="Defeat"?5:message.heading=="Victory"?4:i];
 									}}
 									onMouseLeave={(e) => {
 										e.currentTarget.style.transitionDuration =
