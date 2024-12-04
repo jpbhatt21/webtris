@@ -63,7 +63,7 @@ function StartScreen() {
 						onMouseLeave={(e) => {
 							e.currentTarget.style.color = "";
 						}}>
-						Start
+						Singleplayer
 					</button>
 					<button
 						//   className="bg-post cursor-pointer rounded-sm duration-100 select-none brt hover:text-colors-bloo text-colors-yellow w-[10vmin] h-[3.25vmin] py-[0.5vmin] text-center"
@@ -82,7 +82,7 @@ function StartScreen() {
 						onMouseLeave={(e) => {
 							e.currentTarget.style.color = state == "onlineSearch" ? theme.accents[2] : "";
 						}}>
-						Online
+						Multiplayer
 					</button>
 					<button
 						//   className="bg-post cursor-pointer rounded-sm duration-100 select-none brt hover:text-colors-bloo text-colors-yellow w-[10vmin] h-[3.25vmin] py-[0.5vmin] text-center"

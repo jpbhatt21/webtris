@@ -225,7 +225,7 @@ window.addEventListener("keyup", (e) => {
 	}
 });
 let inter: any = null;
-let lineBar=20;
+let lineBar=10;
 function MainBoard() {
 	const [board, setBoard] = useAtom(boardAtom);
 	const [active, setActive] = useAtom(activePieceAtom);
@@ -254,7 +254,7 @@ function MainBoard() {
 	const [user] = useAtom(userAtom);
 	useEffect(() => {
 		if (user.name == "Guest") {
-			lineBar = 20;
+			lineBar = 10;
 		} else {
 			lineBar = 10;
 		}

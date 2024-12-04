@@ -1,14 +1,14 @@
 import { useAtom } from "jotai";
 import { allStatsAtom, themeAtom, userAtom } from "../atoms";
 import { useEffect } from "react";
-let lineBar=20
+let lineBar=10
 function SpeedLvAndLine() {
     const [theme] = useAtom(themeAtom);
     const [[level,,lines]] = useAtom(allStatsAtom);
 	const [user] = useAtom(userAtom);
 	useEffect(() => {
 		if (user.name == "Guest") {
-			lineBar = 20;
+			lineBar = 10;
 		} else {
 			lineBar = 10;
 		}
