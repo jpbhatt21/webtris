@@ -80,7 +80,7 @@ function App() {
 					{page == "multi" && <Multi />}
 				</div>
 
-				{page == "multi" && (
+				{(
 					<div
 						className="w-[47vmin] fixed right-[15vmin] bottom-0  ml-[-23.7vmin] mr-[-23.7vmin] h-[50vmin] mt-[3.6vmin] duration-500 flex items-center justify-center"
 						style={{

@@ -388,7 +388,7 @@ function MainBoard() {
 							Array.from({ length: 10 }, (_, j: any) => ({
 								occupied:
 									j !== ths.garbageLines[1] ? true : false,
-								color: 1,
+								color: 8,
 							}))
 						);
 					}

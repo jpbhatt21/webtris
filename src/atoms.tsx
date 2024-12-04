@@ -406,7 +406,7 @@ export const initAtom = atom(null, (_get, set) => {
 	return [tempCurSh, tempNxtSh, tempHoldSh];
 });
 
-const garbageLines=atom([0,Math.floor(Math.random() * 10)]); // [0,5] means 0 lines of garbage and hole at column index 5
+const garbageLines=atom([0,parseInt((Math.random()*10).toString())]); // [0,5] means 0 lines of garbage and hole at column index 5
 export const garbageLinesAtom=atom(
 	(get)=>get(garbageLines),
 	(_get,set,update:any)=>{
