@@ -1,9 +1,19 @@
 import { useAtom } from "jotai";
-import { allStatsAtom, themeAtom } from "../atoms";
-
+import { allStatsAtom, themeAtom, userAtom } from "../atoms";
+import { useEffect } from "react";
+let lineBar=20
 function SpeedLvAndLine() {
     const [theme] = useAtom(themeAtom);
     const [[level,,lines]] = useAtom(allStatsAtom);
+	const [user] = useAtom(userAtom);
+	useEffect(() => {
+		if (user.name == "Guest") {
+			lineBar = 20;
+		} else {
+			lineBar = 10;
+		}
+	}, [user]);
+	
 	return (
 		<>
 			<div className="text-[2vmin]">Speed Lv. {level + 1}</div>
@@ -35,8 +45,8 @@ function SpeedLvAndLine() {
 						strokeLinecap="round"
 						strokeDashoffset={
 							(596.68 *
-								(20 - (lines + 20 * Math.floor(lines / 20)))) /
-							20
+								(lineBar - (lines + lineBar * Math.floor(lines / lineBar)))) /
+							lineBar
 						}
 						fill="transparent"
 						strokeDasharray="596.68px"
@@ -45,7 +55,7 @@ function SpeedLvAndLine() {
 				<div className="w-fit h-fit flex flex-col items-center justify-center">
 					<div>{lines}</div>
 					<div className="w-full h-[1px] bg-white"></div>
-					<div>{(level + 1) * 20}</div>
+					<div>{(level + 1) * lineBar}</div>
 				</div>
 			</div>
 		</>

@@ -151,7 +151,7 @@ function PauseScreen() {
 						onMouseLeave={(e) => {
 							e.currentTarget.style.color = "";
 						}}>
-						Restart
+						{message.active ? "Play Again" : "Restart"}
 					</button>
 					<button
 						//   className="bg-post cursor-pointer rounded-sm duration-100 select-none brt hover:text-colors-bloo text-colors-yellow w-[10vmin] h-[3.25vmin] py-[0.5vmin] text-center"

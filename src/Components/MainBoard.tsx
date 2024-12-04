@@ -225,6 +225,7 @@ window.addEventListener("keyup", (e) => {
 	}
 });
 let inter: any = null;
+let lineBar=20;
 function MainBoard() {
 	const [board, setBoard] = useAtom(boardAtom);
 	const [active, setActive] = useAtom(activePieceAtom);
@@ -251,6 +252,13 @@ function MainBoard() {
 	const setSpeed = useAtom(speedAtom)[1];
 	const setMessage = useAtom(messageAtom)[1];
 	const [user] = useAtom(userAtom);
+	useEffect(() => {
+		if (user.name == "Guest") {
+			lineBar = 20;
+		} else {
+			lineBar = 10;
+		}
+	}, [user]);
 	function startMainGameLoop() {
 		let x = init();
 		let held = false;
@@ -341,7 +349,7 @@ function MainBoard() {
 				setScore(ths.score);
 				ths.lines += line;
 				setLines(ths.lines);
-				ths.level = Math.min(Math.floor(ths.lines / 20), 29);
+				ths.level = Math.min(Math.floor(ths.lines / lineBar), 29);
 				setLevel(ths.level);
 				if (line > 0 && !(ths.autoplay && ths.page == "single"))
 					await new Promise((resolve) =>
