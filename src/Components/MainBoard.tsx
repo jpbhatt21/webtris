@@ -12,17 +12,21 @@ import {
 	initAtom,
 	intervalAtom,
 	levelAtom,
+	lineDissapearAtom,
 	linesAtom,
 	lineStackAtom,
+	moveDownAtom,
 	nextShapeAtom,
 	pageAtom,
 	scoreAtom,
+	speedAtom,
 	stateAtom,
 	themeAtom,
 	timeAtom,
+	userAtom,
 } from "../atoms";
-import { useEffect, useState } from "react";
-import { activePos, initSettings } from "../constants";
+import { useEffect } from "react";
+import { activePos, initSettings, socket } from "../constants";
 import { automatic, rotPiece } from "../Functionality/helper";
 import Rect from "./Rect";
 let keys = {
@@ -37,7 +41,7 @@ let keys = {
 };
 function form(x: number) {
 	// let speed=960
-	return 960 * Math.pow(Math.E,-0.2*x)
+	return 960 * Math.pow(Math.E, -0.2 * x);
 	// switch (x) {
 	// 	case 0:
 	// 		speed=960
@@ -107,7 +111,7 @@ let ths: any = {};
 function getThs() {
 	return ths;
 }
-let speed =960;
+let speed = 960;
 let eventHandler: any = null;
 let settings = initSettings;
 window.addEventListener("keydown", (e) => {
@@ -179,8 +183,7 @@ window.addEventListener("keyup", (e) => {
 		ths.page == "single"
 	) {
 		ths.setState("pause");
-	}
-	else if (key === settings.closeMenu) {
+	} else if (key === settings.closeMenu) {
 		if (ths.state === "game over") return;
 		if (ths.state == "settings" && ths.page == "single")
 			ths.setState("pause");
@@ -219,7 +222,6 @@ window.addEventListener("keyup", (e) => {
 		//setKeys((prev:any) => ({ ...prev, holdPiece: false }));
 		keys.holdPiece = false;
 	}
-	
 });
 let inter: any = null;
 function MainBoard() {
@@ -243,8 +245,10 @@ function MainBoard() {
 	const bagRand = useAtom(bagRandAtom)[1];
 	const init = useAtom(initAtom)[1];
 	const getAutoplayState = useAtom(getAutoplayStateAtom)[1];
-	const [lineDissapear, setLineDissapear] = useState([]);
-	const [moveDown, setMoveDown] = useState(Array(20).fill(0));
+	const [lineDissapear, setLineDissapear] = useAtom(lineDissapearAtom);
+	const [moveDown, setMoveDown] = useAtom(moveDownAtom);
+	const setSpeed = useAtom(speedAtom)[1];
+	const [user] = useAtom(userAtom);
 	function startMainGameLoop() {
 		let x = init();
 		let held = false;
@@ -252,9 +256,12 @@ function MainBoard() {
 		ths.board = JSON.parse(JSON.stringify(board));
 		ths.active = JSON.parse(JSON.stringify(activePos[x[0]]));
 		ths.state = state;
-		speed=960
+		speed = 960;
+		setSpeed(speed);
 		ths.setState = setState;
 		setActive(activePos[x[0]]);
+		ths.lineDissapear = [];
+		ths.moveDown = Array(20).fill(0);
 		ths.ghost = JSON.parse(JSON.stringify(ghost));
 		ths.autoplay = JSON.parse(JSON.stringify(autoplay));
 		ths.autoplaySpeed = JSON.parse(JSON.stringify(autoplaySpeed));
@@ -291,20 +298,37 @@ function MainBoard() {
 					ths.board[pos[0]][pos[1]].color = ths.currentShape;
 				});
 
-				let lineDissapear: any = [];
-				let moveDown: any = Array(20).fill(0);
+				ths.lineDissapear = [];
+				ths.moveDown = Array(20).fill(0);
 				ths.board.forEach((row: any, i: number) => {
 					if (row.every((cell: any) => cell.occupied)) {
-						lineDissapear.push(i);
+						ths.lineDissapear.push(i);
 						for (let j = 0; j < i; j++) {
-							moveDown[j]++;
+							ths.moveDown[j]++;
 						}
 						line++;
 					}
 				});
-				setLineDissapear(lineDissapear);
-				setMoveDown(moveDown);
-
+				setLineDissapear(ths.lineDissapear);
+				setMoveDown(ths.moveDown);
+				if (user.room !== "")
+					socket.emit("roomCom", {
+						room: user.room,
+						board: JSON.parse(JSON.stringify(ths.board)),
+						active: JSON.parse(JSON.stringify(ths.active)),
+						currentShape: JSON.parse(
+							JSON.stringify(ths.currentShape)
+						),
+						nextShape: JSON.parse(JSON.stringify(ths.nextShape)),
+						holdShape: JSON.parse(JSON.stringify(ths.holdShape)),
+						score: ths.score,
+						lines: ths.lines,
+						level: ths.level,
+						lineDissapear: ths.lineDissapear,
+						moveDown: ths.moveDown,
+						speed: speed,
+						npc: ths.npc,
+					});
 				if (line > 0) {
 					ths.lineStack[line - 1]++;
 					setLineStack(ths.lineStack);
@@ -314,7 +338,7 @@ function MainBoard() {
 				setScore(ths.score);
 				ths.lines += line;
 				setLines(ths.lines);
-				ths.level = Math.min(Math.floor(ths.lines / 20),29)
+				ths.level = Math.min(Math.floor(ths.lines / 20), 29);
 				setLevel(ths.level);
 				if (line > 0 && !(ths.autoplay && ths.page == "single"))
 					await new Promise((resolve) =>
@@ -337,9 +361,13 @@ function MainBoard() {
 				});
 
 				setBoard(ths.board);
+				ths.lineDissapear = [];
+				ths.moveDown = Array(20).fill(0);
 				setLineDissapear([]);
 				setMoveDown(Array(20).fill(0));
-				speed = form(ths.level)
+				speed = form(ths.level);
+				setSpeed(speed);
+				
 			}
 
 			for (let i = 0; i < 4; i++) {
@@ -378,6 +406,7 @@ function MainBoard() {
 			setNextShape(ths.nextShape);
 
 			ths.npc = false;
+			
 		}
 		let move = false;
 		ths.time = 0;
@@ -394,8 +423,25 @@ function MainBoard() {
 			holdPiece: false,
 			pauseGame: false,
 		};
+
 		if (eventHandler) clearInterval(eventHandler);
 		eventHandler = setInterval(async () => {
+			// if(user.room!=="")
+			// socket.emit("roomCom", {
+			// 	room: user.room,
+			// 	board: JSON.parse(JSON.stringify(ths.board)),
+			// 	active: JSON.parse(JSON.stringify(ths.active)),
+			// 	currentShape: JSON.parse(JSON.stringify(ths.currentShape)),
+			// 	nextShape: JSON.parse(JSON.stringify(ths.nextShape)),
+			// 	holdShape: JSON.parse(JSON.stringify(ths.holdShape)),
+			// 	score: ths.score,
+			// 	lines: ths.lines,
+			// 	level: ths.level,
+			// 	lineDissapear: ths.lineDissapear,
+			// 	moveDown: ths.moveDown,
+			// 	speed: speed,
+			// 	npc: ths.npc,
+			// });
 			if (ths.npc) return;
 			if (
 				cur - prevTickTime.moveLeft >= ticker.moveLRSpeed &&
@@ -512,9 +558,10 @@ function MainBoard() {
 			] = getAutoplayState();
 			if (ths.autoplay && diff < Math.min(ths.autoplaySpeed, speed))
 				return;
-			if (ths.state !== "play" || ths.npc){
+			if (ths.state !== "play" || ths.npc) {
 				prev = cur;
-				return;}
+				return;
+			}
 
 			//hold
 			if (
@@ -637,7 +684,7 @@ function MainBoard() {
 				ghos[3][0]++;
 			}
 			setGhost(() => JSON.parse(JSON.stringify(ghos)));
-			
+
 			ths.time += diff / 1000;
 			setTime(ths.time);
 			prev = cur;
@@ -654,10 +701,17 @@ function MainBoard() {
 			<svg
 				id="mainboard"
 				xmlns="http://www.w3.org/2000/svg"
-				className=" w-full  h-full tms duration-200  mb-0 "
+				className=" w-full absolute h-full tms duration-200  mb-0 "
 				viewBox="0 0 2110 2215"
 				fill="none">
-				<rect x="515" y="5" rx={7} height="2125" width="1075" stroke={theme.text}/>
+				<rect
+					x="515"
+					y="5"
+					rx={7}
+					height="2125"
+					width="1075"
+					stroke={theme.text}
+				/>
 				{board.map((row, i) =>
 					row.map((_, j) => (
 						<Rect
@@ -686,7 +740,7 @@ function MainBoard() {
 											Math.max(300, speed) +
 											"ms",
 									}}
-									key={`${i * 10 + j}block`+currentShape}
+									key={`${i * 10 + j}block` + currentShape}
 								/>
 							)
 					)

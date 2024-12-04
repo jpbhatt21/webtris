@@ -56,7 +56,7 @@ function ControlsScreen() {
               outlineColor:settings.clash.includes((settings[settingsKeys[i]]).toString())?"#bf616a":""
             }}
             onFocus={(e) => {
-              console.log(state)
+              // console.log(state)
                 if(i==1 || state!=="settings")
                     e.currentTarget.blur()
             }}

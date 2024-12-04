@@ -116,3 +116,20 @@ button:focus {
 	}
 }
 
+.fadeinout{
+	animation: fadeinout 10s;
+}
+@keyframes fadeinout {
+	0% {
+		opacity: 0;
+	}
+	20% {
+		opacity: 80%;
+	}
+	40% {
+		opacity: 80%;
+	}
+	60%,100% {
+		opacity: 0;
+	}
+}

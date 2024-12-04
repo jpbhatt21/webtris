@@ -1,5 +1,5 @@
 import { atom, createStore } from "jotai";
-import { activePos, initScale, initSettings, themeKeys, themes } from "./constants";
+import { activePos, initScale, initSettings, socket, themeKeys, themes } from "./constants";
 let act: number = window.localStorage.getItem("colorScheme")
 	? parseInt(window.localStorage.getItem("colorScheme") as string)
 	: 0;
@@ -223,8 +223,37 @@ export const resetAtom = atom(null, (_get, set) => {
 		[0, 0],
 	]);
 	set(autoplaySpeed, 50);
-});
+	let tempUser = _get(user);	
+	if(tempUser.room!==""){
+		setInterval(() => {
+			// console.log("sending")
+			if(_get(lineDissapear).length==0)
+			socket.emit("roomCom", {
+				room: tempUser.room,
+				board: _get(board),
+				active: _get(activePiece),
+				currentShape: _get(currentShape),
+				nextShape: _get(nextShape),
+				holdShape: _get(holdShape),
+				score: _get(score),
+				lines: _get(lines),
+				level: _get(level),
+				lineDissapear: _get(lineDissapear),
+				moveDown: _get(moveDown),
+				speed: _get(speed),
+				
+			});
+		}, 100);
+	}
 
+});
+const speed = atom(960);
+export const speedAtom = atom(
+	(get) => get(speed),
+	(_get, set, update: number) => {
+		set(speed, update);
+	}
+);
 const scale = atom(initScale);
 export const scaleAtom = atom(
 	(get) => get(scale),
@@ -257,22 +286,64 @@ export const settingsAtom = atom(
 		window.localStorage.setItem("settings", JSON.stringify(temp));
 	}
 );
-
-const bag = atom([0, 1, 2, 3, 4, 5, 6]);
+const lineDissapear = atom([]);
+export const lineDissapearAtom = atom(
+	(get) => get(lineDissapear),
+	(_get, set, update: any) => {
+		set(lineDissapear, update);
+	}
+);
+const moveDown = atom([]);
+export const moveDownAtom = atom(
+	(get) => get(moveDown),
+	(_get, set, update: any) => {
+		set(moveDown, update);
+	}
+);
+let temp=[0,1,2,3,4,5,6]
+const bag = atom("0000000".split("").map((_)=>{
+	let random = temp[Math.floor(Math.random() * temp.length)];
+	temp = temp.filter((v) => v !== random);
+	return random;
+}));
 export const bagAtom = atom(
 	(get) => get(bag),
 	(_get, set, update: any) => {
 		set(bag, update);
 	}
 );
-export const bagRandAtom = atom(null, (_get, set) => {
-	let temp = _get(bag);
+const nextBag = atom("0000000".split("").map((_)=>{
 	let random = temp[Math.floor(Math.random() * temp.length)];
 	temp = temp.filter((v) => v !== random);
-	if (temp.length === 0) {
-		temp = [0, 1, 2, 3, 4, 5, 6];
+	return random;
+}));
+export const nextBagAtom = atom(
+	(get) => get(nextBag),
+	(_get, set, update: any) => {
+		set(nextBag, update);
 	}
-	set(bag, temp);
+);
+export const bagRandAtom = atom(null, (_get, set) => {
+	let tempBag = _get(bag);
+	let random = tempBag.shift();
+	if(tempBag.length==0){
+		temp=[0,1,2,3,4,5,6];
+		tempBag= "0000000".split("").map((_)=>{
+			let random = temp[Math.floor(Math.random() * temp.length)];
+			temp = temp.filter((v) => v !== random);
+			return random;
+		});
+		if(_get(user).room!==""){
+			tempBag = _get(nextBag);
+			socket.emit("getBag",{
+				room: _get(user).room,
+				name: _get(user).name,
+				
+			})
+		}
+	}
+	
+	set(bag, tempBag);
 	return random;
 });
 const rotate = atom(0);
@@ -298,11 +369,22 @@ export const lineStackAtom = atom(
     }
 );  
 export const initAtom = atom(null, (_get, set) => {
+	
 	let tempBag = [0, 1, 2, 3, 4, 5, 6];
-	let tempCurSh = tempBag[Math.floor(Math.random() * tempBag.length)];
+	let tempCurSh:any = tempBag[Math.floor(Math.random() * tempBag.length)];
 	tempBag = tempBag.filter((v) => v !== tempCurSh);
-	let tempNxtSh = tempBag[Math.floor(Math.random() * tempBag.length)];
+	let tempNxtSh:any = tempBag[Math.floor(Math.random() * tempBag.length)];
 	tempBag = tempBag.filter((v) => v !== tempNxtSh);
+
+	if(_get(user).room!==""){
+		tempBag = _get(bag);
+		tempCurSh = tempBag.shift();
+		tempNxtSh = tempBag.shift();
+		set(bag, tempBag);
+	}
+	else
+	set(bag, tempBag);
+	
 	set(currentShape, tempCurSh);
 	set(nextShape, tempNxtSh);
 	let tempHoldSh = 7;
@@ -311,9 +393,15 @@ export const initAtom = atom(null, (_get, set) => {
 		tempBag = tempBag.filter((v) => v !== tempHoldSh);
 	}
 	set(holdShape, tempHoldSh);
-	set(bag, tempBag);
 	set(activePiece, activePos[tempCurSh]);
 	set(ghostPiece, activePos[tempCurSh]);
-
 	return [tempCurSh, tempNxtSh, tempHoldSh];
 });
+
+const user = atom({ name: "Guest", sid: "0", count :"-",room:"" });
+export const userAtom = atom(
+	(get) => get(user),
+	(_get, set, update: any) => {
+		set(user, {..._get(user), ...update});
+	}
+);

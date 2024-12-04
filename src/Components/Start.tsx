@@ -20,7 +20,7 @@ function StartScreen() {
 				style={{
 					opacity: page == "home" ? "1" : "0",
 					pointerEvents: page == "home" ? "all" : "none",
-					marginLeft: page == "home" ? "-40vmin" : "-80vmin",
+					marginLeft: page == "home" ? "-70vmin" : "-80vmin",
 				}}>
 				<div className="text-[7.5vmin] cursor-default prt">
 					{" "}
@@ -37,6 +37,8 @@ function StartScreen() {
 								e.currentTarget.style.transitionDuration = "5s";
 								e.currentTarget.style.color = "";
 								setTimeout(() => {
+									
+									if(e.currentTarget)
 									e.currentTarget.style.transitionDuration =
 										"0.25s";
 								}, 5000);
@@ -50,7 +52,7 @@ function StartScreen() {
 						//   className="bg-post cursor-pointer rounded-sm duration-100 select-none brt hover:text-colors-bloo text-colors-yellow w-[10vmin] h-[3.25vmin] py-[0.5vmin] text-center"
 						className="cursor-pointer duration-300 w-fit select-none h-fit py-[0.5vmin]"
 						onClick={() => {
-							if (page == "single") return;
+							if (page !== "home") return;
 							setAutoplay(false);
 							setReset();
 							setPage("single");
@@ -66,15 +68,19 @@ function StartScreen() {
 					<button
 						//   className="bg-post cursor-pointer rounded-sm duration-100 select-none brt hover:text-colors-bloo text-colors-yellow w-[10vmin] h-[3.25vmin] py-[0.5vmin] text-center"
 						className=" cursor-pointer duration-300 select-none w-fit h-fit py-[0.5vmin] "
+						style={{
+							color: state == "onlineSearch" ? theme.accents[2] : "",
+						}}
 						onClick={() => {
-							if (page == "single") return;
+							if (page !== "home") return;
+							setState("onlineSearch");
 							//props.setPaused(false);
 						}}
 						onMouseEnter={(e) => {
 							e.currentTarget.style.color = theme.accents[2];
 						}}
 						onMouseLeave={(e) => {
-							e.currentTarget.style.color = "";
+							e.currentTarget.style.color = state == "onlineSearch" ? theme.accents[2] : "";
 						}}>
 						Online
 					</button>
@@ -85,7 +91,7 @@ function StartScreen() {
 							color: state == "settings" ? theme.accents[0] : "",
 						}}
 						onClick={() => {
-							if (page == "single") return;
+							if (page !== "home") return;
 							if (state == "settings") {
 								setState("play");
 							} else setState("settings");
