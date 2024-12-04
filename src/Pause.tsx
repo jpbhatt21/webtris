@@ -136,10 +136,11 @@ function PauseScreen() {
 									room: "",
 								});
 								socket.disconnect();
-								setPage("home");
-								setState("onlineSearch");
 								setAutoplay(true);
 								setReset();
+								setPage("home");
+								setState("onlineSearch");
+								
 								return;
 							}
 							reset();
