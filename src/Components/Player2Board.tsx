@@ -1,6 +1,8 @@
 import { useAtom } from "jotai";
 import {
+	messageAtom,
 	nextBagAtom,
+	stateAtom,
 	themeAtom,
 	userAtom,
 } from "../atoms";
@@ -29,12 +31,22 @@ function Player2Board() {
 	const [moveDown, setMoveDown] = useState(Array(20).fill(0));
 	const [theme] = useAtom(themeAtom);
 	const setNextBag = useAtom(nextBagAtom)[1];
+	const setState = useAtom(stateAtom)[1];
 	const [speed, setSpeed] = useState(960);
-	
+	const setMessage = useAtom(messageAtom)[1];
 	const [user] = useAtom(userAtom);
 	useEffect(() => {
 		socket.on("getBag",(data:any)=>{
 			setNextBag(data.bag)
+		})
+		socket.on("opponentDisconnected",()=>{
+			setState("pause")
+			setMessage({
+				active:true,
+				heading:"Victory",
+				body:"Opponent Surrendered",
+			})
+			console.log("opponentDisconnected")
 		})
 		socket.on("roomCom", (data: any) => {
 			// console.log(data);

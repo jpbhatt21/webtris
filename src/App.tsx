@@ -1,5 +1,14 @@
 import { useAtom } from "jotai";
-import { pageAtom, scaleAtom, stateAtom, themeAtom, userAtom } from "./atoms";
+import {
+	autoplayAtom,
+	messageAtom,
+	pageAtom,
+	resetAtom,
+	scaleAtom,
+	stateAtom,
+	themeAtom,
+	userAtom,
+} from "./atoms";
 import StartScreen from "./Components/Start";
 import Single from "./Single";
 import SettingsScreen from "./Settings";
@@ -8,14 +17,21 @@ import OnlineSearch from "./OnlineSearch";
 import Multi from "./Multi";
 import Player2Board from "./Components/Player2Board";
 import { useState } from "react";
+import { socket } from "./constants";
 
 function App() {
 	const [theme] = useAtom(themeAtom);
 	const [state, setState] = useAtom(stateAtom);
-	const [page] = useAtom(pageAtom);
+	const [,setAutoplay] = useAtom(autoplayAtom);
+	const setReset = useAtom(resetAtom)[1];
+	const [page,setPage] = useAtom(pageAtom);
 	const [scale, setScale] = useAtom(scaleAtom);
-	const [user] = useAtom(userAtom);
+	const [user, setUser] = useAtom(userAtom);
 	const [scale2, setScale2] = useState(1);
+	const [message, setMessage] = useAtom(messageAtom) as [
+		{ active: boolean; heading: string; body: string },
+		any
+	];
 	// console.log(page,state)
 	return (
 		<>
@@ -63,35 +79,29 @@ function App() {
 					{page != "multi" && <Single />}
 					{page == "multi" && <Multi />}
 				</div>
-				
-					{page == "multi" && (
-						<div
-							className="w-[47vmin] fixed right-[15vmin] bottom-0  ml-[-23.7vmin] mr-[-23.7vmin] h-[50vmin] mt-[3.6vmin] duration-500 flex items-center justify-center"
-							
-							style={{
-								opacity:
-									page == "multi" || state == "play" ? 1 : 0,
-								transform:page == "multi"
-										? "scale(" + scale2 + ")"
-										: "scale(1)",
-							}}
-							onWheel={(e) => {
-								if (
-									
-									(page == "multi" && state == "play")
-								) {
-									if (e.deltaY > 0) {
-										if (scale2 > 0.5) setScale2(scale2 - 0.1);
-									} else {
-										if (scale2 < 1.0) setScale2(scale2 + 0.1);
-									}
+
+				{page == "multi" && (
+					<div
+						className="w-[47vmin] fixed right-[15vmin] bottom-0  ml-[-23.7vmin] mr-[-23.7vmin] h-[50vmin] mt-[3.6vmin] duration-500 flex items-center justify-center"
+						style={{
+							opacity: page == "multi" || state == "play" ? 1 : 0,
+							transform:
+								page == "multi"
+									? "scale(" + scale2 + ")"
+									: "scale(1)",
+						}}
+						onWheel={(e) => {
+							if (page == "multi" && state == "play") {
+								if (e.deltaY > 0) {
+									if (scale2 > 0.5) setScale2(scale2 - 0.1);
+								} else {
+									if (scale2 < 1.0) setScale2(scale2 + 0.1);
 								}
-							}}
-							>
-							<Player2Board />
-						</div>
-					)}
-				
+							}
+						}}>
+						<Player2Board />
+					</div>
+				)}
 
 				<div className="w-full absolute pointer-events-none h-full flex items-center justify-center">
 					<div
@@ -100,19 +110,42 @@ function App() {
 							pointerEvents: state != "play" ? "all" : "none",
 							backgroundColor:
 								"#000000" +
-								(state != "play" && page == "single"
+								(state != "play" &&
+								(page == "single" || message.active)
 									? "95"
 									: "00"),
 						}}
 						id="dismiss"
 						onClick={() => {
 							if (state === "game over") return;
-							if (state == "settings" && page == "single")
+							if (message.active) {
+								if (user.name !== "Guest") {
+									setMessage({
+										active: false,
+										heading: "",
+										body: "",
+									});
+									setUser({
+										name: "Guest",
+										sid: -1,
+										count: "-",
+										room: "",
+									});
+									socket.disconnect();
+									setPage("home");
+									setAutoplay(true);
+									setReset();
+								}
+							}
+							if (
+								state == "settings" &&
+								(page == "single" || message.active)
+							)
 								setState("pause");
 							else setState("play");
 						}}
 					/>
-					{page == "single" && <PauseScreen />}
+					{(page == "single" || message.active) && <PauseScreen />}
 					<StartScreen />
 					<SettingsScreen />
 					{<OnlineSearch />}

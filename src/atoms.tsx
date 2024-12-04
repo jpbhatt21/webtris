@@ -312,6 +312,13 @@ export const bagAtom = atom(
 		set(bag, update);
 	}
 );
+const message:any=atom({active:false,heading:"",body:""});
+export const messageAtom = atom(
+	(get) => get(message),
+	(_get, set, update:any) => {
+		set(message, update);
+	}
+);
 const nextBag = atom("0000000".split("").map((_)=>{
 	let random = temp[Math.floor(Math.random() * temp.length)];
 	temp = temp.filter((v) => v !== random);
