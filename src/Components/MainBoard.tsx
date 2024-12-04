@@ -226,7 +226,7 @@ window.addEventListener("keyup", (e) => {
 	}
 });
 let inter: any = null;
-let lineBar=10;
+let lineBar = 10;
 function MainBoard() {
 	const [board, setBoard] = useAtom(boardAtom);
 	const [active, setActive] = useAtom(activePieceAtom);
@@ -272,7 +272,11 @@ function MainBoard() {
 		ths.board = JSON.parse(JSON.stringify(board));
 		ths.active = JSON.parse(JSON.stringify(activePos[x[0]]));
 		ths.state = state;
-		ths.garbageLines = 0;
+		ths.garbageLines = [0, Math.floor(Math.random() * 10)];
+		setGarbageLines({
+			type: "set",
+			value: ths.garbageLines,
+		});
 		speed = 960;
 		setSpeed(speed);
 		ths.setState = setState;
@@ -291,7 +295,7 @@ function MainBoard() {
 		// console.log(ths.holdShape);
 		ths.lines = JSON.parse(JSON.stringify(lines));
 		ths.level = JSON.parse(JSON.stringify(level));
-		
+
 		ths.lineStack = [0, 0, 0, 0];
 		async function createNewPiece(hldr: boolean = true) {
 			let line = 0;
@@ -377,21 +381,22 @@ function MainBoard() {
 						);
 					}
 				});
-				if(ths.garbageLines[0]>3){
-					for (let i=0;i<ths.garbageLines[0];i++){
-						ths.board.shift()
+				if (ths.garbageLines[0] > 3) {
+					for (let i = 0; i < ths.garbageLines[0]; i++) {
+						ths.board.shift();
 						ths.board.push(
-							Array.from({ length: 10 }, (_,j:any) => ({
-								occupied:j!==ths.garbageLines[1]?true:false,
+							Array.from({ length: 10 }, (_, j: any) => ({
+								occupied:
+									j !== ths.garbageLines[1] ? true : false,
 								color: 1,
 							}))
-						)
+						);
 					}
-					ths.garbageLines=[0, Math.floor(Math.random() * 10)]
+					ths.garbageLines = [0, Math.floor(Math.random() * 10)];
 					setGarbageLines({
 						type: "set",
-						value: ths.garbageLines ,
-					})
+						value: ths.garbageLines,
+					});
 				}
 				setBoard(ths.board);
 				ths.lineDissapear = [];
@@ -400,7 +405,6 @@ function MainBoard() {
 				setMoveDown(Array(20).fill(0));
 				speed = form(ths.level);
 				setSpeed(speed);
-				
 			}
 
 			for (let i = 0; i < 4; i++) {
@@ -421,9 +425,11 @@ function MainBoard() {
 					if (ths.page == "single") {
 						ths.state = "game over";
 						ths.setState("game over");
-					}
-					else if(ths.page == "multi"){
-						socket.emit("gameOver",{room:user.room,name:user.name})
+					} else if (ths.page == "multi") {
+						socket.emit("gameOver", {
+							room: user.room,
+							name: user.name,
+						});
 						setMessage({
 							active: true,
 							heading: "Defeat",
@@ -431,7 +437,6 @@ function MainBoard() {
 						});
 						ths.setState("pause");
 						ths.state = "game over";
-
 					}
 
 					return;
@@ -450,7 +455,6 @@ function MainBoard() {
 			setNextShape(ths.nextShape);
 
 			ths.npc = false;
-			
 		}
 		let move = false;
 		ths.time = 0;
@@ -813,8 +817,8 @@ function MainBoard() {
 						className="duration-[15ms] fadein shadow-xl"
 						style={{
 							transitionDuration: autoplay
-								? Math.min(autoplaySpeed / 4, 25) + "ms"
-								: "25ms",
+								? autoplaySpeed / 4 + "ms"
+								: Math.min(25,speed)+"ms",
 						}}
 						x={5 + pos[1] * 105}
 						y={20 + pos[0] * 105}
