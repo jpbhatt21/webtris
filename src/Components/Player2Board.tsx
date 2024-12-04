@@ -7,7 +7,7 @@ import {
 import Rect from "./Rect";
 import { useEffect, useState } from "react";
 import {  socket } from "../constants";
-
+let animTimeout:any=null
 function Player2Board() {
 	const [board, setBoard] = useState(
 		Array.from({ length: 20 }, (_) =>
@@ -39,6 +39,7 @@ function Player2Board() {
 		socket.on("roomCom", (data: any) => {
 			// console.log(data);
 			if(data.nextShape && data.sender!== user.sid){
+				if(animTimeout)clearTimeout(animTimeout)
 				// console.log(data.currentShape)
 				setBoard(data.board)
 				setActive(data.active)
@@ -47,7 +48,7 @@ function Player2Board() {
 				setMoveDown(data.moveDown)
 				setSpeed(data.speed)
 				if(data.lineDissapear.length>0){
-					setTimeout(()=>{setLineDissapear([])},parseInt(data.speed)/2)
+					animTimeout=setTimeout(()=>{setLineDissapear([])},parseInt(data.speed)/2+100)
 				}
 			}
 			})
