@@ -69,9 +69,9 @@ function Player2Board() {
 			});
 			// console.log("opponentDisconnected");
 		});
+		
 		socket.on("roomComm", (data: any) => {
 			// console.log(data);
-			if (data.nextShape && data.sender !== localUser.sid) {
 				if (animTimeout) clearTimeout(animTimeout);
 				if (data.lines !== prevLines) {
 					addGarbageLines({
@@ -90,13 +90,14 @@ function Player2Board() {
 				clearTimeout(updaterTimeout);
 				updaterTimeout = setTimeout(() => {
 					setUpdater(true);
+					// socket.emit("getData", { room: localUser.room });
 				}, 2000);
 				if (data.lineDissapear.length > 0) {
 					animTimeout = setTimeout(() => {
 						setLineDissapear([]);
 					}, parseInt(data.speed) / 2 + 100);
 				}
-			}
+			
 			
 		});
 	}, []);

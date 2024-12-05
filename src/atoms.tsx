@@ -1,5 +1,12 @@
 import { atom, createStore } from "jotai";
-import { activePos, initScale, initSettings, socket, themeKeys, themes } from "./constants";
+import {
+	activePos,
+	initScale,
+	initSettings,
+	socket,
+	themeKeys,
+	themes,
+} from "./constants";
 let act: number = window.localStorage.getItem("colorScheme")
 	? parseInt(window.localStorage.getItem("colorScheme") as string)
 	: 0;
@@ -19,6 +26,11 @@ const state = atom("play");
 export const stateAtom = atom(
 	(get) => get(state),
 	(_get, set, update: string) => {
+		const intervalId = _get(multiplayerInterval);
+		if (update == "game over" && intervalId) {
+			clearInterval(intervalId);
+			set(multiplayerInterval, null);
+		}
 		set(state, update);
 	}
 );
@@ -68,7 +80,7 @@ export const getAutoplayStateAtom = atom(null, (_get) => {
 		_get(state),
 		_get(autoplaySpeed),
 		_get(settings),
-		_get(page)
+		_get(page),
 	];
 	return temp;
 });
@@ -185,13 +197,20 @@ export const intervalAtom = atom(
 		set(interval, update);
 	}
 );
+const multiplayerInterval = atom<number | null>(null);
+export const multiplayerIntervalAtom = atom(
+	(get) => get(multiplayerInterval),
+	(_get, set, update: any) => {
+		set(multiplayerInterval, update);
+	}
+);
 export const resetAtom = atom(null, (_get, set) => {
 	const intervalId = _get(interval);
 	if (intervalId !== null) {
 		clearInterval(intervalId);
-        set(interval, null);
+		set(interval, null);
 	}
-    set(state, "play");
+	set(state, "play");
 	set(gameOver, false);
 	set(
 		board,
@@ -203,7 +222,7 @@ export const resetAtom = atom(null, (_get, set) => {
 		)
 	);
 	// set(autoplay, false);
-    set(lineStack, [0,0,0,0]);
+	set(lineStack, [0, 0, 0, 0]);
 	set(holdShape, 7);
 	set(currentShape, 7);
 	set(nextShape, 7);
@@ -223,29 +242,30 @@ export const resetAtom = atom(null, (_get, set) => {
 		[0, 0],
 	]);
 	set(autoplaySpeed, 100);
-	let tempUser = _get(user);	
-	if(tempUser.room!==""){
-		setInterval(() => {
-			// console.log("sending")
-			if(_get(lineDissapear).length==0)
-			socket.emit("roomCom", {
-				room: tempUser.room,
-				board: _get(board),
-				active: _get(activePiece),
-				currentShape: _get(currentShape),
-				nextShape: _get(nextShape),
-				holdShape: _get(holdShape),
-				score: _get(score),
-				lines: _get(lines),
-				level: _get(level),
-				lineDissapear: _get(lineDissapear),
-				moveDown: _get(moveDown),
-				speed: _get(speed),
-				
-			});
-		}, 100);
+	let tempUser = _get(user);
+	if (tempUser.room !== "") {
+		set(
+			multiplayerInterval,
+			setInterval(() => {
+				// console.log("sending")
+				if (_get(lineDissapear).length == 0)
+					socket.emit("roomCom", {
+						room: tempUser.room,
+						board: _get(board),
+						active: _get(activePiece),
+						currentShape: _get(currentShape),
+						nextShape: _get(nextShape),
+						holdShape: _get(holdShape),
+						score: _get(score),
+						lines: _get(lines),
+						level: _get(level),
+						lineDissapear: _get(lineDissapear),
+						moveDown: _get(moveDown),
+						speed: _get(speed),
+					});
+			}, 100)
+		);
 	}
-
 });
 const speed = atom(960);
 export const speedAtom = atom(
@@ -271,8 +291,7 @@ export const settingsAtom = atom(
 		let prev: any = [];
 		let clash: any = [];
 		for (let i = 0; i < values.length; i++) {
-			if(i==1)
-				continue;
+			if (i == 1) continue;
 			let value = values[i];
 			if (prev.includes(value)) {
 				clash.push(value);
@@ -300,30 +319,34 @@ export const moveDownAtom = atom(
 		set(moveDown, update);
 	}
 );
-let temp=[0,1,2,3,4,5,6]
-const bag = atom("0000000".split("").map((_)=>{
-	let random = temp[Math.floor(Math.random() * temp.length)];
-	temp = temp.filter((v) => v !== random);
-	return random;
-}));
+let temp = [0, 1, 2, 3, 4, 5, 6];
+const bag = atom(
+	"0000000".split("").map((_) => {
+		let random = temp[Math.floor(Math.random() * temp.length)];
+		temp = temp.filter((v) => v !== random);
+		return random;
+	})
+);
 export const bagAtom = atom(
 	(get) => get(bag),
 	(_get, set, update: any) => {
 		set(bag, update);
 	}
 );
-const message:any=atom({active:false,heading:"",body:""});
+const message: any = atom({ active: false, heading: "", body: "" });
 export const messageAtom = atom(
 	(get) => get(message),
-	(_get, set, update:any) => {
+	(_get, set, update: any) => {
 		set(message, update);
 	}
 );
-const nextBag = atom("0000000".split("").map((_)=>{
-	let random = temp[Math.floor(Math.random() * temp.length)];
-	temp = temp.filter((v) => v !== random);
-	return random;
-}));
+const nextBag = atom(
+	"0000000".split("").map((_) => {
+		let random = temp[Math.floor(Math.random() * temp.length)];
+		temp = temp.filter((v) => v !== random);
+		return random;
+	})
+);
 export const nextBagAtom = atom(
 	(get) => get(nextBag),
 	(_get, set, update: any) => {
@@ -333,23 +356,22 @@ export const nextBagAtom = atom(
 export const bagRandAtom = atom(null, (_get, set) => {
 	let tempBag = _get(bag);
 	let random = tempBag.shift();
-	if(tempBag.length==0){
-		temp=[0,1,2,3,4,5,6];
-		tempBag= "0000000".split("").map((_)=>{
+	if (tempBag.length == 0) {
+		temp = [0, 1, 2, 3, 4, 5, 6];
+		tempBag = "0000000".split("").map((_) => {
 			let random = temp[Math.floor(Math.random() * temp.length)];
 			temp = temp.filter((v) => v !== random);
 			return random;
 		});
-		if(_get(user).room!==""){
+		if (_get(user).room !== "") {
 			tempBag = _get(nextBag);
-			socket.emit("getBag",{
+			socket.emit("getBag", {
 				room: _get(user).room,
 				name: _get(user).name,
-				
-			})
+			});
 		}
 	}
-	
+
 	set(bag, tempBag);
 	return random;
 });
@@ -362,37 +384,34 @@ export const rotateAtom = atom(
 );
 const time = atom(0);
 export const timeAtom = atom(
-    (get) => get(time),
-    (_get, set, update: number) => {
-        set(time, update);
-    }
+	(get) => get(time),
+	(_get, set, update: number) => {
+		set(time, update);
+	}
 );
 
-const lineStack = atom([0,0,0,0]);
+const lineStack = atom([0, 0, 0, 0]);
 export const lineStackAtom = atom(
-    (get) => get(lineStack),
-    (_get, set, update: any) => {
-        set(lineStack, update);
-    }
-);  
+	(get) => get(lineStack),
+	(_get, set, update: any) => {
+		set(lineStack, update);
+	}
+);
 export const initAtom = atom(null, (_get, set) => {
-	
 	let tempBag = [0, 1, 2, 3, 4, 5, 6];
-	set(garbageLines, [0,parseInt((Math.random()*10).toString())]);
-	let tempCurSh:any = tempBag[Math.floor(Math.random() * tempBag.length)];
+	set(garbageLines, [0, parseInt((Math.random() * 10).toString())]);
+	let tempCurSh: any = tempBag[Math.floor(Math.random() * tempBag.length)];
 	tempBag = tempBag.filter((v) => v !== tempCurSh);
-	let tempNxtSh:any = tempBag[Math.floor(Math.random() * tempBag.length)];
+	let tempNxtSh: any = tempBag[Math.floor(Math.random() * tempBag.length)];
 	tempBag = tempBag.filter((v) => v !== tempNxtSh);
 
-	if(_get(user).room!==""){
+	if (_get(user).room !== "") {
 		tempBag = _get(bag);
 		tempCurSh = tempBag.shift();
 		tempNxtSh = tempBag.shift();
 		set(bag, tempBag);
-	}
-	else
-	set(bag, tempBag);
-	
+	} else set(bag, tempBag);
+
 	set(currentShape, tempCurSh);
 	set(nextShape, tempNxtSh);
 	let tempHoldSh = 7;
@@ -406,21 +425,29 @@ export const initAtom = atom(null, (_get, set) => {
 	return [tempCurSh, tempNxtSh, tempHoldSh];
 });
 
-const garbageLines=atom([0,parseInt((Math.random()*10).toString())]); // [0,5] means 0 lines of garbage and hole at column index 5
-export const garbageLinesAtom=atom(
-	(get)=>get(garbageLines),
-	(_get,set,update:any)=>{
-		if(update.type=="add")
-			set(garbageLines,[_get(garbageLines)[0]+update.lines,_get(garbageLines)[1]]);
-		else
-			set(garbageLines,update.value);
+const garbageLines = atom([0, parseInt((Math.random() * 10).toString())]); // [0,5] means 0 lines of garbage and hole at column index 5
+export const garbageLinesAtom = atom(
+	(get) => get(garbageLines),
+	(_get, set, update: any) => {
+		if (update.type == "add")
+			set(garbageLines, [
+				_get(garbageLines)[0] + update.lines,
+				_get(garbageLines)[1],
+			]);
+		else set(garbageLines, update.value);
 	}
 );
 
-const user = atom({ name: "Guest", sid: "0", count :"-",room:"",opponent:"" });
+const user = atom({
+	name: "Guest",
+	sid: "0",
+	count: "-",
+	room: "",
+	opponent: "",
+});
 export const userAtom = atom(
 	(get) => get(user),
 	(_get, set, update: any) => {
-		set(user, {..._get(user), ...update});
+		set(user, { ..._get(user), ...update });
 	}
 );
