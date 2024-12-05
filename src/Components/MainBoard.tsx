@@ -16,7 +16,6 @@ import {
 	lineDissapearAtom,
 	linesAtom,
 	lineStackAtom,
-	messageAtom,
 	moveDownAtom,
 	nextShapeAtom,
 	pageAtom,
