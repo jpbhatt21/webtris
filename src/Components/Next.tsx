@@ -1,11 +1,12 @@
 import { useAtom } from "jotai";
-import { nextShapeAtom, themeAtom } from "../atoms";
+import { nextShapeAtom, themeAtom, timerAtom } from "../atoms";
 import { shapeGrid } from "../constants";
 import Rect from "./Rect";
 
 function Next() {
     const [theme] = useAtom(themeAtom);
     const [nextShape] = useAtom(nextShapeAtom);
+	const [timer]=useAtom(timerAtom);
  	return (
 		<>
 			<div
@@ -13,7 +14,7 @@ function Next() {
 				style={{
 					borderColor: theme.text,
 				}}>
-				<div className="w-full flex flex-col h-2/3 items-center fadein justify-center" key={"next"+nextShape}>
+				{timer==0?<div className="w-full flex flex-col h-2/3 items-center fadein justify-center" key={"next"+nextShape}>
 					{shapeGrid[nextShape].split(" ").map((row,i) => {
 						return (
 							<div className="w-full h-[4vmin] flex justify-center " key={"nextblock"+i}>
@@ -44,7 +45,7 @@ function Next() {
 							</div>
 						);
 					})}
-				</div>
+				</div>:<div className="w-full flex flex-col h-2/3 items-center fadein justify-center"/>}
 				<label className=" text-[1.5vmin]">Next</label>
 			</div>
 		</>

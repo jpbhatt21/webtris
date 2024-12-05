@@ -6,6 +6,7 @@ import {
 	pageAtom,
 	stateAtom,
 	themeAtom,
+	timerAtom,
 	userAtom,
 } from "../atoms";
 import Rect from "./Rect";
@@ -41,6 +42,7 @@ function Player2Board() {
 	const [page] = useAtom(pageAtom);
 	const setMessage = useAtom(messageAtom)[1];
 	const [user] = useAtom(userAtom);
+	const [timer]=useAtom(timerAtom);
 	useEffect(() => {
 		prevLines = 0;
 	}, [user]);
@@ -103,16 +105,16 @@ function Player2Board() {
 
 	return (
 		<>
-			{page == "multi" && (
+			{page == "multi"&& (
 				<>
-					<label className=" absolute top-[-3vmin]">
+					<label className=" fadein ml-[26%] top-[-3vmin]">
 						{user.opponent}
 					</label>{" "}
 					<svg
 						id="mainboard2"
 						xmlns="http://www.w3.org/2000/svg"
-						className=" w-full absolute h-full tms duration-200  mb-0 "
-						viewBox="0 0 2110 2215"
+						className=" w-full  fadein h-full tms duration-200  mb-0 "
+						viewBox="0 0 1670 2215"
 						fill="none">
 						<rect
 							x="515"
@@ -161,7 +163,7 @@ function Player2Board() {
 									)
 							)
 						)}
-						{lineDissapear.length == 0 &&
+						{lineDissapear.length == 0 &&timer==0 &&
 							active.map((pos: any, ind: any) => (
 								<Rect
 									className="duration-[25ms] fadein shadow-xl"
@@ -181,7 +183,7 @@ function Player2Board() {
 							fill={theme.background+(updater?"aa":"00")}
 						/>
 					</svg>
-					<div className="duration-300"
+					<div className="duration-300 absolute ml-[26%]"
 					style={{
 						opacity: updater ? 1 : 0,
 					}}

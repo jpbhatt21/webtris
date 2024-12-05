@@ -25,6 +25,7 @@ import {
 	stateAtom,
 	themeAtom,
 	timeAtom,
+	timerAtom,
 	userAtom,
 } from "../atoms";
 import { useEffect } from "react";
@@ -258,6 +259,7 @@ function MainBoard() {
 	const setSpeed = useAtom(speedAtom)[1];
 	const setMessage = useAtom(messageAtom)[1];
 	const [user] = useAtom(userAtom);
+	const [timer] = useAtom(timerAtom);
 	useEffect(() => {
 		if (user.name == "Guest") {
 			lineBar = 10;
@@ -751,6 +753,7 @@ function MainBoard() {
 				xmlns="http://www.w3.org/2000/svg"
 				className=" w-full absolute h-full tms duration-200  mb-0 "
 				viewBox="0 0 2110 2215"
+				
 				fill="none">
 				<rect
 					x="515"
@@ -758,6 +761,7 @@ function MainBoard() {
 					rx={7}
 					height="2125"
 					width="1075"
+					fill={theme.background}
 					stroke={theme.text}
 				/>
 				{board.map((row, i) =>
@@ -793,7 +797,7 @@ function MainBoard() {
 							)
 					)
 				)}
-				{!autoplay &&
+				{timer==0 &&!autoplay &&
 					ghost.map((pos: any, ind: any) => (
 						<Rect
 							className="duration-[15ms] fadein brightness-75 "
@@ -812,7 +816,7 @@ function MainBoard() {
 							key={"ghos" + ind + "" + currentShape}
 						/>
 					))}
-				{active.map((pos: any, ind: any) => (
+				{timer==0 &&active.map((pos: any, ind: any) => (
 					<Rect
 						className="duration-[15ms] fadein shadow-xl"
 						style={{
@@ -824,7 +828,7 @@ function MainBoard() {
 						y={20 + pos[0] * 105}
 						fill={theme.accents[currentShape]}
 						key={"active" + ind + "" + currentShape}
-					/>
+					/> 
 				))}
 			</svg>
 		</>

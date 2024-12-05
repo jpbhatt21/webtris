@@ -7,6 +7,7 @@ import {
 	scaleAtom,
 	stateAtom,
 	themeAtom,
+	timerAtom,
 	userAtom,
 } from "./atoms";
 import StartScreen from "./Components/Start";
@@ -16,7 +17,7 @@ import PauseScreen from "./Pause";
 import OnlineSearch from "./OnlineSearch";
 import Multi from "./Multi";
 import Player2Board from "./Components/Player2Board";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { socket } from "./constants";
 
 function App() {
@@ -32,6 +33,26 @@ function App() {
 		{ active: boolean; heading: string; body: string },
 		any
 	];
+	const [timerKey,setTimerKey] = useState(0);
+	const [timer, setTimer] = useAtom(timerAtom);
+	const [darken,setDarken] = useState(false);
+	useEffect(() => {
+		if(user.room!==""){
+			setDarken(true);
+			setTimeout(() => {
+				setDarken(false);
+			}, 1000);
+		}
+	}, [user.room]);
+	useEffect(() => {
+		if(timer!==0){
+			if(timer==3)
+				setTimerKey(timerKey+1);
+			setTimeout(() => {
+				setTimer(timer - 1);
+			}, timer==3?1100:1000);
+		}
+	}, [timer]);
 	// console.log(user)
 	return (
 		<>
@@ -45,7 +66,7 @@ function App() {
 					style={{
 						opacity: user.name !== "Guest" ? 1 : 0,
 					}}
-					className=" fixed left-0 duration-300 self-start mt-[1vmin] ml-[2vmin] text-[1.5vmin]">
+					className=" fixed left-0 duration-300 self-start mt-[1vmin] ml-[2vmin] ">
 					{user.name}
 				</div>
 				<div
@@ -53,16 +74,31 @@ function App() {
 						opacity:
 							user.name !== "Guest" && user.room == "" ? 1 : 0,
 					}}
-					className="fixed right-0 self-start duration-300 mt-[1vmin] mr-[2vmin] text-[1.5vmin]">
+					className="fixed right-0 self-start duration-300 mt-[1vmin] mr-[2vmin] ">
 					{user.count + " player(s) online"}
 				</div>
+				{(
+					<div
+						className=" aspect-[43/60] fixed  bottom-0 right-0   h-[60vmin] flex flex-col items-center  justify-center  duration-500"
+						style={{
+							opacity: page == "multi" || state == "play" ? 1 : 0,
+							height:	page == "multi"? 60*scale2+"vmin" : "0",
+									
+							pointerEvents: "none",
+						}}
+						>
+							
+						<Player2Board />
+					</div>
+				)}
 				<div
 					className="fixed lexend gap-[2vmin] duration-300 w-full h-full flex items-center justify-center"
 					style={{
 						transform:
 							page == "single" || page == "multi"
 								? "scale(" + scale + ")"
-								: "scale(1)",
+								: "scale(1) ",
+								
 					}}
 					onWheel={(e) => {
 						if (
@@ -82,25 +118,22 @@ function App() {
 
 				{(
 					<div
-						className="w-[47vmin] fixed right-[15vmin] bottom-0  ml-[-23.7vmin] mr-[-23.7vmin] h-[50vmin] mt-[3.6vmin] duration-500 flex items-center justify-center"
+						className=" aspect-[43/60] fixed  bottom-0 right-0   h-[60vmin] flex flex-col items-center  justify-center  duration-500"
 						style={{
 							opacity: page == "multi" || state == "play" ? 1 : 0,
-							transform:
-								page == "multi"
-									? "scale(" + scale2 + ")"
-									: "scale(1)",
+							height:	page == "multi"? 60*scale2+"vmin" : "0",
+									
+							pointerEvents: state == "play" && page=="multi" ? "all" : "none",
 						}}
 						onWheel={(e) => {
 							if (page == "multi" && state == "play") {
 								if (e.deltaY > 0) {
 									if (scale2 > 0.5) setScale2(scale2 - 0.1);
 								} else {
-									if (scale2 < 1.0) setScale2(scale2 + 0.1);
+									if (scale2 < 1.6) setScale2(scale2 + 0.1);
 								}
 							}
 						}}>
-							
-						<Player2Board />
 					</div>
 				)}
 
@@ -150,6 +183,29 @@ function App() {
 					<StartScreen />
 					<SettingsScreen />
 					{<OnlineSearch />}
+				</div>
+				<div
+						className="fixed  pointer-events-none duration-500 w-full h-full  "
+						style={{
+							opacity: darken ? 1 : 0,
+							color: theme.text,
+							backgroundColor: theme.background,
+						}}
+					/>
+				<div key={timerKey} style={{
+						opacity:timer==0?0:1,
+						animation:timer==0?"":"fadein 0.75s",
+						backgroundColor: theme.background+"99",
+					}} className="w-full pointer-events-none  text-[8vmin] duration-1000 prt fixed h-full bg-black flex items-center justify-center gap-[5vmin] bg-opacity-50">
+					<div className="fadeupleft opacity-0 w-1/2 text-end">{user.name}</div>
+					<div className="fadeup opacity-0 text-[6vmin] mt-[2vmin]">VS</div>
+					<div className="fadeupright w-1/2  opacity-0">{user.opponent}</div>
+					<div className="absolute text-[5vmin] mt-[25vmin] fadein duration-1000 "
+					style={{
+						opacity:timer==0?0:1,
+						animationDuration:"2s"
+					}}
+					>{timer}</div>
 				</div>
 			</div>
 		</>

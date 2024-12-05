@@ -133,3 +133,57 @@ button:focus {
 		opacity: 0;
 	}
 }
+.fadeup{
+	animation: fadeup 4s;
+}
+.fadeupleft{
+	animation: fadeupleft 4s;
+}
+.fadeupright{
+	animation: fadeupright 4s;
+}
+@keyframes fadeup {
+	0%,10% {
+		transform: translateY(5vmin);
+		opacity: 0;
+		
+	}
+	40%,80% {
+		transform: translateY(0px);
+		opacity: 100%;
+	}
+	100% {
+		transform: translateY(0vmin) scale(1.5);
+		opacity: 0;
+	}
+}
+@keyframes fadeupleft {
+	0% {
+		transform: translateY(5vmin);
+		opacity: 0;
+		
+	}
+	30%,80% {
+		transform: translateY(0px);
+		opacity: 100%;
+	}
+	100% {
+		transform: translateX(-15vw) scale(1.5);
+		opacity: 0;
+	}
+}
+@keyframes fadeupright {
+	0%,20% {
+		transform: translateY(5vmin);
+		opacity: 0;
+		
+	}
+	50%,80% {
+		transform: translateY(0px);
+		opacity: 100%;
+	}
+	100% {
+		transform: translateX(15vw) scale(1.5);
+		opacity: 0;
+	}
+}

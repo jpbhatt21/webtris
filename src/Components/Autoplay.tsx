@@ -12,7 +12,7 @@ function Autoplay() {
 	const [autoplay, setAutoplay] = useAtom(autoplayAtom);
 	const [page] = useAtom(pageAtom);
 	const [autoplaySpeed, setAutoplaySpeed] = useAtom(autoplaySpeedAtom);
-	const [weights] = useAtom(weightsAtom);
+	const [weights,setWeights] = useAtom(weightsAtom);
 	return (
 		<>
 			<div
@@ -83,9 +83,11 @@ function Autoplay() {
 							className="bg-black w-[4vmin] bg-opacity-0 text-center "
 							defaultValue={weights.weightedBlocks}
 							onChange={(e) => {
+								if(!isNaN(parseFloat(e.target.value)))
 								weights.weightedBlocks = parseFloat(
 									e.target.value
 								);
+								setWeights(weights);
 							}}
 						/>
 					</div>
@@ -97,9 +99,12 @@ function Autoplay() {
 							className="bg-black w-[4vmin] bg-opacity-0 text-center "
 							defaultValue={weights.connectedHoles}
 							onChange={(e) => {
+								if(!isNaN(parseFloat(e.target.value)))
 								weights.connectedHoles = parseFloat(
 									e.target.value
 								);
+								setWeights(weights);
+
 							}}
 						/>
 					</div>
@@ -114,7 +119,10 @@ function Autoplay() {
 							className="bg-black w-[4vmin] bg-opacity-0 text-center "
 							defaultValue={weights.roughness}
 							onChange={(e) => {
+								if(!isNaN(parseFloat(e.target.value)))
 								weights.roughness = parseFloat(e.target.value);
+								setWeights(weights);
+								
 							}}
 						/>
 					</div>
@@ -126,9 +134,12 @@ function Autoplay() {
 							className="bg-black w-[4vmin] bg-opacity-0 text-center "
 							defaultValue={weights.pitholePercentage}
 							onChange={(e) => {
+								if(!isNaN(parseFloat(e.target.value)))
 								weights.pitholePercentage = parseFloat(
 									e.target.value
 								);
+								setWeights(weights);
+
 							}}
 						/>
 					</div>
@@ -143,9 +154,13 @@ function Autoplay() {
 							className="bg-black w-[4vmin] bg-opacity-0 text-center "
 							defaultValue={weights.clearAbleLines}
 							onChange={(e) => {
+								if(!isNaN(parseFloat(e.target.value)))
 								weights.clearAbleLines = parseFloat(
 									e.target.value
 								);
+								setWeights(weights);
+
+								
 							}}
 						/>
 					</div>
@@ -157,9 +172,12 @@ function Autoplay() {
 							className="bg-black w-[4vmin] bg-opacity-0 text-center "
 							defaultValue={weights.deepestHole}
 							onChange={(e) => {
+								if(!isNaN(parseFloat(e.target.value)))
 								weights.deepestHole = parseFloat(
 									e.target.value
 								);
+								setWeights(weights);
+
 							}}
 						/>
 					</div>
@@ -174,7 +192,10 @@ function Autoplay() {
 							className="bg-black w-[4vmin] bg-opacity-0 text-center "
 							defaultValue={weights.blocks}
 							onChange={(e) => {
+								if(!isNaN(parseFloat(e.target.value)))
 								weights.blocks = parseFloat(e.target.value);
+								setWeights(weights);
+
 							}}
 						/>
 					</div>
@@ -186,7 +207,10 @@ function Autoplay() {
 							className="bg-black w-[4vmin] bg-opacity-0 text-center "
 							defaultValue={weights.colHoles}
 							onChange={(e) => {
+								if(!isNaN(parseFloat(e.target.value)))
 								weights.colHoles = parseFloat(e.target.value);
+								setWeights(weights);
+
 							}}
 						/>
 					</div>

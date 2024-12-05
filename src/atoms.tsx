@@ -7,6 +7,7 @@ import {
 	themeKeys,
 	themes,
 } from "./constants";
+import { setWeights } from "./Functionality/helper";
 let act: number = window.localStorage.getItem("colorScheme")
 	? parseInt(window.localStorage.getItem("colorScheme") as string)
 	: 0;
@@ -185,8 +186,16 @@ export const weight = atom(
 export const weightsAtom = atom(
 	(get) => get(weight),
 	(_get, set, update: any) => {
+		setWeights(update);
 		set(weight, update);
 		window.localStorage.setItem("weights", JSON.stringify(update));
+	}
+);
+const timer = atom(0);
+export const timerAtom = atom(
+	(get) => get(timer),
+	(_get, set, update: number) => {
+		set(timer, update);
 	}
 );
 export const store = createStore();
@@ -204,12 +213,13 @@ export const multiplayerIntervalAtom = atom(
 		set(multiplayerInterval, update);
 	}
 );
-export const resetAtom = atom(null, (_get, set) => {
+export const resetAtom = atom(null, (_get, set,val=true) => {
 	const intervalId = _get(interval);
 	if (intervalId !== null) {
 		clearInterval(intervalId);
 		set(interval, null);
 	}
+	if(val)
 	set(state, "play");
 	set(gameOver, false);
 	set(
@@ -421,7 +431,12 @@ export const initAtom = atom(null, (_get, set) => {
 	}
 	set(holdShape, tempHoldSh);
 	set(activePiece, activePos[tempCurSh]);
-	set(ghostPiece, activePos[tempCurSh]);
+	let tempGhostPiece = JSON.parse(JSON.stringify(activePos[tempCurSh]));
+	while(tempGhostPiece.every((v:any)=>v[0]<19)){
+		tempGhostPiece = tempGhostPiece.map((v:any) => [v[0] + 1, v[1]]);
+	}
+
+	set(ghostPiece, tempGhostPiece);
 	return [tempCurSh, tempNxtSh, tempHoldSh];
 });
 

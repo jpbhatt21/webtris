@@ -8,6 +8,7 @@ import {
 	resetAtom,
 	stateAtom,
 	themeAtom,
+	timerAtom,
 	userAtom,
 } from "./atoms";
 import { socket, svg } from "./constants";
@@ -87,13 +88,14 @@ function OnlineSearch() {
 	const setBag = useAtom(bagAtom)[1];
 	const [user, setUser] = useAtom(userAtom);
 	const setNextBag = useAtom(nextBagAtom)[1];
-	const [timer, setTimer] = useState(0);
+	const [factTimer, setFactTimer] = useState(0);
+	const setTimer = useAtom(timerAtom)[1];
 	useEffect(() => {
 		if (state == "onlineSearch") {
 			if (inter) inter.map((x: any) => clearInterval(x));
 			inter = [
 				setInterval(() => {
-					setTimer((timer) => timer + 1);
+					setFactTimer((timer) => timer + 1);
 				}, 1000),
 				setInterval(() => {
 					setSelected(Math.floor(Math.random() * tetrisFacts.length));
@@ -123,14 +125,21 @@ function OnlineSearch() {
 						localUser.opponent = data.users[0];
 					}
 					setUser(localUser);
-					setAutoplay(false);
-					setBag(data.bag);
-					setNextBag(data.nextBag);
-					setPage("multi");
-					reset();
 					setTimeout(() => {
-						setState("play");
-					}, 300);
+						
+						setAutoplay(false);
+						setBag(data.bag);
+						setNextBag(data.nextBag);
+						setPage("multi");
+						reset(false);
+						setTimeout(()=>{
+							setTimer(3);
+						setTimeout(() => {
+
+							setState("play");
+						}, 4000);
+						},500)
+					}, 500);
 					// if(data.users[0]==localUser.name){
 					//     socket.emit("roomCom",data)
 					// }
@@ -138,9 +147,9 @@ function OnlineSearch() {
 			}
 		} else {
 			clearInterval(inter);
-			setTimer(0);
+			setFactTimer(0);
 			// console.log(state);
-			if (localUser.room == "" && state =="play" ) {
+			if (localUser.room == "" && state == "play") {
 				setUser(localUser);
 				setTried(false);
 				socket.disconnect();
@@ -157,66 +166,18 @@ function OnlineSearch() {
 	return (
 		<>
 			{state == "onlineSearch" && (
-				<div
-					className="w-[60vmin] h-fit  flex flex-col  prt  duration-500 absolute items-center py-[2vmin]"
-					style={{
-						opacity: page != "multi" ? "1" : "0",
-						marginLeft:
-							state == "onlineSearch" ? "70vmin" : "20vmin",
-					}}>
-					{user.name !== "Guest" ? (
-						<>
-							<div className="text-[5vmin] fadein">
-								{"In Queue".split("").map((x, i) => (
-									<span
-										key={"settings" + i}
-										className="duration-100"
-										onMouseEnter={(e) => {
-											e.currentTarget.style.transitionDuration =
-												"0.25s";
-											e.currentTarget.style.color =
-												theme.accents[i % 7];
-										}}
-										onMouseLeave={(e) => {
-											e.currentTarget.style.transitionDuration =
-												"5s";
-											e.currentTarget.style.color = "";
-											setTimeout(() => {
-												e.currentTarget.style.transitionDuration =
-													"0.25s";
-											}, 7000);
-										}}>
-										{x}
-									</span>
-								))}
-							</div>
-							<div className="flex fadein flex-col items-center justify-between mt-[1.5vmin] h-[15vmin]">
-								<div className="flex flex-col w-full items-center justify-center gap-[1vmin]">
-									<div className=" min-h-fit min-w-fit ">
-										{svg.loader}
-									</div>
-									<div className=" mts text-[2vmin] roboto">
-										{(parseInt((timer / 60).toFixed(0)) < 10
-											? "0"
-											: "") +
-											(timer / 60).toFixed(0) +
-											":" +
-											(timer % 60 < 10 ? "0" : "") +
-											(timer % 60)}
-									</div>
-								</div>
-								<div
-									key={"sel" + selected}
-									className="fadeinout mts min-w-fit text-center w-full">
-									{tetrisFacts[selected]}
-								</div>
-							</div>
-						</>
-					) : (
-						tried && (
+				<>
+					<div
+						className="w-[60vmin] h-fit  flex flex-col  prt  duration-500 absolute items-center py-[2vmin]"
+						style={{
+							opacity: page != "multi" ? "1" : "0",
+							marginLeft:
+								state == "onlineSearch" ? "70vmin" : "20vmin",
+						}}>
+						{user.name !== "Guest" ? (
 							<>
-								<div className="text-[5vmin]">
-									{"Server is Full".split("").map((x, i) => (
+								<div className="text-[5vmin] fadein">
+									{"In Queue".split("").map((x, i) => (
 										<span
 											key={"settings" + i}
 											className="duration-100"
@@ -240,13 +201,73 @@ function OnlineSearch() {
 										</span>
 									))}
 								</div>
-								<div className="fadein mt-[2vmin] mts min-w-fit text-center w-full">
-									Please Try Again Later
+								<div className="flex fadein flex-col items-center justify-between mt-[1.5vmin] h-[15vmin]">
+									<div className="flex flex-col w-full items-center justify-center gap-[1vmin]">
+										<div className=" min-h-fit min-w-fit ">
+											{svg.loader}
+										</div>
+										<div className=" mts text-[2vmin] roboto">
+											{(parseInt(
+												(factTimer / 60).toFixed(0)
+											) < 10
+												? "0"
+												: "") +
+												(factTimer / 60).toFixed(0) +
+												":" +
+												(factTimer % 60 < 10
+													? "0"
+													: "") +
+												(factTimer % 60)}
+										</div>
+									</div>
+									<div
+										key={"sel" + selected}
+										className="fadeinout mts min-w-fit text-center w-full">
+										{tetrisFacts[selected]}
+									</div>
 								</div>
 							</>
-						)
-					)}
-				</div>
+						) : (
+							tried && (
+								<>
+									<div className="text-[5vmin]">
+										{"Server is Full"
+											.split("")
+											.map((x, i) => (
+												<span
+													key={"settings" + i}
+													className="duration-100"
+													onMouseEnter={(e) => {
+														e.currentTarget.style.transitionDuration =
+															"0.25s";
+														e.currentTarget.style.color =
+															theme.accents[
+																i % 7
+															];
+													}}
+													onMouseLeave={(e) => {
+														e.currentTarget.style.transitionDuration =
+															"5s";
+														e.currentTarget.style.color =
+															"";
+														setTimeout(() => {
+															e.currentTarget.style.transitionDuration =
+																"0.25s";
+														}, 7000);
+													}}>
+													{x}
+												</span>
+											))}
+									</div>
+									<div className="fadein mt-[2vmin] mts min-w-fit text-center w-full">
+										Please Try Again Later
+									</div>
+								</>
+							)
+						)}
+					</div>
+					
+				</>
 			)}
 		</>
 	);

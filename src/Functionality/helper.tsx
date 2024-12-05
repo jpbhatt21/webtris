@@ -712,19 +712,22 @@ export function rotPiece(
 	}
 	return [backupAct, backupRot];
 }
+let weights = {
+	weightedBlocks: 0.25, //weighted sum of blocks, where a block's weight is the row it's on
+	connectedHoles: 0.09, //number of vertically connected holes
+	roughness: -0.63, //sum of height differences between adjacent columns
+	pitholePercentage: 0.2, //number of pits divided by total pits and holes
+	clearAbleLines: 0.41, //number of lines that can be cleared by an I piece
+	deepestHole: 0.22, //depth of the deepest hole
+	blocks: -0.36, //number of blocks
+	colHoles: -1.38, //number of columns containing holes
+};
+export function setWeights(newWeights: any): void {
+	weights = newWeights;
+}
 export function analyze(board: any): number {
-	const weights = {
-		weightedBlocks: 0.25, //weighted sum of blocks, where a block's weight is the row it's on
-		connectedHoles: 0.09, //number of vertically connected holes
-		roughness: -0.63, //sum of height differences between adjacent columns
-		pitholePercentage: 0.2, //number of pits divided by total pits and holes
-		clearAbleLines: 0.41, //number of lines that can be cleared by an I piece
-		deepestHole: 0.22, //depth of the deepest hole
-		blocks: -0.36, //number of blocks
-		colHoles: -1.38, //number of columns containing holes
-	};
-	// if(timecache[JSON.stringify(board)]!==undefined){
-	//     return timecache[JSON.stringify(board)]}
+	
+
 
 	let weightedBlocks = 0;
 	let connectedHoles = 0;
