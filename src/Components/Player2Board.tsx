@@ -14,7 +14,7 @@ import { socket, svg } from "../constants";
 let animTimeout: any = null;
 let updaterTimeout: any = null;
 let prevLines = 0;
-let localUser = { name: "Guest", sid: "-1", count: "-", room: "", opponent: "" };
+// let localUser = { name: "Guest", sid: "-1", count: "-", room: "", opponent: "" };
 function Player2Board() {
 	const [board, setBoard] = useState(
 		Array.from({ length: 20 }, (_) =>
@@ -42,7 +42,6 @@ function Player2Board() {
 	const setMessage = useAtom(messageAtom)[1];
 	const [user] = useAtom(userAtom);
 	useEffect(() => {
-		localUser=JSON.parse(JSON.stringify(user));
 		prevLines = 0;
 	}, [user]);
 	const addGarbageLines = useAtom(garbageLinesAtom)[1];
