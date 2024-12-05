@@ -821,13 +821,13 @@ function MainBoard() {
 						className="duration-[15ms] fadein shadow-xl"
 						style={{
 							transitionDuration: autoplay
-								? autoplaySpeed / 4 + "ms"
+								? Math.min(autoplaySpeed / 4,speed) + "ms"
 								: Math.min(25,speed)+"ms",
 						}}
 						x={5 + pos[1] * 105}
 						y={20 + pos[0] * 105}
 						fill={theme.accents[currentShape]}
-						key={"active" + ind + "" + currentShape}
+						key={"active" + ind + "" + currentShape+""+score}
 					/> 
 				))}
 			</svg>

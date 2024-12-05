@@ -55,7 +55,7 @@ function SpeedLvAndLine() {
 				<div className="w-fit h-fit flex flex-col items-center justify-center">
 					<div>{lines}</div>
 					<div className="w-full h-[1px] bg-white"></div>
-					<div>{(level + 1) * lineBar}</div>
+					<div>{parseInt((lines/10 + 1).toString()) * lineBar}</div>
 				</div>
 			</div>
 		</>
