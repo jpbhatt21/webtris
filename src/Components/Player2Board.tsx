@@ -58,7 +58,7 @@ function Player2Board() {
 				heading: "Victory",
 				body: "You Won!",
 			});
-			console.log("opponentDisconnected");
+			// console.log("opponentDisconnected");
 		});
 		socket.on("opponentDisconnected", () => {
 			setState("game over");
@@ -67,13 +67,12 @@ function Player2Board() {
 				heading: "Victory",
 				body: "Opponent Surrendered",
 			});
-			console.log("opponentDisconnected");
+			// console.log("opponentDisconnected");
 		});
 		socket.on("roomComm", (data: any) => {
 			// console.log(data);
 			if (data.nextShape && data.sender !== localUser.sid) {
 				if (animTimeout) clearTimeout(animTimeout);
-				// console.log(data.currentShape)
 				if (data.lines !== prevLines) {
 					addGarbageLines({
 						type: "add",
@@ -98,6 +97,7 @@ function Player2Board() {
 					}, parseInt(data.speed) / 2 + 100);
 				}
 			}
+			
 		});
 	}, []);
 

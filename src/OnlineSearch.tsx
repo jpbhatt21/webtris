@@ -139,7 +139,7 @@ function OnlineSearch() {
 		} else {
 			clearInterval(inter);
 			setTimer(0);
-			console.log(state);
+			// console.log(state);
 			if (localUser.room == "" && state =="play" ) {
 				setUser(localUser);
 				setTried(false);

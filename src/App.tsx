@@ -32,7 +32,7 @@ function App() {
 		{ active: boolean; heading: string; body: string },
 		any
 	];
-	console.log(user)
+	// console.log(user)
 	return (
 		<>
 			<div
