@@ -257,7 +257,6 @@ function MainBoard() {
 	const [lineDissapear, setLineDissapear] = useAtom(lineDissapearAtom);
 	const [moveDown, setMoveDown] = useAtom(moveDownAtom);
 	const setSpeed = useAtom(speedAtom)[1];
-	const setMessage = useAtom(messageAtom)[1];
 	const [user] = useAtom(userAtom);
 	const [timer] = useAtom(timerAtom);
 	useEffect(() => {
