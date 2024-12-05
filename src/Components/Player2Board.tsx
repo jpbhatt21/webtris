@@ -10,8 +10,9 @@ import {
 } from "../atoms";
 import Rect from "./Rect";
 import { useEffect, useState } from "react";
-import { socket } from "../constants";
+import { socket, svg } from "../constants";
 let animTimeout: any = null;
+let updaterTimeout: any = null;
 let prevLines = 0;
 let localUser = { name: "Guest", sid: "-1", count: "-", room: "", opponent: "" };
 function Player2Board() {
@@ -33,6 +34,7 @@ function Player2Board() {
 	const [lineDissapear, setLineDissapear] = useState([]);
 	const [moveDown, setMoveDown] = useState(Array(20).fill(0));
 	const [theme] = useAtom(themeAtom);
+	const [updater, setUpdater] = useState(false);
 	const setNextBag = useAtom(nextBagAtom)[1];
 	const setState = useAtom(stateAtom)[1];
 	const [speed, setSpeed] = useState(960);
@@ -40,7 +42,7 @@ function Player2Board() {
 	const setMessage = useAtom(messageAtom)[1];
 	const [user] = useAtom(userAtom);
 	useEffect(() => {
-		localUser=user
+		localUser=JSON.parse(JSON.stringify(user));
 		prevLines = 0;
 	}, [user]);
 	const addGarbageLines = useAtom(garbageLinesAtom)[1];
@@ -50,7 +52,7 @@ function Player2Board() {
 			setNextBag(data.bag);
 		});
 		socket.on("gameOver", () => {
-			setState("pause");
+			setState("game over");
 			setMessage({
 				active: true,
 				heading: "Victory",
@@ -59,7 +61,7 @@ function Player2Board() {
 			console.log("opponentDisconnected");
 		});
 		socket.on("opponentDisconnected", () => {
-			setState("pause");
+			setState("game over");
 			setMessage({
 				active: true,
 				heading: "Victory",
@@ -67,7 +69,7 @@ function Player2Board() {
 			});
 			console.log("opponentDisconnected");
 		});
-		socket.on("roomCom", (data: any) => {
+		socket.on("roomComm", (data: any) => {
 			// console.log(data);
 			if (data.nextShape && data.sender !== localUser.sid) {
 				if (animTimeout) clearTimeout(animTimeout);
@@ -85,6 +87,11 @@ function Player2Board() {
 				setLineDissapear(data.lineDissapear);
 				setMoveDown(data.moveDown);
 				setSpeed(data.speed);
+				setUpdater(false);
+				clearTimeout(updaterTimeout);
+				updaterTimeout = setTimeout(() => {
+					setUpdater(true);
+				}, 2000);
 				if (data.lineDissapear.length > 0) {
 					animTimeout = setTimeout(() => {
 						setLineDissapear([]);
@@ -102,7 +109,7 @@ function Player2Board() {
 						{user.opponent}
 					</label>{" "}
 					<svg
-						id="mainboard"
+						id="mainboard2"
 						xmlns="http://www.w3.org/2000/svg"
 						className=" w-full absolute h-full tms duration-200  mb-0 "
 						viewBox="0 0 2110 2215"
@@ -164,7 +171,24 @@ function Player2Board() {
 									key={"active" + ind + "" + currentShape}
 								/>
 							))}
+						<rect
+							x="510"
+							y="0"
+							rx={7}
+							className="duration-300"
+							height="2135"
+							width="1085"
+							fill={theme.background+(updater?"aa":"00")}
+						/>
 					</svg>
+					<div className="duration-300"
+					style={{
+						opacity: updater ? 1 : 0,
+					}}
+					>
+						{svg.loader}
+
+					</div>
 				</>
 			)}
 		</>

@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react";
 import { useAtom } from "jotai";
-import { autoplayAtom, bagAtom, nextBagAtom, pageAtom, resetAtom, stateAtom, themeAtom, userAtom } from "./atoms";
+import {
+	autoplayAtom,
+	bagAtom,
+	nextBagAtom,
+	pageAtom,
+	resetAtom,
+	stateAtom,
+	themeAtom,
+	userAtom,
+} from "./atoms";
 import { socket, svg } from "./constants";
 const tetrisFacts = [
 	"Tetris was created in 1984 by Soviet engineer Alexey Pajitnov, the inventor of Tetris.",
@@ -66,16 +75,16 @@ const tetrisFacts = [
 	"Tetris is a testament to innovative and elegant game design.",
 ];
 let inter: any = null;
-let localUser = { name: "Guest",sid:-1, count: "-",room:"",opponent:"" };
+let localUser = { name: "Guest", sid: -1, count: "-", room: "", opponent: "" };
 function OnlineSearch() {
 	const [selected, setSelected] = useState(0);
-    const [tried, setTried] = useState(false);
+	const [tried, setTried] = useState(false);
 	const [theme] = useAtom(themeAtom);
-    const setAutoplay = useAtom(autoplayAtom)[1];
-    const reset = useAtom(resetAtom)[1];
-	const [state,setState] = useAtom(stateAtom);
-	const [page,setPage] = useAtom(pageAtom);
-    const setBag = useAtom(bagAtom)[1];
+	const setAutoplay = useAtom(autoplayAtom)[1];
+	const reset = useAtom(resetAtom)[1];
+	const [state, setState] = useAtom(stateAtom);
+	const [page, setPage] = useAtom(pageAtom);
+	const setBag = useAtom(bagAtom)[1];
 	const [user, setUser] = useAtom(userAtom);
 	const setNextBag = useAtom(nextBagAtom)[1];
 	const [timer, setTimer] = useState(0);
@@ -90,148 +99,155 @@ function OnlineSearch() {
 					setSelected(Math.floor(Math.random() * tetrisFacts.length));
 				}, 5000),
 			];
-            if (!socket.connected) {
+			if (!socket.connected) {
+				socket.connect();
 
-                socket.connect();
-                
-                socket.on("initUser", (data: any) => {
-                    if (data.name == "Guest") {
-                        socket.disconnect();
-                    } else {
-                        localUser ={...localUser, ...data};
-                        setUser(localUser);
-                        socket.emit("online");
-                    }
-                    setTried(true);
-                });
-                socket.on("online", (data: any) => {
-                    setUser(data);
-                });
-                socket.on("joinRoom",(data:any)=>{
-                    localUser.room = data.room;
-					if(data.users[0]==localUser.name){
-						localUser.opponent = data.users[1];
+				socket.on("initUser", (data: any) => {
+					if (data.name == "Guest") {
+						socket.disconnect();
+					} else {
+						localUser = { ...localUser, ...data };
+						setUser(localUser);
+						socket.emit("online");
 					}
-					else{
+					setTried(true);
+				});
+				socket.on("online", (data: any) => {
+					setUser(data);
+				});
+				socket.on("joinRoom", (data: any) => {
+					localUser.room = data.room;
+					if (data.users[0] == localUser.name) {
+						localUser.opponent = data.users[1];
+					} else {
 						localUser.opponent = data.users[0];
 					}
-                    setUser(localUser)
-                    setAutoplay(false);
-                    setBag(data.bag)
-                    setNextBag(data.nextBag)
-                    setPage("multi")
-                    setTimeout(()=>{
-                        reset();
-                        setState("play")
-                    },300)
-                    // if(data.users[0]==localUser.name){
-                    //     socket.emit("roomCom",data)
-                    // }
-                })
-            }
+					setUser(localUser);
+					setAutoplay(false);
+					setBag(data.bag);
+					setNextBag(data.nextBag);
+					setPage("multi");
+					reset();
+					setTimeout(() => {
+						setState("play");
+					}, 300);
+					// if(data.users[0]==localUser.name){
+					//     socket.emit("roomCom",data)
+					// }
+				});
+			}
 		} else {
 			clearInterval(inter);
 			setTimer(0);
-           if(localUser.room==""){
-            localUser = { name: "Guest",sid:-1, count: "-",room:"" ,opponent:""};
-            setUser(localUser);
-            setTried(false);
-            socket.disconnect();
-           }
-            
+			console.log(state);
+			if (localUser.room == "" && state =="play" ) {
+				setUser(localUser);
+				setTried(false);
+				socket.disconnect();
+			}
+			localUser = {
+				name: "Guest",
+				sid: -1,
+				count: "-",
+				room: "",
+				opponent: "",
+			};
 		}
 	}, [state]);
 	return (
 		<>
-			{
-              state == "onlineSearch"&&   <div
-				className="w-[60vmin] h-fit  flex flex-col  prt  duration-500 absolute items-center py-[2vmin]"
-				style={{
-                    opacity: page!="multi" ? "1" : "0",
-					marginLeft: state == "onlineSearch" ? "70vmin" : "20vmin",
-				}}>
-				{user.name !== "Guest" ? (
-					<>
-						<div className="text-[5vmin] fadein">
-							{"In Queue".split("").map((x, i) => (
-								<span
-									key={"settings" + i}
-									className="duration-100"
-									onMouseEnter={(e) => {
-										e.currentTarget.style.transitionDuration =
-											"0.25s";
-										e.currentTarget.style.color =
-											theme.accents[i % 7];
-									}}
-									onMouseLeave={(e) => {
-										e.currentTarget.style.transitionDuration =
-											"5s";
-										e.currentTarget.style.color = "";
-										setTimeout(() => {
+			{state == "onlineSearch" && (
+				<div
+					className="w-[60vmin] h-fit  flex flex-col  prt  duration-500 absolute items-center py-[2vmin]"
+					style={{
+						opacity: page != "multi" ? "1" : "0",
+						marginLeft:
+							state == "onlineSearch" ? "70vmin" : "20vmin",
+					}}>
+					{user.name !== "Guest" ? (
+						<>
+							<div className="text-[5vmin] fadein">
+								{"In Queue".split("").map((x, i) => (
+									<span
+										key={"settings" + i}
+										className="duration-100"
+										onMouseEnter={(e) => {
 											e.currentTarget.style.transitionDuration =
 												"0.25s";
-										}, 7000);
-									}}>
-									{x}
-								</span>
-							))}
-						</div>
-						<div className="flex fadein flex-col items-center justify-between mt-[1.5vmin] h-[15vmin]">
-							<div className="flex flex-col w-full items-center justify-center gap-[1vmin]">
-								<div className=" min-h-fit min-w-fit ">
-									{svg.loader}
-								</div>
-								<div className=" mts text-[2vmin] roboto">
-									{(parseInt((timer / 60).toFixed(0)) < 10
-										? "0"
-										: "") +
-										(timer / 60).toFixed(0) +
-										":" +
-										(timer % 60 < 10 ? "0" : "") +
-										(timer % 60)}
-								</div>
-							</div>
-							<div
-								key={"sel" + selected}
-								className="fadeinout mts min-w-fit text-center w-full">
-								{tetrisFacts[selected]}
-							</div>
-						</div>
-					</>
-				) : tried &&(
-					<>
-						<div className="text-[5vmin]">
-							{"Server is Full".split("").map((x, i) => (
-								<span
-									key={"settings" + i}
-									className="duration-100"
-									onMouseEnter={(e) => {
-										e.currentTarget.style.transitionDuration =
-											"0.25s";
-										e.currentTarget.style.color =
-											theme.accents[i % 7];
-									}}
-									onMouseLeave={(e) => {
-										e.currentTarget.style.transitionDuration =
-											"5s";
-										e.currentTarget.style.color = "";
-										setTimeout(() => {
+											e.currentTarget.style.color =
+												theme.accents[i % 7];
+										}}
+										onMouseLeave={(e) => {
 											e.currentTarget.style.transitionDuration =
-												"0.25s";
-										}, 7000);
-									}}>
-									{x}
-								</span>
-							))}
-						</div>
-						<div
-							className="fadein mt-[2vmin] mts min-w-fit text-center w-full">
-							Please Try Again Later
-						</div>
-					</>
-				)}
-			</div>
-            }
+												"5s";
+											e.currentTarget.style.color = "";
+											setTimeout(() => {
+												e.currentTarget.style.transitionDuration =
+													"0.25s";
+											}, 7000);
+										}}>
+										{x}
+									</span>
+								))}
+							</div>
+							<div className="flex fadein flex-col items-center justify-between mt-[1.5vmin] h-[15vmin]">
+								<div className="flex flex-col w-full items-center justify-center gap-[1vmin]">
+									<div className=" min-h-fit min-w-fit ">
+										{svg.loader}
+									</div>
+									<div className=" mts text-[2vmin] roboto">
+										{(parseInt((timer / 60).toFixed(0)) < 10
+											? "0"
+											: "") +
+											(timer / 60).toFixed(0) +
+											":" +
+											(timer % 60 < 10 ? "0" : "") +
+											(timer % 60)}
+									</div>
+								</div>
+								<div
+									key={"sel" + selected}
+									className="fadeinout mts min-w-fit text-center w-full">
+									{tetrisFacts[selected]}
+								</div>
+							</div>
+						</>
+					) : (
+						tried && (
+							<>
+								<div className="text-[5vmin]">
+									{"Server is Full".split("").map((x, i) => (
+										<span
+											key={"settings" + i}
+											className="duration-100"
+											onMouseEnter={(e) => {
+												e.currentTarget.style.transitionDuration =
+													"0.25s";
+												e.currentTarget.style.color =
+													theme.accents[i % 7];
+											}}
+											onMouseLeave={(e) => {
+												e.currentTarget.style.transitionDuration =
+													"5s";
+												e.currentTarget.style.color =
+													"";
+												setTimeout(() => {
+													e.currentTarget.style.transitionDuration =
+														"0.25s";
+												}, 7000);
+											}}>
+											{x}
+										</span>
+									))}
+								</div>
+								<div className="fadein mt-[2vmin] mts min-w-fit text-center w-full">
+									Please Try Again Later
+								</div>
+							</>
+						)
+					)}
+				</div>
+			)}
 		</>
 	);
 }

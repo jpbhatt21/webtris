@@ -222,7 +222,7 @@ export const resetAtom = atom(null, (_get, set) => {
 		[0, 0],
 		[0, 0],
 	]);
-	set(autoplaySpeed, 50);
+	set(autoplaySpeed, 100);
 	let tempUser = _get(user);	
 	if(tempUser.room!==""){
 		setInterval(() => {

@@ -36,7 +36,7 @@ function PauseScreen() {
 				}}>
 				<div className="text-[5vmin]  prt  cursor-default ">
 					{" "}
-					{state == "game over"
+					{state == "game over" && !message.active
 						? "Game Over".split("").map((x, i) => (
 								<span
 									key={"gameover" + i}
@@ -124,20 +124,21 @@ function PauseScreen() {
 						onClick={() => {
 							if (state == "play") return;
 							if (message.active) {
-								setMessage({
-									active: false,
-									heading: "",
-									body: "",
-								});
+								socket.disconnect();
+								
 								setUser({
 									name: "Guest",
 									sid: -1,
 									count: "-",
 									room: "",
 								});
-								socket.disconnect();
 								setAutoplay(true);
 								setReset();
+								setMessage({
+									active: false,
+									heading: "",
+									body: "",
+								});
 								setPage("home");
 								setState("onlineSearch");
 								
@@ -184,18 +185,21 @@ function PauseScreen() {
 						onClick={() => {
 							if (state == "play") return;
 							if (user.name !== "Guest") {
-								setMessage({
-									active: false,
-									heading: "",
-									body: "",
-								});
+								socket.disconnect();
 								setUser({
 									name: "Guest",
 									sid: -1,
 									count: "-",
 									room: "",
 								});
-								socket.disconnect();
+								setAutoplay(true);
+								setReset();
+								setMessage({
+									active: false,
+									heading: "",
+									body: "",
+								});
+								
 							}
 							setPage("home");
 							setAutoplay(true);

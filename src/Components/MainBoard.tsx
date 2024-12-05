@@ -242,7 +242,7 @@ function MainBoard() {
 	const setTime = useAtom(timeAtom)[1];
 	const [garbageLines, setGarbageLines] = useAtom(garbageLinesAtom);
 	useEffect(() => {
-		console.log(garbageLines);
+		// console.log(garbageLines);
 		ths.garbageLines = garbageLines;
 	}, [garbageLines]);
 	const [score, setScore] = useAtom(scoreAtom);
@@ -435,7 +435,7 @@ function MainBoard() {
 							heading: "Defeat",
 							body: "Better luck next time!",
 						});
-						ths.setState("pause");
+						ths.setState("game over");
 						ths.state = "game over";
 					}
 
