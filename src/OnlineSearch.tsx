@@ -118,28 +118,28 @@ function OnlineSearch() {
 					setUser(data);
 				});
 				socket.on("joinRoom", (data: any) => {
-					localUser.room = data.room;
-					if (data.users[0] == localUser.name) {
-						localUser.opponent = data.users[1];
-					} else {
-						localUser.opponent = data.users[0];
-					}
-					setUser(localUser);
 					setTimeout(() => {
-						
-						setAutoplay(false);
-						setBag(data.bag);
-						setNextBag(data.nextBag);
-						setPage("multi");
-						reset(false);
-						setTimeout(()=>{
-							setTimer(3);
+						localUser.room = data.room;
+						if (data.users[0] == localUser.name) {
+							localUser.opponent = data.users[1];
+						} else {
+							localUser.opponent = data.users[0];
+						}
+						setUser(localUser);
 						setTimeout(() => {
-
-							setState("play");
-						}, 4000);
-						},500)
-					}, 500);
+							setAutoplay(false);
+							setBag(data.bag);
+							setNextBag(data.nextBag);
+							setPage("multi");
+							reset(false);
+							setTimeout(() => {
+								setTimer(3);
+								setTimeout(() => {
+									setState("play");
+								}, 4000);
+							}, 500);
+						}, 500);
+					}, 1000);
 					// if(data.users[0]==localUser.name){
 					//     socket.emit("roomCom",data)
 					// }
@@ -151,9 +151,9 @@ function OnlineSearch() {
 			// console.log(state);
 			if (localUser.room == "" && state == "play") {
 				setUser(localUser);
-				setTried(false);
 				socket.disconnect();
 			}
+			setTried(false);
 			localUser = {
 				name: "Guest",
 				sid: -1,
@@ -203,7 +203,7 @@ function OnlineSearch() {
 								</div>
 								<div className="flex fadein flex-col items-center justify-between mt-[1.5vmin] h-[15vmin]">
 									<div className="flex flex-col w-full items-center justify-center gap-[1vmin]">
-										<div className=" min-h-fit min-w-fit ">
+										<div className=" h-[5vmin] w-[5vmin]">
 											{svg.loader}
 										</div>
 										<div className=" mts text-[2vmin] roboto">
@@ -266,7 +266,6 @@ function OnlineSearch() {
 							)
 						)}
 					</div>
-					
 				</>
 			)}
 		</>

@@ -57,7 +57,7 @@ function App() {
 	return (
 		<>
 			<div
-				className="fixed lexend gap-[2vmin] w-full h-full flex items-center justify-center "
+				className="fixed lexend gap-[2vmin] text-[2vmin] w-full h-full flex items-center justify-center "
 				style={{
 					color: theme.text,
 					backgroundColor: theme.background,
@@ -74,12 +74,12 @@ function App() {
 						opacity:
 							user.name !== "Guest" && user.room == "" ? 1 : 0,
 					}}
-					className="fixed right-0 self-start duration-300 mt-[1vmin] mr-[2vmin] ">
+					className="fixed right-0 self-start  duration-300 mt-[1vmin] mr-[2vmin] ">
 					{user.count + " player(s) online"}
 				</div>
 				{(
 					<div
-						className=" aspect-[43/60] fixed  bottom-0 right-0   h-[60vmin] flex flex-col items-center  justify-center  duration-500"
+						className=" aspect-[43/60] text-[2vmin] fixed  bottom-0 right-0   h-[60vmin] flex flex-col items-center  justify-center  duration-500"
 						style={{
 							opacity: page == "multi" || state == "play" ? 1 : 0,
 							height:	page == "multi"? 60*scale2+"vmin" : "0",

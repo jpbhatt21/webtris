@@ -49,7 +49,9 @@ function Multi() {
 					<Next />
 				</div>
 				<div className="h-full w-full flex flex-col items-center justify-center ">
-					
+					<div id="scrf" className=" text-[1.9vmin] text-center mb-[2vmin] duration-300">
+						Score Finalized. Wait for opponent to finish.
+					</div>
 					<TimeScoreAndLineCounter />
 				</div>
 			</div>

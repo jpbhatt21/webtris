@@ -360,8 +360,8 @@ export let shapeGrid = [
 	"",
 ];
 
-export const initSettings = window.localStorage.getItem("webtriSettings")
-	? JSON.parse(window.localStorage.getItem("webtriSettings") as string)
+export const initSettings = window.localStorage.getItem("webtrisSettings")
+	? JSON.parse(window.localStorage.getItem("webtrisSettings") as string)
 	: {
 			pauseGame: "ESCAPE",
 			closeMenu: "ESCAPE",
@@ -384,7 +384,7 @@ export let currentPieceShapes = [];
 export const svg = {
 	loader: (
 		<svg
-			height="40"
+			height="full"
 			className="animate-spin"
 			viewBox="0 0 24 24"
 			fill="none"

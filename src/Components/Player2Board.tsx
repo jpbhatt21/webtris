@@ -15,7 +15,13 @@ import { socket, svg } from "../constants";
 let animTimeout: any = null;
 let updaterTimeout: any = null;
 let prevLines = 0;
-// let localUser = { name: "Guest", sid: "-1", count: "-", room: "", opponent: "" };
+let localUser = {
+	name: "Guest",
+	sid: "-1",
+	count: "-",
+	room: "",
+	opponent: "",
+};
 function Player2Board() {
 	const [board, setBoard] = useState(
 		Array.from({ length: 20 }, (_) =>
@@ -38,12 +44,15 @@ function Player2Board() {
 	const [updater, setUpdater] = useState(false);
 	const setNextBag = useAtom(nextBagAtom)[1];
 	const setState = useAtom(stateAtom)[1];
+	const [score, setScore] = useState(0);
 	const [speed, setSpeed] = useState(960);
 	const [page] = useAtom(pageAtom);
 	const setMessage = useAtom(messageAtom)[1];
 	const [user] = useAtom(userAtom);
-	const [timer]=useAtom(timerAtom);
+	const [timer] = useAtom(timerAtom);
 	useEffect(() => {
+		localUser = user;
+		setScore(0);
 		prevLines = 0;
 	}, [user]);
 	const addGarbageLines = useAtom(garbageLinesAtom)[1];
@@ -52,13 +61,30 @@ function Player2Board() {
 		socket.on("getBag", (data: any) => {
 			setNextBag(data.bag);
 		});
-		socket.on("gameOver", () => {
+		socket.on("gameOver", (data) => {
 			setState("game over");
-			setMessage({
-				active: true,
-				heading: "Victory",
-				body: "You Won!",
-			});
+			let scrf = document.getElementById("scrf");
+			if (scrf) scrf.style.opacity = "0";
+			clearTimeout(updaterTimeout);
+			if (data.winner == localUser.name)
+				setMessage({
+					active: true,
+					heading: "Victory",
+					body: "You Won!",
+				});
+			else if (data.winner != "draw") {
+				setMessage({
+					active: true,
+					heading: "Defeat",
+					body: "Better luck next time!",
+				});
+			} else {
+				setMessage({
+					active: true,
+					heading: "Draw",
+					body: "It's a draw!",
+				});
+			}
 			// console.log("opponentDisconnected");
 		});
 		socket.on("opponentDisconnected", () => {
@@ -70,50 +96,47 @@ function Player2Board() {
 			});
 			// console.log("opponentDisconnected");
 		});
-		
+
 		socket.on("roomComm", (data: any) => {
 			// console.log(data);
-				if (animTimeout) clearTimeout(animTimeout);
-				if (data.lines !== prevLines) {
-					addGarbageLines({
-						type: "add",
-						lines: data.lines - prevLines,
-					});
-					prevLines = data.lines;
-				}
-				setBoard(data.board);
-				setActive(data.active);
-				setCurrentShape(data.currentShape);
-				setLineDissapear(data.lineDissapear);
-				setMoveDown(data.moveDown);
-				setSpeed(data.speed);
-				setUpdater(false);
-				clearTimeout(updaterTimeout);
-				updaterTimeout = setTimeout(() => {
-					setUpdater(true);
-					// socket.emit("getData", { room: localUser.room });
-				}, 2000);
-				if (data.lineDissapear.length > 0) {
-					animTimeout = setTimeout(() => {
-						setLineDissapear([]);
-					}, parseInt(data.speed) / 2 + 100);
-				}
-			
-			
+			if (animTimeout) clearTimeout(animTimeout);
+			if (data.lines !== prevLines) {
+				addGarbageLines({
+					type: "add",
+					lines: data.lines - prevLines,
+				});
+				prevLines = data.lines;
+			}
+			setBoard(data.board);
+			setScore(data.score);
+			setActive(data.active);
+			setCurrentShape(data.currentShape);
+			setLineDissapear(data.lineDissapear);
+			setMoveDown(data.moveDown);
+			setSpeed(data.speed);
+			setUpdater(false);
+			clearTimeout(updaterTimeout);
+			updaterTimeout = setTimeout(() => {
+				setUpdater(true);
+				// socket.emit("getData", { room: localUser.room });
+			}, 2000);
+			if (data.lineDissapear.length > 0) {
+				animTimeout = setTimeout(() => {
+					setLineDissapear([]);
+				}, parseInt(data.speed) / 2 + 100);
+			}
 		});
 	}, []);
 
 	return (
 		<>
-			{page == "multi"&& (
+			{page == "multi" && (
 				<>
-					<label className=" fadein ml-[26%] top-[-3vmin]">
-						{user.opponent}
-					</label>{" "}
+					<label className=" fadein ml-[26%]">{user.opponent}</label>{" "}
 					<svg
 						id="mainboard2"
 						xmlns="http://www.w3.org/2000/svg"
-						className=" w-full  fadein h-full tms duration-200  mb-0 "
+						className=" w-full  fadein h-full tms duration-200  mb -[2vmin] h-[2vmin] "
 						viewBox="0 0 1670 2215"
 						fill="none">
 						<rect
@@ -163,7 +186,8 @@ function Player2Board() {
 									)
 							)
 						)}
-						{lineDissapear.length == 0 &&timer==0 &&
+						{lineDissapear.length == 0 &&
+							timer == 0 &&
 							active.map((pos: any, ind: any) => (
 								<Rect
 									className="duration-[25ms] fadein shadow-xl"
@@ -180,16 +204,18 @@ function Player2Board() {
 							className="duration-300"
 							height="2135"
 							width="1085"
-							fill={theme.background+(updater?"aa":"00")}
+							fill={theme.background + (updater ? "aa" : "00")}
 						/>
 					</svg>
-					<div className="duration-300 absolute ml-[26%]"
-					style={{
-						opacity: updater ? 1 : 0,
-					}}
-					>
+					<label className=" fadein ml-[26%] mt-[-5%] mb-[2.5%] h-[2vmin]">
+						{score}
+					</label>{" "}
+					<div
+						className="duration-300 absolute ml-[26%]"
+						style={{
+							opacity: updater ? 1 : 0,
+						}}>
 						{svg.loader}
-
 					</div>
 				</>
 			)}

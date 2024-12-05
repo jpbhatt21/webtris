@@ -297,7 +297,8 @@ function MainBoard() {
 		// console.log(ths.holdShape);
 		ths.lines = JSON.parse(JSON.stringify(lines));
 		ths.level = JSON.parse(JSON.stringify(level));
-
+		let scrf = document.getElementById("scrf");
+		if (scrf) scrf.style.opacity="0";
 		ths.lineStack = [0, 0, 0, 0];
 		async function createNewPiece(hldr: boolean = true) {
 			let line = 0;
@@ -428,17 +429,20 @@ function MainBoard() {
 						ths.state = "game over";
 						ths.setState("game over");
 					} else if (ths.page == "multi") {
-						socket.emit("gameOver", {
-							room: user.room,
-							name: user.name,
-						});
-						setMessage({
-							active: true,
-							heading: "Defeat",
-							body: "Better luck next time!",
-						});
-						ths.setState("game over");
-						ths.state = "game over";
+						setTimeout(()=>{
+							socket.emit("gameOver", {
+								room: user.room,
+								name: user.name,
+								score: ths.score,
+							});
+						},100)
+						if (scrf) scrf.style.opacity="1";
+						// setMessage({
+						// 	active: true,
+						// 	heading: "Defeat",
+						// 	body: "Better luck next time!",
+						// });
+						
 					}
 
 					return;

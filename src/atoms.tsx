@@ -312,7 +312,7 @@ export const settingsAtom = atom(
 		temp.clash = clash;
 
 		set(settings, temp);
-		window.localStorage.setItem("settings", JSON.stringify(temp));
+		window.localStorage.setItem("webtrisSettings", JSON.stringify(temp));
 	}
 );
 const lineDissapear = atom([]);
