@@ -6,11 +6,11 @@ import {
 	initTheme,
 	initWeights,
 	localStorages,
+	setWeights,
 	socket,
 	themeKeys,
 	themes,
 } from "./constants";
-import { setWeights } from "./Functionality/helper";
 
 const index = atom(initTheme);
 export const themeAtom = atom(themes[themeKeys[initTheme]]);

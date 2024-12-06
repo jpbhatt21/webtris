@@ -29,7 +29,7 @@ import {
 } from "../atoms";
 import { useEffect } from "react";
 import { activePos, initSettings, socket } from "../constants";
-import { automatic, rotPiece } from "../Functionality/helper";
+import { automatic, checkCollision, rotate } from "../Functionality/helper";
 import Rect from "./Rect";
 let keys = {
 	moveLeft: false,
@@ -94,7 +94,7 @@ function form(x: number) {
 }
 let initTime = new Date().getTime();
 let ticker = {
-	rotate: 150,
+	rotate: 250,
 	softDrop: 100,
 	moveLRSpeed: 100,
 	hardDrop: 333,
@@ -127,14 +127,10 @@ let moveFunctions = {
 	moveLeft: () => {
 		if (
 			!keys.moveRight &&
-			ths.active[0][1] !== 0 &&
-			ths.active[1][1] !== 0 &&
-			ths.active[2][1] !== 0 &&
-			ths.active[3][1] !== 0 &&
-			!ths.board[ths.active[0][0]][ths.active[0][1] - 1].occupied &&
-			!ths.board[ths.active[1][0]][ths.active[1][1] - 1].occupied &&
-			!ths.board[ths.active[2][0]][ths.active[2][1] - 1].occupied &&
-			!ths.board[ths.active[3][0]][ths.active[3][1] - 1].occupied &&
+			!checkCollision(
+				ths.board,
+				ths.active.map((el: any) => [el[0], el[1] - 1])
+			) &&
 			ths.state === "play" &&
 			!ths.npc
 		) {
@@ -148,14 +144,10 @@ let moveFunctions = {
 	moveRight: () => {
 		if (
 			!keys.moveLeft &&
-			ths.active[0][1] !== 9 &&
-			ths.active[1][1] !== 9 &&
-			ths.active[2][1] !== 9 &&
-			ths.active[3][1] !== 9 &&
-			!ths.board[ths.active[0][0]][ths.active[0][1] + 1].occupied &&
-			!ths.board[ths.active[1][0]][ths.active[1][1] + 1].occupied &&
-			!ths.board[ths.active[2][0]][ths.active[2][1] + 1].occupied &&
-			!ths.board[ths.active[3][0]][ths.active[3][1] + 1].occupied &&
+			!checkCollision(
+				ths.board,
+				ths.active.map((el: any) => [el[0], el[1] + 1])
+			) &&
 			ths.state === "play" &&
 			!ths.npc
 		) {
@@ -168,14 +160,10 @@ let moveFunctions = {
 	},
 	softDrop: () => {
 		if (
-			ths.active[0][0] != 19 &&
-			ths.active[1][0] != 19 &&
-			ths.active[2][0] != 19 &&
-			ths.active[3][0] != 19 &&
-			!ths.board[ths.active[0][0] + 1][ths.active[0][1]].occupied &&
-			!ths.board[ths.active[1][0] + 1][ths.active[1][1]].occupied &&
-			!ths.board[ths.active[2][0] + 1][ths.active[2][1]].occupied &&
-			!ths.board[ths.active[3][0] + 1][ths.active[3][1]].occupied &&
+			!checkCollision(
+				ths.board,
+				ths.active.map((el: any) => [el[0] + 1, el[1]])
+			) &&
 			ths.state === "play" &&
 			!ths.npc
 		) {
@@ -190,14 +178,10 @@ let moveFunctions = {
 	hardDrop: () => {
 		if (ths.state === "play" && !ths.npc) {
 			while (
-				ths.active[0][0] !== 19 &&
-				ths.active[1][0] !== 19 &&
-				ths.active[2][0] !== 19 &&
-				ths.active[3][0] !== 19 &&
-				!ths.board[ths.active[0][0] + 1][ths.active[0][1]].occupied &&
-				!ths.board[ths.active[1][0] + 1][ths.active[1][1]].occupied &&
-				!ths.board[ths.active[2][0] + 1][ths.active[2][1]].occupied &&
-				!ths.board[ths.active[3][0] + 1][ths.active[3][1]].occupied
+				!checkCollision(
+					ths.board,
+					ths.active.map((el: any) => [el[0] + 1, el[1]])
+				)
 			) {
 				ths.active[0][0]++;
 				ths.active[1][0]++;
@@ -208,17 +192,20 @@ let moveFunctions = {
 			prevTickTime.gravity = -100;
 		}
 	},
-	rotateCW: () => {},
-	hold:()=>{},
+	rotate: (dir: any) => {
+		dir = dir;
+	},
+	hold: () => {},
 };
 window.addEventListener("keydown", (e) => {
 	settings = getThs().settings;
 	let key = e.key.toUpperCase();
 	if (key === " ") {
-		key = "␣";
+		key = "SPACE";
 	}
 
 	if (!ths.autoplay) {
+		e.preventDefault();
 		if (key === settings.moveLeft) {
 			keys.moveLeft = true;
 			if (!intervals.moveLeft)
@@ -263,16 +250,28 @@ window.addEventListener("keydown", (e) => {
 				}, 0);
 		}
 		if (key === settings.rotateCW) {
+			keys.rotateCW = true;
 			if (!intervals.rotateCW)
 				intervals.rotateCW = setInterval(() => {
 					if (
 						new Date().getTime() - prevTickTime.rotate >=
-						ticker.rotate
+							ticker.rotate &&
+						!keys.rotateCCW
 					)
-						moveFunctions.rotateCW();
+						moveFunctions.rotate(1);
 				}, 0);
 		}
 		if (key === settings.rotateCCW) {
+			keys.rotateCCW = true;
+			if (!intervals.rotateCCW)
+				intervals.rotateCCW = setInterval(() => {
+					if (
+						new Date().getTime() - prevTickTime.rotate >=
+							ticker.rotate &&
+						!keys.rotateCW
+					)
+						moveFunctions.rotate(-1);
+				}, 0);
 		}
 		if (key === settings.holdPiece) {
 			moveFunctions.hold();
@@ -280,10 +279,11 @@ window.addEventListener("keydown", (e) => {
 	}
 });
 window.addEventListener("keyup", (e) => {
+	e.preventDefault();
 	settings = getThs().settings;
 	let key = e.key.toUpperCase();
 	if (key === " ") {
-		key = "␣";
+		key = "SPACE";
 	}
 
 	if (key === settings.pauseGame && ths.state === "pause") {
@@ -327,9 +327,12 @@ window.addEventListener("keyup", (e) => {
 		intervals.rotateCW && clearInterval(intervals.rotateCW);
 		intervals.rotateCW = null;
 		prevTickTime.rotate -= ticker.rotate;
+		keys.rotateCW = false;
 	}
 	if (key === settings.rotateCCW) {
-		e.preventDefault();
+		intervals.rotateCCW && clearInterval(intervals.rotateCCW);
+		intervals.rotateCCW = null;
+		prevTickTime.rotate -= ticker.rotate;
 		keys.rotateCCW = false;
 	}
 	// if (key === settings.holdPiece) {
@@ -346,7 +349,7 @@ function MainBoard() {
 	const [, bagRand] = useAtom(bagRandAtom);
 	const [, init] = useAtom(initAtom);
 	const [, setSpeed] = useAtom(speedAtom);
-	const[settings]= useAtom(settingsAtom)
+	const [settings] = useAtom(settingsAtom);
 	const [board, setBoard] = useAtom(boardAtom);
 	const [active, setActive] = useAtom(activePieceAtom);
 	const [ghost, setGhost] = useAtom(ghostPieceAtom);
@@ -365,41 +368,36 @@ function MainBoard() {
 	const [moveDown, setMoveDown] = useAtom(moveDownAtom);
 	const [user] = useAtom(userAtom);
 	const [timer] = useAtom(timerAtom);
-	useEffect(()=>{
-		ths.autoplay=autoplay
-		ths.state=state
-		ths.autoplaySpeed = autoplaySpeed
-		ths.page= page
-		ths.settings=settings
-	},[
-		autoplay,state, autoplaySpeed,page,settings
-	])
+	useEffect(() => {
+		ths.autoplay = autoplay;
+		ths.state = state;
+		ths.autoplaySpeed = autoplaySpeed;
+		ths.page = page;
+		ths.settings = settings;
+	}, [autoplay, state, autoplaySpeed, page, settings]);
 	function startMainGameLoop() {
-		moveFunctions.rotateCW = () => {
+		moveFunctions.rotate = (dir) => {
 			if (ths.state === "play" && !ths.npc) {
-				[ths.active, ths.rot] = rotPiece(
+				[ths.active, ths.rot] = rotate(
 					ths.board,
 					ths.currentShape,
 					ths.rot,
-					ths.active
+					ths.active,
+					dir
 				);
 				setActive(JSON.parse(JSON.stringify(ths.active)));
 				prevTickTime.rotate = new Date().getTime();
 			}
 		};
-		moveFunctions.hold=()=>{
+		moveFunctions.hold = () => {
 			if (ths.holdShape == 7) {
-				ths.holdShape = JSON.parse(
-					JSON.stringify(ths.currentShape)
-				);
+				ths.holdShape = JSON.parse(JSON.stringify(ths.currentShape));
 				setHoldShape(ths.currentShape);
 				createNewPiece(false);
 			} else if (!held) {
 				held = true;
 				let temp = JSON.parse(JSON.stringify(ths.holdShape));
-				ths.holdShape = JSON.parse(
-					JSON.stringify(ths.currentShape)
-				);
+				ths.holdShape = JSON.parse(JSON.stringify(ths.currentShape));
 				ths.currentShape = temp;
 				ths.rot = 0;
 				ths.active = JSON.parse(
@@ -411,7 +409,7 @@ function MainBoard() {
 			}
 
 			held = true;
-		}
+		};
 		let x = init();
 		let held = false;
 		ths.npc = false;
@@ -553,11 +551,8 @@ function MainBoard() {
 				setSpeed(speed);
 			}
 
-			for (let i = 0; i < 4; i++) {
 				if (
-					ths.board[activePos[ths.nextShape][i][0]][
-						activePos[ths.nextShape][i][1]
-					].occupied
+					checkCollision(ths.board,activePos[ths.nextShape])
 				) {
 					setActive([
 						[-10, -10],
@@ -580,16 +575,12 @@ function MainBoard() {
 							});
 						}, 100);
 						if (scrf) scrf.style.opacity = "1";
-						// setMessage({
-						// 	active: true,
-						// 	heading: "Defeat",
-						// 	body: "Better luck next time!",
-						// });
+					
 					}
 
 					return;
 				}
-			}
+			
 			// setOds(analyze(JSON.parse(JSON.stringify(board))));
 			ths.currentShape = ths.nextShape;
 			ths.active = JSON.parse(
@@ -625,14 +616,6 @@ function MainBoard() {
 		inter = setInterval(async () => {
 			cur = new Date().getTime();
 			diff = cur - prev;
-			// console.log(held);
-			// [
-			// 	ths.autoplay,
-			// 	ths.state,
-			// 	ths.autoplaySpeed,
-			// 	ths.settings,
-			// 	ths.page,
-			// ] = getAutoplayState();
 			if (ths.autoplay && diff < Math.min(ths.autoplaySpeed, speed))
 				return;
 			if (ths.state !== "play" || ths.npc) {
@@ -640,29 +623,14 @@ function MainBoard() {
 				return;
 			}
 
-			//hold
-			// if (
-			// 	cur - prevTickTime.hold >= ticker.hold &&
-			// 	!held &&
-			// 	keys.holdPiece
-			// ) {
-				
-			// }
-
 			//gravity
 			if (
 				cur - prevTickTime.gravity >=
 					(ths.autoplay
 						? Math.min(ths.autoplaySpeed, speed)
 						: speed) &&
-				ths.active[0][0] !== 19 &&
-				ths.active[1][0] !== 19 &&
-				ths.active[2][0] !== 19 &&
-				ths.active[3][0] !== 19 &&
-				!ths.board[ths.active[0][0] + 1][ths.active[0][1]].occupied &&
-				!ths.board[ths.active[1][0] + 1][ths.active[1][1]].occupied &&
-				!ths.board[ths.active[2][0] + 1][ths.active[2][1]].occupied &&
-				!ths.board[ths.active[3][0] + 1][ths.active[3][1]].occupied && (ths.autoplay || !keys.softDrop||speed<ticker.softDrop)
+						!checkCollision(ths.board, ths.active.map((el: any) => [el[0]+1, el[1]])) &&
+				(ths.autoplay || !keys.softDrop || speed < ticker.softDrop)
 			) {
 				ths.active[0][0]++;
 				ths.active[1][0]++;
@@ -684,8 +652,6 @@ function MainBoard() {
 			}
 			if (!move && ths.autoplay) {
 				let sc1, sc2, act2;
-				// let prev = JSON.parse(JSON.stringify(ths.active));
-				// let prevRot = JSON.parse(JSON.stringify(0));
 				[ths.active, ths.currentShape, ths.rot, sc1] = automatic(
 					JSON.parse(JSON.stringify(ths.board)),
 					JSON.parse(JSON.stringify(ths.active)),
@@ -723,14 +689,7 @@ function MainBoard() {
 			setActive(JSON.parse(JSON.stringify(ths.active)));
 			let ghos = JSON.parse(JSON.stringify(ths.active));
 			while (
-				ghos[0][0] !== 19 &&
-				ghos[1][0] !== 19 &&
-				ghos[2][0] !== 19 &&
-				ghos[3][0] !== 19 &&
-				!ths.board[ghos[0][0] + 1][ghos[0][1]].occupied &&
-				!ths.board[ghos[1][0] + 1][ghos[1][1]].occupied &&
-				!ths.board[ghos[2][0] + 1][ghos[2][1]].occupied &&
-				!ths.board[ghos[3][0] + 1][ghos[3][1]].occupied
+				!checkCollision(ths.board,ghos.map((el: any) => [el[0]+1, el[1]]))
 			) {
 				ghos[0][0]++;
 				ghos[1][0]++;

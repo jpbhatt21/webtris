@@ -26,8 +26,8 @@ export const activePos = [
 		[1, 5],
 	],
 	[
-		[0, 4],
 		[0, 5],
+		[0, 4],
 		[1, 4],
 		[1, 3],
 	],
@@ -347,6 +347,87 @@ export const themes = {
 		],
 	},
 };
+
+export const rotationTable = [
+	[
+		[2, -1],
+		[1, 0],
+		[0, 1],
+		[-1, 2],
+	],
+	[
+		[2, 0],
+		[1, -1],
+		[0, 0],
+		[-1, 1],
+	],
+	[
+		[0, 2],
+		[1, 1],
+		[0, 0],
+		[1, -1],
+	],
+	[
+		[1, 1],
+		[1, -1],
+		[0, 0],
+		[-1, 1],
+	],
+];
+export const superRotationTable = [
+	[
+		[
+			[-2, 0],
+			[1, 0],
+			[-2, -1],
+			[1, 2],
+		],
+		[
+			[-1, 0],
+			[2, 0],
+			[-1, 2],
+			[2, -1],
+		],
+		[
+			[2, 0],
+			[-1, 0],
+			[2, 1],
+			[-1, -2],
+		],
+		[
+			[1, 0],
+			[-2, 0],
+			[1, -2],
+			[-2, 1],
+		],
+	],
+	[
+		[
+			[-1, 0],
+			[-1, 1],
+			[0, -2],
+			[-1, -2],
+		],
+		[
+			[1, 0],
+			[1, -1],
+			[0, 2],
+			[1, 2],
+		],
+		[
+			[1, 0],
+			[1, 1],
+			[0, -2],
+			[1, -2],
+		],
+		[
+			[-1, 0],
+			[-1, -1],
+			[0, 2],
+			[-1, 2],
+		],
+	],
+];
 type ThemeType = typeof themes;
 export const themeKeys = Object.keys(themes) as (keyof ThemeType)[];
 export let shapeGrid = [
@@ -359,19 +440,35 @@ export let shapeGrid = [
 	"1 111",
 	"",
 ];
-const localStorageVersions={
-	settings:"0.1",
-	weights:"0.1",
-	theme:"0.1",
-	scale:"0.1",
-	game:"0.1",
-}
-export const localStorages={
-	settings: "webtrisSettings_"+localStorageVersions.game+"_"+localStorageVersions.settings,
-	weights:  "webtrisWeights_"+localStorageVersions.game+"_"+localStorageVersions.weights,
-	theme: "webtrisTheme_"+localStorageVersions.game+"_"+localStorageVersions.theme,
-	scale: "webtrisScale_"+localStorageVersions.game+"_"+localStorageVersions.scale
-}
+const localStorageVersions = {
+	settings: "0.01",
+	weights: "0.1",
+	theme: "0.1",
+	scale: "0.1",
+	game: "0.1",
+};
+export const localStorages = {
+	settings:
+		"webtrisSettings_" +
+		localStorageVersions.game +
+		"_" +
+		localStorageVersions.settings,
+	weights:
+		"webtrisWeights_" +
+		localStorageVersions.game +
+		"_" +
+		localStorageVersions.weights,
+	theme:
+		"webtrisTheme_" +
+		localStorageVersions.game +
+		"_" +
+		localStorageVersions.theme,
+	scale:
+		"webtrisScale_" +
+		localStorageVersions.game +
+		"_" +
+		localStorageVersions.scale,
+};
 export const initWeights = window.localStorage.getItem(localStorages.weights)
 	? JSON.parse(window.localStorage.getItem(localStorages.weights) as string)
 	: {
@@ -384,9 +481,13 @@ export const initWeights = window.localStorage.getItem(localStorages.weights)
 			blocks: -0.36, //number of blocks
 			colHoles: -1.38, //number of columns containing holes
 	  };
+export let weights = initWeights;
+export function setWeights(newWeights: any): void {
+	weights = newWeights;
+}
 export const initTheme = window.localStorage.getItem(localStorages.theme)
-? parseInt(window.localStorage.getItem(localStorages.theme) as string)
-: 0;
+	? parseInt(window.localStorage.getItem(localStorages.theme) as string)
+	: 0;
 export const initSettings = window.localStorage.getItem(localStorages.settings)
 	? JSON.parse(window.localStorage.getItem(localStorages.settings) as string)
 	: {
@@ -396,18 +497,21 @@ export const initSettings = window.localStorage.getItem(localStorages.settings)
 			softDrop: "S",
 			hardDrop: "W",
 			holdPiece: "SHIFT",
-			rotateCW: "␣",
-			closeMenu: "ESCAPE",
+			rotateCW: "SPACE",
 			rotateCCW: "ALT",
+			closeMenu: "ESCAPE",
 			clash: [""],
 	  };
 export const initScale = window.localStorage.getItem(localStorages.scale)
 	? JSON.parse(window.localStorage.getItem(localStorages.scale) as string)
 	: 1;
-window.localStorage.setItem(localStorages.scale,JSON.stringify(initScale))
-window.localStorage.setItem(localStorages.settings,JSON.stringify(initSettings))
-window.localStorage.setItem(localStorages.weights,JSON.stringify(initWeights))
-window.localStorage.setItem(localStorages.theme,JSON.stringify(initTheme))
+window.localStorage.setItem(localStorages.scale, JSON.stringify(initScale));
+window.localStorage.setItem(
+	localStorages.settings,
+	JSON.stringify(initSettings)
+);
+window.localStorage.setItem(localStorages.weights, JSON.stringify(initWeights));
+window.localStorage.setItem(localStorages.theme, JSON.stringify(initTheme));
 type settingsType = typeof initSettings;
 export const settingsKeys = Object.keys(initSettings) as (keyof settingsType)[];
 

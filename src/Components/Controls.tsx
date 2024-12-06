@@ -16,6 +16,7 @@ function ControlsScreen() {
     "Hard Drop",
     "Hold",
     "Rotate CW",
+    "Rotate CCW",
     "Close Menu",
   ]
   const [scrollHeight,setScrollHeight]=useState(0)  
@@ -53,12 +54,12 @@ function ControlsScreen() {
             className="h-[3.5vmin] w-[10vmin] text-[1.7vmin] cursor-pointer focus:cursor-none duration-200 outline outline-1 outline-[#0000] active:outline-none caret-transparent focus:outline-none focus:border-colors-green bg-bdark bg-opacity-20 border border-[#0000] text-center rounded-[0.5vmin]"
             type="text"
             style={{
-              outlineColor:settings.clash.includes((settings[settingsKeys[i]]).toString())?"#bf616a":"",
-              opacity:i==7?"0.5":""
+              outlineColor:settings.clash.includes((settings[settingsKeys[i]]).toString())?"#bf616a":"#bf616a00",
+              opacity:i==8?"0.5":""
             }}
             onFocus={(e) => {
               // console.log(state)
-                if(i==7 || state!=="settings")
+                if(i==8 || state!=="settings")
                     e.currentTarget.blur()
             }}
             onChange={(e) => {
@@ -66,7 +67,7 @@ function ControlsScreen() {
             }}
             onKeyDown={(e) => {
               setSettings((prevSettings: any) => {
-                prevSettings[settingsKeys[i]]=e.key !== " " ? e.key.toUpperCase() : "␣";
+                prevSettings[settingsKeys[i]]=e.key !== " " ? e.key.toUpperCase() : "SPACE";
                 return prevSettings
               });
               e.currentTarget.value = e.key; 
