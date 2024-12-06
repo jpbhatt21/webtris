@@ -7,7 +7,6 @@ import {
 	boardAtom,
 	currentShapeAtom,
 	garbageLinesAtom,
-	getAutoplayStateAtom,
 	ghostPieceAtom,
 	holdShapeAtom,
 	initAtom,
@@ -20,6 +19,7 @@ import {
 	nextShapeAtom,
 	pageAtom,
 	scoreAtom,
+	settingsAtom,
 	speedAtom,
 	stateAtom,
 	themeAtom,
@@ -97,7 +97,7 @@ let ticker = {
 	rotate: 150,
 	softDrop: 100,
 	moveLRSpeed: 100,
-	hardDrop: 250,
+	hardDrop: 333,
 	hold: 150,
 };
 let prevTickTime = {
@@ -114,8 +114,103 @@ function getThs() {
 	return ths;
 }
 let speed = 960;
-let eventHandler: any = null;
 let settings = initSettings;
+let intervals: any = {
+	rotate: null,
+	softDrop: null,
+	moveLeft: null,
+	moveRight: null,
+	hardDrop: null,
+	gravity: null,
+};
+let moveFunctions = {
+	moveLeft: () => {
+		if (
+			!keys.moveRight &&
+			ths.active[0][1] !== 0 &&
+			ths.active[1][1] !== 0 &&
+			ths.active[2][1] !== 0 &&
+			ths.active[3][1] !== 0 &&
+			!ths.board[ths.active[0][0]][ths.active[0][1] - 1].occupied &&
+			!ths.board[ths.active[1][0]][ths.active[1][1] - 1].occupied &&
+			!ths.board[ths.active[2][0]][ths.active[2][1] - 1].occupied &&
+			!ths.board[ths.active[3][0]][ths.active[3][1] - 1].occupied &&
+			ths.state === "play" &&
+			!ths.npc
+		) {
+			ths.active[0][1]--;
+			ths.active[1][1]--;
+			ths.active[2][1]--;
+			ths.active[3][1]--;
+			prevTickTime.moveLeft = new Date().getTime();
+		}
+	},
+	moveRight: () => {
+		if (
+			!keys.moveLeft &&
+			ths.active[0][1] !== 9 &&
+			ths.active[1][1] !== 9 &&
+			ths.active[2][1] !== 9 &&
+			ths.active[3][1] !== 9 &&
+			!ths.board[ths.active[0][0]][ths.active[0][1] + 1].occupied &&
+			!ths.board[ths.active[1][0]][ths.active[1][1] + 1].occupied &&
+			!ths.board[ths.active[2][0]][ths.active[2][1] + 1].occupied &&
+			!ths.board[ths.active[3][0]][ths.active[3][1] + 1].occupied &&
+			ths.state === "play" &&
+			!ths.npc
+		) {
+			ths.active[0][1]++;
+			ths.active[1][1]++;
+			ths.active[2][1]++;
+			ths.active[3][1]++;
+			prevTickTime.moveRight = new Date().getTime();
+		}
+	},
+	softDrop: () => {
+		if (
+			ths.active[0][0] != 19 &&
+			ths.active[1][0] != 19 &&
+			ths.active[2][0] != 19 &&
+			ths.active[3][0] != 19 &&
+			!ths.board[ths.active[0][0] + 1][ths.active[0][1]].occupied &&
+			!ths.board[ths.active[1][0] + 1][ths.active[1][1]].occupied &&
+			!ths.board[ths.active[2][0] + 1][ths.active[2][1]].occupied &&
+			!ths.board[ths.active[3][0] + 1][ths.active[3][1]].occupied &&
+			ths.state === "play" &&
+			!ths.npc
+		) {
+			ths.active[0][0]++;
+			ths.active[1][0]++;
+			ths.active[2][0]++;
+			ths.active[3][0]++;
+			prevTickTime.softDrop = new Date().getTime();
+			prevTickTime.gravity = new Date().getTime();
+		}
+	},
+	hardDrop: () => {
+		if (ths.state === "play" && !ths.npc) {
+			while (
+				ths.active[0][0] !== 19 &&
+				ths.active[1][0] !== 19 &&
+				ths.active[2][0] !== 19 &&
+				ths.active[3][0] !== 19 &&
+				!ths.board[ths.active[0][0] + 1][ths.active[0][1]].occupied &&
+				!ths.board[ths.active[1][0] + 1][ths.active[1][1]].occupied &&
+				!ths.board[ths.active[2][0] + 1][ths.active[2][1]].occupied &&
+				!ths.board[ths.active[3][0] + 1][ths.active[3][1]].occupied
+			) {
+				ths.active[0][0]++;
+				ths.active[1][0]++;
+				ths.active[2][0]++;
+				ths.active[3][0]++;
+			}
+			prevTickTime.hardDrop = new Date().getTime();
+			prevTickTime.gravity = -100;
+		}
+	},
+	rotateCW: () => {},
+	hold:()=>{},
+};
 window.addEventListener("keydown", (e) => {
 	settings = getThs().settings;
 	let key = e.key.toUpperCase();
@@ -125,40 +220,62 @@ window.addEventListener("keydown", (e) => {
 
 	if (!ths.autoplay) {
 		if (key === settings.moveLeft) {
-			//setKeys((prev:any) => ({ ...prev, moveLeft: true }));
 			keys.moveLeft = true;
+			if (!intervals.moveLeft)
+				intervals.moveLeft = setInterval(() => {
+					if (
+						new Date().getTime() - prevTickTime.moveLeft >=
+						ticker.moveLRSpeed
+					)
+						moveFunctions.moveLeft();
+				}, 0);
 		}
 		if (key === settings.moveRight) {
-			//setKeys((prev:any) => ({ ...prev, moveRight: true }));
 			keys.moveRight = true;
+			if (!intervals.moveRight)
+				intervals.moveRight = setInterval(() => {
+					if (
+						new Date().getTime() - prevTickTime.moveRight >=
+						ticker.moveLRSpeed
+					)
+						moveFunctions.moveRight();
+				}, 0);
 		}
 		if (key === settings.softDrop) {
-			//setKeys((prev:any) => ({ ...prev, softDrop: true }));
 			keys.softDrop = true;
+			if (!intervals.softDrop)
+				intervals.softDrop = setInterval(() => {
+					if (
+						new Date().getTime() - prevTickTime.softDrop >=
+						ticker.softDrop
+					)
+						moveFunctions.softDrop();
+				}, 0);
 		}
 		if (key === settings.hardDrop) {
-			//setKeys((prev:any) => ({ ...prev, hardDrop: true }));
-			keys.hardDrop = true;
+			if (!intervals.hardDrop)
+				intervals.hardDrop = setInterval(() => {
+					if (
+						new Date().getTime() - prevTickTime.hardDrop >=
+						ticker.hardDrop
+					)
+						moveFunctions.hardDrop();
+				}, 0);
 		}
 		if (key === settings.rotateCW) {
-			//setKeys((prev:any) => ({ ...prev, rotateCW: true }));
-			keys.rotateCW = true;
+			if (!intervals.rotateCW)
+				intervals.rotateCW = setInterval(() => {
+					if (
+						new Date().getTime() - prevTickTime.rotate >=
+						ticker.rotate
+					)
+						moveFunctions.rotateCW();
+				}, 0);
 		}
 		if (key === settings.rotateCCW) {
-			//   setActive([
-			//     [-10, -10],
-			//     [-10, -10],
-			//     [-10, -10],
-			//     [-10, -10],
-			//   ]);
-			//   clearInterval(inter);
-			//   inter = -0;
-			//setKeys((prev:any) => ({ ...prev, rotateCCW: true }));
-			// keys.rotateCCW = true;
 		}
 		if (key === settings.holdPiece) {
-			//setKeys((prev:any) => ({ ...prev, holdPiece: true }));
-			keys.holdPiece = true;
+			moveFunctions.hold();
 		}
 	}
 });
@@ -168,17 +285,9 @@ window.addEventListener("keyup", (e) => {
 	if (key === " ") {
 		key = "␣";
 	}
-	if (key === settings.moveLeft) {
-		//setKeys((prev:any) => ({ ...prev, moveLeft: false }));
-		keys.moveLeft = false;
-		// movClock = new Date().getTime() - lrSpeed;
-	}
+
 	if (key === settings.pauseGame && ths.state === "pause") {
 		ths.setState("play");
-		// 	setControls((prev: any) => {
-		// 		if (!prev) keys.pauseGame = false;
-		// 		return prev;
-		// 	});
 	} else if (
 		key == settings.pauseGame &&
 		ths.state === "play" &&
@@ -190,82 +299,119 @@ window.addEventListener("keyup", (e) => {
 		if (ths.state == "settings" && ths.page == "single")
 			ths.setState("pause");
 		else ths.setState("play");
-		// setControls((prev: any) => {
-		// 	if (!prev) setPaused(false);
-
-		// 	return false;
-		// });
+	}
+	if (key === settings.moveLeft) {
+		intervals.moveLeft && clearInterval(intervals.moveLeft);
+		intervals.moveLeft = null;
+		keys.moveLeft = false;
+		prevTickTime.moveLeft -= ticker.moveLRSpeed;
 	}
 	if (key === settings.moveRight) {
-		//setKeys((prev:any) => ({ ...prev, moveRight: false }));
+		intervals.moveRight && clearInterval(intervals.moveRight);
+		intervals.moveRight = null;
 		keys.moveRight = false;
-		// movClock = new Date().getTime() - lrSpeed;
+		prevTickTime.moveRight -= ticker.moveLRSpeed;
 	}
 	if (key === settings.softDrop) {
-		//setKeys((prev:any) => ({ ...prev, softDrop: false }));
+		intervals.softDrop && clearInterval(intervals.softDrop);
+		intervals.softDrop = null;
 		keys.softDrop = false;
+		prevTickTime.softDrop -= ticker.softDrop;
 	}
 	if (key === settings.hardDrop) {
-		//setKeys((prev:any) => ({ ...prev, hardDrop: false }));
-		keys.hardDrop = false;
+		intervals.hardDrop && clearInterval(intervals.hardDrop);
+		intervals.hardDrop = null;
+		prevTickTime.hardDrop -= ticker.hardDrop;
 	}
 	if (key === settings.rotateCW) {
-		//setKeys((prev:any) => ({ ...prev, rotateCW: false }));
-		keys.rotateCW = false;
-		// rotClock = new Date().getTime() - 150;
+		intervals.rotateCW && clearInterval(intervals.rotateCW);
+		intervals.rotateCW = null;
+		prevTickTime.rotate -= ticker.rotate;
 	}
 	if (key === settings.rotateCCW) {
 		e.preventDefault();
-		//setKeys((prev:any) => ({ ...prev, rotateCCW: false }));
 		keys.rotateCCW = false;
-		// rotClock = new Date().getTime() - 150;
 	}
-	if (key === settings.holdPiece) {
-		//setKeys((prev:any) => ({ ...prev, holdPiece: false }));
-		keys.holdPiece = false;
-	}
+	// if (key === settings.holdPiece) {
+	// 	keys.holdPiece = false;
+	// }
 });
 let inter: any = null;
 let lineBar = 10;
 function MainBoard() {
+	const [, setLineStack] = useAtom(lineStackAtom);
+	const [, setHoldShape] = useAtom(holdShapeAtom);
+	const [, setNextShape] = useAtom(nextShapeAtom);
+	const [, setTime] = useAtom(timeAtom);
+	const [, bagRand] = useAtom(bagRandAtom);
+	const [, init] = useAtom(initAtom);
+	const [, setSpeed] = useAtom(speedAtom);
+	const[settings]= useAtom(settingsAtom)
 	const [board, setBoard] = useAtom(boardAtom);
 	const [active, setActive] = useAtom(activePieceAtom);
 	const [ghost, setGhost] = useAtom(ghostPieceAtom);
 	const [theme] = useAtom(themeAtom);
 	const [autoplay] = useAtom(autoplayAtom);
 	const [interval, stInterval] = useAtom(intervalAtom);
-	const setLineStack = useAtom(lineStackAtom)[1];
 	const [autoplaySpeed] = useAtom(autoplaySpeedAtom);
-	const [, setHoldShape] = useAtom(holdShapeAtom);
 	const [currentShape, setCurrentShape] = useAtom(currentShapeAtom);
-	const [, setNextShape] = useAtom(nextShapeAtom);
-	const setTime = useAtom(timeAtom)[1];
 	const [garbageLines, setGarbageLines] = useAtom(garbageLinesAtom);
-	useEffect(() => {
-		// console.log(garbageLines);
-		ths.garbageLines = garbageLines;
-	}, [garbageLines]);
 	const [score, setScore] = useAtom(scoreAtom);
 	const [state, setState] = useAtom(stateAtom);
 	const [lines, setLines] = useAtom(linesAtom);
 	const [page] = useAtom(pageAtom);
 	const [level, setLevel] = useAtom(levelAtom);
-	const bagRand = useAtom(bagRandAtom)[1];
-	const init = useAtom(initAtom)[1];
-	const getAutoplayState = useAtom(getAutoplayStateAtom)[1];
 	const [lineDissapear, setLineDissapear] = useAtom(lineDissapearAtom);
 	const [moveDown, setMoveDown] = useAtom(moveDownAtom);
-	const setSpeed = useAtom(speedAtom)[1];
 	const [user] = useAtom(userAtom);
 	const [timer] = useAtom(timerAtom);
-	useEffect(() => {
-		if (user.name == "Guest") {
-			lineBar = 10;
-		} else {
-			lineBar = 10;
-		}
-	}, [user]);
+	useEffect(()=>{
+		ths.autoplay=autoplay
+		ths.state=state
+		ths.autoplaySpeed = autoplaySpeed
+		ths.page= page
+		ths.settings=settings
+	},[
+		autoplay,state, autoplaySpeed,page,settings
+	])
 	function startMainGameLoop() {
+		moveFunctions.rotateCW = () => {
+			if (ths.state === "play" && !ths.npc) {
+				[ths.active, ths.rot] = rotPiece(
+					ths.board,
+					ths.currentShape,
+					ths.rot,
+					ths.active
+				);
+				setActive(JSON.parse(JSON.stringify(ths.active)));
+				prevTickTime.rotate = new Date().getTime();
+			}
+		};
+		moveFunctions.hold=()=>{
+			if (ths.holdShape == 7) {
+				ths.holdShape = JSON.parse(
+					JSON.stringify(ths.currentShape)
+				);
+				setHoldShape(ths.currentShape);
+				createNewPiece(false);
+			} else if (!held) {
+				held = true;
+				let temp = JSON.parse(JSON.stringify(ths.holdShape));
+				ths.holdShape = JSON.parse(
+					JSON.stringify(ths.currentShape)
+				);
+				ths.currentShape = temp;
+				ths.rot = 0;
+				ths.active = JSON.parse(
+					JSON.stringify(activePos[ths.currentShape])
+				);
+				setHoldShape(ths.holdShape);
+				setCurrentShape(ths.currentShape);
+				setActive(JSON.parse(JSON.stringify(ths.active)));
+			}
+
+			held = true;
+		}
 		let x = init();
 		let held = false;
 		ths.npc = false;
@@ -292,11 +438,10 @@ function MainBoard() {
 		ths.page = page;
 		ths.score = JSON.parse(JSON.stringify(score));
 		ths.rot = JSON.parse(JSON.stringify(0));
-		// console.log(ths.holdShape);
 		ths.lines = JSON.parse(JSON.stringify(lines));
 		ths.level = JSON.parse(JSON.stringify(level));
 		let scrf = document.getElementById("scrf");
-		if (scrf) scrf.style.opacity="0";
+		if (scrf) scrf.style.opacity = "0";
 		ths.lineStack = [0, 0, 0, 0];
 		async function createNewPiece(hldr: boolean = true) {
 			let line = 0;
@@ -427,20 +572,19 @@ function MainBoard() {
 						ths.state = "game over";
 						ths.setState("game over");
 					} else if (ths.page == "multi") {
-						setTimeout(()=>{
+						setTimeout(() => {
 							socket.emit("gameOver", {
 								room: user.room,
 								name: user.name,
 								score: ths.score,
 							});
-						},100)
-						if (scrf) scrf.style.opacity="1";
+						}, 100);
+						if (scrf) scrf.style.opacity = "1";
 						// setMessage({
 						// 	active: true,
 						// 	heading: "Defeat",
 						// 	body: "Better luck next time!",
 						// });
-						
 					}
 
 					return;
@@ -476,138 +620,19 @@ function MainBoard() {
 			pauseGame: false,
 		};
 
-		if (eventHandler) clearInterval(eventHandler);
-		eventHandler = setInterval(async () => {
-			// if(user.room!=="")
-			// socket.emit("roomCom", {
-			// 	room: user.room,
-			// 	board: JSON.parse(JSON.stringify(ths.board)),
-			// 	active: JSON.parse(JSON.stringify(ths.active)),
-			// 	currentShape: JSON.parse(JSON.stringify(ths.currentShape)),
-			// 	nextShape: JSON.parse(JSON.stringify(ths.nextShape)),
-			// 	holdShape: JSON.parse(JSON.stringify(ths.holdShape)),
-			// 	score: ths.score,
-			// 	lines: ths.lines,
-			// 	level: ths.level,
-			// 	lineDissapear: ths.lineDissapear,
-			// 	moveDown: ths.moveDown,
-			// 	speed: speed,
-			// 	npc: ths.npc,
-			// });
-			if (ths.npc) return;
-			if (
-				cur - prevTickTime.moveLeft >= ticker.moveLRSpeed &&
-				keys.moveLeft &&
-				!keys.moveRight &&
-				ths.active[0][1] !== 0 &&
-				ths.active[1][1] !== 0 &&
-				ths.active[2][1] !== 0 &&
-				ths.active[3][1] !== 0 &&
-				!ths.board[ths.active[0][0]][ths.active[0][1] - 1].occupied &&
-				!ths.board[ths.active[1][0]][ths.active[1][1] - 1].occupied &&
-				!ths.board[ths.active[2][0]][ths.active[2][1] - 1].occupied &&
-				!ths.board[ths.active[3][0]][ths.active[3][1] - 1].occupied &&
-				ths.state === "play"
-			) {
-				ths.active[0][1]--;
-				ths.active[1][1]--;
-				ths.active[2][1]--;
-				ths.active[3][1]--;
-				prevTickTime.moveLeft = new Date().getTime();
-			}
-			if (
-				cur - prevTickTime.moveRight >= ticker.moveLRSpeed &&
-				keys.moveRight &&
-				!keys.moveLeft &&
-				ths.active[0][1] !== 9 &&
-				ths.active[1][1] !== 9 &&
-				ths.active[2][1] !== 9 &&
-				ths.active[3][1] !== 9 &&
-				!ths.board[ths.active[0][0]][ths.active[0][1] + 1].occupied &&
-				!ths.board[ths.active[1][0]][ths.active[1][1] + 1].occupied &&
-				!ths.board[ths.active[2][0]][ths.active[2][1] + 1].occupied &&
-				!ths.board[ths.active[3][0]][ths.active[3][1] + 1].occupied &&
-				ths.state === "play"
-			) {
-				ths.active[0][1]++;
-				ths.active[1][1]++;
-				ths.active[2][1]++;
-				ths.active[3][1]++;
-				prevTickTime.moveRight = new Date().getTime();
-			}
-			if (
-				cur - prevTickTime.softDrop >= ticker.softDrop &&
-				keys.softDrop &&
-				ths.active[0][0] != 19 &&
-				ths.active[1][0] != 19 &&
-				ths.active[2][0] != 19 &&
-				ths.active[3][0] != 19 &&
-				!ths.board[ths.active[0][0] + 1][ths.active[0][1]].occupied &&
-				!ths.board[ths.active[1][0] + 1][ths.active[1][1]].occupied &&
-				!ths.board[ths.active[2][0] + 1][ths.active[2][1]].occupied &&
-				!ths.board[ths.active[3][0] + 1][ths.active[3][1]].occupied &&
-				ths.state === "play"
-			) {
-				ths.active[0][0]++;
-				ths.active[1][0]++;
-				ths.active[2][0]++;
-				ths.active[3][0]++;
-				prevTickTime.softDrop = new Date().getTime();
-			}
-			if (
-				cur - prevTickTime.hardDrop >= ticker.hardDrop &&
-				keys.hardDrop &&
-				ths.state === "play"
-			) {
-				while (
-					ths.active[0][0] !== 19 &&
-					ths.active[1][0] !== 19 &&
-					ths.active[2][0] !== 19 &&
-					ths.active[3][0] !== 19 &&
-					!ths.board[ths.active[0][0] + 1][ths.active[0][1]]
-						.occupied &&
-					!ths.board[ths.active[1][0] + 1][ths.active[1][1]]
-						.occupied &&
-					!ths.board[ths.active[2][0] + 1][ths.active[2][1]]
-						.occupied &&
-					!ths.board[ths.active[3][0] + 1][ths.active[3][1]].occupied
-				) {
-					ths.active[0][0]++;
-					ths.active[1][0]++;
-					ths.active[2][0]++;
-					ths.active[3][0]++;
-				}
-				prevTickTime.hardDrop = new Date().getTime();
-				prevTickTime.gravity = -100;
-			}
-			if (
-				cur - prevTickTime.rotate >= ticker.rotate &&
-				keys.rotateCW &&
-				ths.state === "play"
-			) {
-				[ths.active, ths.rot] = rotPiece(
-					ths.board,
-					ths.currentShape,
-					ths.rot,
-					ths.active
-				);
-				setActive(JSON.parse(JSON.stringify(ths.active)));
-				prevTickTime.rotate = new Date().getTime();
-			}
-		}, 1000 / 60);
 		let diff = 0;
 		if (inter) clearInterval(inter);
 		inter = setInterval(async () => {
 			cur = new Date().getTime();
 			diff = cur - prev;
 			// console.log(held);
-			[
-				ths.autoplay,
-				ths.state,
-				ths.autoplaySpeed,
-				ths.settings,
-				ths.page,
-			] = getAutoplayState();
+			// [
+			// 	ths.autoplay,
+			// 	ths.state,
+			// 	ths.autoplaySpeed,
+			// 	ths.settings,
+			// 	ths.page,
+			// ] = getAutoplayState();
 			if (ths.autoplay && diff < Math.min(ths.autoplaySpeed, speed))
 				return;
 			if (ths.state !== "play" || ths.npc) {
@@ -616,36 +641,13 @@ function MainBoard() {
 			}
 
 			//hold
-			if (
-				cur - prevTickTime.hold >= ticker.hold &&
-				!held &&
-				keys.holdPiece
-			) {
-				if (ths.holdShape == 7) {
-					ths.holdShape = JSON.parse(
-						JSON.stringify(ths.currentShape)
-					);
-					setHoldShape(ths.currentShape);
-					createNewPiece(false);
-				} else if (!held) {
-					held = true;
-					let temp = JSON.parse(JSON.stringify(ths.holdShape));
-					ths.holdShape = JSON.parse(
-						JSON.stringify(ths.currentShape)
-					);
-					ths.currentShape = temp;
-					ths.rot = 0;
-					ths.active = JSON.parse(
-						JSON.stringify(activePos[ths.currentShape])
-					);
-					setHoldShape(ths.holdShape);
-					setCurrentShape(ths.currentShape);
-					setActive(JSON.parse(JSON.stringify(ths.active)));
-				}
-
-				held = true;
-				prevTickTime.hold = cur;
-			}
+			// if (
+			// 	cur - prevTickTime.hold >= ticker.hold &&
+			// 	!held &&
+			// 	keys.holdPiece
+			// ) {
+				
+			// }
 
 			//gravity
 			if (
@@ -660,7 +662,7 @@ function MainBoard() {
 				!ths.board[ths.active[0][0] + 1][ths.active[0][1]].occupied &&
 				!ths.board[ths.active[1][0] + 1][ths.active[1][1]].occupied &&
 				!ths.board[ths.active[2][0] + 1][ths.active[2][1]].occupied &&
-				!ths.board[ths.active[3][0] + 1][ths.active[3][1]].occupied
+				!ths.board[ths.active[3][0] + 1][ths.active[3][1]].occupied && (ths.autoplay || !keys.softDrop||speed<ticker.softDrop)
 			) {
 				ths.active[0][0]++;
 				ths.active[1][0]++;
@@ -743,11 +745,23 @@ function MainBoard() {
 		}, 0);
 		stInterval(inter);
 	}
+
+	useEffect(() => {
+		if (user.name == "Guest") {
+			lineBar = 10;
+		} else {
+			lineBar = 10;
+		}
+	}, [user]);
+	useEffect(() => {
+		ths.garbageLines = garbageLines;
+	}, [garbageLines]);
 	useEffect(() => {
 		if (interval === null) {
 			startMainGameLoop();
 		}
 	}, [interval]);
+
 	return (
 		<>
 			<svg
@@ -755,7 +769,6 @@ function MainBoard() {
 				xmlns="http://www.w3.org/2000/svg"
 				className=" w-full absolute h-full tms duration-200  mb-0 "
 				viewBox="0 0 2110 2215"
-				
 				fill="none">
 				<rect
 					x="515"
@@ -799,7 +812,8 @@ function MainBoard() {
 							)
 					)
 				)}
-				{timer==0 &&!autoplay &&
+				{timer == 0 &&
+					!autoplay &&
 					ghost.map((pos: any, ind: any) => (
 						<Rect
 							className="duration-[15ms] fadein brightness-75 "
@@ -818,20 +832,23 @@ function MainBoard() {
 							key={"ghos" + ind + "" + currentShape}
 						/>
 					))}
-				{timer==0 &&active.map((pos: any, ind: any) => (
-					<Rect
-						className="duration-[15ms] fadein shadow-xl"
-						style={{
-							transitionDuration: autoplay
-								? Math.min(autoplaySpeed / 4,speed) + "ms"
-								: Math.min(25,speed)+"ms",
-						}}
-						x={5 + pos[1] * 105}
-						y={20 + pos[0] * 105}
-						fill={theme.accents[currentShape]}
-						key={"active" + ind + "" + currentShape+""+score}
-					/> 
-				))}
+				{timer == 0 &&
+					active.map((pos: any, ind: any) => (
+						<Rect
+							className="duration-[15ms] fadein shadow-xl"
+							style={{
+								transitionDuration: autoplay
+									? Math.min(autoplaySpeed / 4, speed) + "ms"
+									: Math.min(25, speed) + "ms",
+							}}
+							x={5 + pos[1] * 105}
+							y={20 + pos[0] * 105}
+							fill={theme.accents[currentShape]}
+							key={
+								"active" + ind + "" + currentShape + "" + score
+							}
+						/>
+					))}
 			</svg>
 		</>
 	);

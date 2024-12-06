@@ -10,13 +10,13 @@ function ControlsScreen() {
   const [state]=useAtom(stateAtom)
   const titles=[
     "Pause",
-    "Close Menu",
     "Move Left",
     "Move Right",
     "Soft Drop",
     "Hard Drop",
     "Hold",
-    "Rotate CW"
+    "Rotate CW",
+    "Close Menu",
   ]
   const [scrollHeight,setScrollHeight]=useState(0)  
   
@@ -46,18 +46,19 @@ function ControlsScreen() {
       
       key={key} className="w-full h-full overflow-y-scroll hscb justify-center py-[0.5vmin] px-[0.5vmin] flex flex-wrap gap-[0.75vmin] text-[2vmin] items-center ">
         {
-          titles.map((x,i)=>{return i!=1&&<div key={"contTitles"+i} className="flex justify-between items-center w-full">
+          titles.map((x,i)=>{return <div key={"contTitles"+i} className="flex justify-between items-center w-full">
           {x}
           <input
             defaultValue={settings[settingsKeys[i]]}
             className="h-[3.5vmin] w-[10vmin] text-[1.7vmin] cursor-pointer focus:cursor-none duration-200 outline outline-1 outline-[#0000] active:outline-none caret-transparent focus:outline-none focus:border-colors-green bg-bdark bg-opacity-20 border border-[#0000] text-center rounded-[0.5vmin]"
             type="text"
             style={{
-              outlineColor:settings.clash.includes((settings[settingsKeys[i]]).toString())?"#bf616a":""
+              outlineColor:settings.clash.includes((settings[settingsKeys[i]]).toString())?"#bf616a":"",
+              opacity:i==7?"0.5":""
             }}
             onFocus={(e) => {
               // console.log(state)
-                if(i==1 || state!=="settings")
+                if(i==7 || state!=="settings")
                     e.currentTarget.blur()
             }}
             onChange={(e) => {

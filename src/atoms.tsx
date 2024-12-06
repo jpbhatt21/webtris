@@ -3,23 +3,23 @@ import {
 	activePos,
 	initScale,
 	initSettings,
+	initTheme,
+	initWeights,
+	localStorages,
 	socket,
 	themeKeys,
 	themes,
 } from "./constants";
 import { setWeights } from "./Functionality/helper";
-let act: number = window.localStorage.getItem("colorScheme")
-	? parseInt(window.localStorage.getItem("colorScheme") as string)
-	: 0;
 
-const index = atom(act);
-export const themeAtom = atom(themes[themeKeys[act]]);
+const index = atom(initTheme);
+export const themeAtom = atom(themes[themeKeys[initTheme]]);
 export const themeIndexAtom = atom(
 	(get) => get(index),
 	(_get, set, update: number) => {
 		set(index, update);
 		set(themeAtom, themes[themeKeys[update]]);
-		window.localStorage.setItem("colorScheme", update.toString());
+		window.localStorage.setItem(localStorages.theme, update.toString());
 	}
 );
 
@@ -75,16 +75,16 @@ export const autoplayAtom = atom(
 	}
 );
 
-export const getAutoplayStateAtom = atom(null, (_get) => {
-	let temp = [
-		_get(autoplay),
-		_get(state),
-		_get(autoplaySpeed),
-		_get(settings),
-		_get(page),
-	];
-	return temp;
-});
+// export const getAutoplayStateAtom = atom(null, (_get) => {
+// 	let temp = [
+// 		_get(autoplay),
+// 		_get(state),
+// 		_get(autoplaySpeed),
+// 		_get(settings),
+// 		_get(page),
+// 	];
+// 	return temp;
+// });
 const holdShape = atom(7);
 export const holdShapeAtom = atom(
 	(get) => get(holdShape),
@@ -170,25 +170,14 @@ export const autoplaySpeedAtom = atom(
 );
 
 export const weight = atom(
-	window.localStorage.getItem("weights")
-		? JSON.parse(window.localStorage.getItem("weights") as string)
-		: {
-				weightedBlocks: 0.25, //weighted sum of blocks, where a block's weight is the row it's on
-				connectedHoles: 0.09, //number of vertically connected holes
-				roughness: -0.63, //sum of height differences between adjacent columns
-				pitholePercentage: 0.2, //number of pits divided by total pits and holes
-				clearAbleLines: 0.41, //number of lines that can be cleared by an I piece
-				deepestHole: 0.22, //depth of the deepest hole
-				blocks: -0.36, //number of blocks
-				colHoles: -1.38, //number of columns containing holes
-		  }
+	initWeights
 );
 export const weightsAtom = atom(
 	(get) => get(weight),
 	(_get, set, update: any) => {
 		setWeights(update);
 		set(weight, update);
-		window.localStorage.setItem("weights", JSON.stringify(update));
+		window.localStorage.setItem(localStorages.weights, JSON.stringify(update));
 	}
 );
 const timer = atom(0);
@@ -289,7 +278,7 @@ export const scaleAtom = atom(
 	(get) => get(scale),
 	(_get, set, update: number) => {
 		set(scale, update);
-		window.localStorage.setItem("scale", update.toString());
+		window.localStorage.setItem(localStorages.scale, update.toString());
 	}
 );
 const settings = atom(initSettings);
@@ -301,7 +290,6 @@ export const settingsAtom = atom(
 		let prev: any = [];
 		let clash: any = [];
 		for (let i = 0; i < values.length; i++) {
-			if (i == 1) continue;
 			let value = values[i];
 			if (prev.includes(value)) {
 				clash.push(value);
@@ -312,7 +300,7 @@ export const settingsAtom = atom(
 		temp.clash = clash;
 
 		set(settings, temp);
-		window.localStorage.setItem("webtrisSettings", JSON.stringify(temp));
+		window.localStorage.setItem(localStorages.settings, JSON.stringify(temp));
 	}
 );
 const lineDissapear = atom([]);
@@ -408,6 +396,9 @@ export const lineStackAtom = atom(
 	}
 );
 export const initAtom = atom(null, (_get, set) => {
+	console.log("called")
+	if(_get(currentShape)!=7)
+		return [_get(currentShape), _get(nextShape), _get(holdShape)];
 	let tempBag = [0, 1, 2, 3, 4, 5, 6];
 	set(garbageLines, [0, parseInt((Math.random() * 10).toString())]);
 	let tempCurSh: any = tempBag[Math.floor(Math.random() * tempBag.length)];
@@ -417,6 +408,7 @@ export const initAtom = atom(null, (_get, set) => {
 
 	if (_get(user).room !== "") {
 		tempBag = _get(bag);
+		console.log(tempBag);
 		tempCurSh = tempBag.shift();
 		tempNxtSh = tempBag.shift();
 		set(bag, tempBag);

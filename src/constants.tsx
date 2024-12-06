@@ -359,24 +359,55 @@ export let shapeGrid = [
 	"1 111",
 	"",
 ];
-
-export const initSettings = window.localStorage.getItem("webtrisSettings")
-	? JSON.parse(window.localStorage.getItem("webtrisSettings") as string)
+const localStorageVersions={
+	settings:"0.1",
+	weights:"0.1",
+	theme:"0.1",
+	scale:"0.1",
+	game:"0.1",
+}
+export const localStorages={
+	settings: "webtrisSettings_"+localStorageVersions.game+"_"+localStorageVersions.settings,
+	weights:  "webtrisWeights_"+localStorageVersions.game+"_"+localStorageVersions.weights,
+	theme: "webtrisTheme_"+localStorageVersions.game+"_"+localStorageVersions.theme,
+	scale: "webtrisScale_"+localStorageVersions.game+"_"+localStorageVersions.scale
+}
+export const initWeights = window.localStorage.getItem(localStorages.weights)
+	? JSON.parse(window.localStorage.getItem(localStorages.weights) as string)
 	: {
-			pauseGame: "ESCAPE",
-			closeMenu: "ESCAPE",
+			weightedBlocks: 0.25, //weighted sum of blocks, where a block's weight is the row it's on
+			connectedHoles: 0.09, //number of vertically connected holes
+			roughness: -0.63, //sum of height differences between adjacent columns
+			pitholePercentage: 0.2, //number of pits divided by total pits and holes
+			clearAbleLines: 0.41, //number of lines that can be cleared by an I piece
+			deepestHole: 0.22, //depth of the deepest hole
+			blocks: -0.36, //number of blocks
+			colHoles: -1.38, //number of columns containing holes
+	  };
+export const initTheme = window.localStorage.getItem(localStorages.theme)
+? parseInt(window.localStorage.getItem(localStorages.theme) as string)
+: 0;
+export const initSettings = window.localStorage.getItem(localStorages.settings)
+	? JSON.parse(window.localStorage.getItem(localStorages.settings) as string)
+	: {
+			pauseGame: "P",
 			moveLeft: "A",
 			moveRight: "D",
 			softDrop: "S",
 			hardDrop: "W",
 			holdPiece: "SHIFT",
 			rotateCW: "␣",
+			closeMenu: "ESCAPE",
 			rotateCCW: "ALT",
 			clash: [""],
 	  };
-export const initScale = window.localStorage.getItem("scale")
-	? JSON.parse(window.localStorage.getItem("scale") as string)
+export const initScale = window.localStorage.getItem(localStorages.scale)
+	? JSON.parse(window.localStorage.getItem(localStorages.scale) as string)
 	: 1;
+window.localStorage.setItem(localStorages.scale,JSON.stringify(initScale))
+window.localStorage.setItem(localStorages.settings,JSON.stringify(initSettings))
+window.localStorage.setItem(localStorages.weights,JSON.stringify(initWeights))
+window.localStorage.setItem(localStorages.theme,JSON.stringify(initTheme))
 type settingsType = typeof initSettings;
 export const settingsKeys = Object.keys(initSettings) as (keyof settingsType)[];
 
@@ -1273,5 +1304,4 @@ const URL = "https://weback.jpbhatt.tech";
 export const socket = io(URL, {
 	autoConnect: false,
 	withCredentials: true,
-	
 });
