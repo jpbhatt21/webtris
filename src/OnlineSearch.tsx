@@ -145,8 +145,7 @@ function OnlineSearch() {
 	useEffect(() => {
 		if (state != "onlineSearch") {
 			socket.emit("leaveQueue");
-			clearInterval(inter[0]);
-			clearInterval(inter[1]);
+			if (inter) inter.map((x: any) => clearInterval(x));
 			setFactTimer(0);
 			// console.log(state);
 			setTried(false);
