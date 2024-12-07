@@ -76,7 +76,13 @@ const tetrisFacts = [
 	"Tetris is a testament to innovative and elegant game design.",
 ];
 let inter: any = null;
-let localUser = { name: "Guest", sid: "-1", count: "-", room: "", opponent: "" };
+let localUser = {
+	name: "Guest",
+	sid: "-1",
+	count: "-",
+	room: "",
+	opponent: "",
+};
 function OnlineSearch() {
 	const [selected, setSelected] = useState(0);
 	const [tried, setTried] = useState(false);
@@ -91,15 +97,6 @@ function OnlineSearch() {
 	const [factTimer, setFactTimer] = useState(0);
 	const setTimer = useAtom(timerAtom)[1];
 	useEffect(() => {
-		if (inter) inter.map((x: any) => clearInterval(x));
-		inter = [
-			setInterval(() => {
-				setFactTimer((timer) => timer + 1);
-			}, 1000),
-			setInterval(() => {
-				setSelected(Math.floor(Math.random() * tetrisFacts.length));
-			}, 5000),
-		];
 		if (!socket.connected) {
 			socket.connect();
 
@@ -147,19 +144,26 @@ function OnlineSearch() {
 	}, []);
 	useEffect(() => {
 		if (state != "onlineSearch") {
-			socket.emit("leaveQueue")
-			clearInterval(inter);
+			socket.emit("leaveQueue");
+			clearInterval(inter[0]);
+			clearInterval(inter[1]);
 			setFactTimer(0);
 			// console.log(state);
 			setTried(false);
-		}
-		else if(localUser.room==""){
-			console.log("joining queue")
-			socket.emit("joinQueue")
-
+		} else if (localUser.room == "") {
+			if (inter) inter.map((x: any) => clearInterval(x));
+			inter = [
+				setInterval(() => {
+					setFactTimer((timer) => timer + 1);
+				}, 1000),
+				setInterval(() => {
+					setSelected(Math.floor(Math.random() * tetrisFacts.length));
+				}, 5000),
+			];
+			socket.emit("joinQueue");
 		}
 		localUser = user;
-	}, [state,user]);
+	}, [state, user]);
 	return (
 		<>
 			{state == "onlineSearch" && (
