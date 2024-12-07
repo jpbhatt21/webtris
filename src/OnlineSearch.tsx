@@ -83,6 +83,7 @@ let localUser = {
 	room: "",
 	opponent: "",
 };
+let curState=""
 function OnlineSearch() {
 	const [selected, setSelected] = useState(0);
 	const [tried, setTried] = useState(false);
@@ -131,6 +132,7 @@ function OnlineSearch() {
 						setTimeout(() => {
 							setTimer(3);
 							setTimeout(() => {
+								if(curState!="game over")
 								setState("play");
 							}, 4000);
 						}, 500);
@@ -143,6 +145,7 @@ function OnlineSearch() {
 		}
 	}, []);
 	useEffect(() => {
+		curState = state
 		if (state != "onlineSearch") {
 			socket.emit("leaveQueue");
 			if (inter) inter.map((x: any) => clearInterval(x));
