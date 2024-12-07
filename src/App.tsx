@@ -18,7 +18,6 @@ import OnlineSearch from "./OnlineSearch";
 import Multi from "./Multi";
 import Player2Board from "./Components/Player2Board";
 import { useEffect, useState } from "react";
-import { socket } from "./constants";
 
 function App() {
 	const [theme] = useAtom(themeAtom);

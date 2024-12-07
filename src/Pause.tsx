@@ -204,7 +204,7 @@ function PauseScreen() {
 						onMouseLeave={(e) => {
 							e.currentTarget.style.color = "";
 						}}>
-						Return Home
+						{message.active ? "Return Home" : "Quit"}
 					</button>
 				</div>
 			</div>

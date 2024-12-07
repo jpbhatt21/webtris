@@ -90,7 +90,6 @@ function OnlineSearch() {
 	const setNextBag = useAtom(nextBagAtom)[1];
 	const [factTimer, setFactTimer] = useState(0);
 	const setTimer = useAtom(timerAtom)[1];
-	const [inQueue, setInQueue] = useState(false);
 	useEffect(() => {
 		if (inter) inter.map((x: any) => clearInterval(x));
 		inter = [
@@ -177,7 +176,7 @@ function OnlineSearch() {
 								<div className="text-[5vmin] fadein">
 									{"In Queue".split("").map((x, i) => (
 										<span
-											key={"settings" + i}
+											key={"QUE" + i}
 											className="duration-100"
 											onMouseEnter={(e) => {
 												e.currentTarget.style.transitionDuration =
@@ -233,7 +232,7 @@ function OnlineSearch() {
 											.split("")
 											.map((x, i) => (
 												<span
-													key={"settings" + i}
+													key={"server" + i}
 													className="duration-100"
 													onMouseEnter={(e) => {
 														e.currentTarget.style.transitionDuration =

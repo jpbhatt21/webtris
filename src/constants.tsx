@@ -441,18 +441,18 @@ export let shapeGrid = [
 	"",
 ];
 const localStorageVersions = {
-	settings: "0.01",
+	controls: "0.1",
 	weights: "0.1",
 	theme: "0.1",
 	scale: "0.1",
 	game: "0.1",
 };
 export const localStorages = {
-	settings:
-		"webtrisSettings_" +
+	controls:
+		"webtrisControls_" +
 		localStorageVersions.game +
 		"_" +
-		localStorageVersions.settings,
+		localStorageVersions.controls,
 	weights:
 		"webtrisWeights_" +
 		localStorageVersions.game +
@@ -488,8 +488,8 @@ export function setWeights(newWeights: any): void {
 export const initTheme = window.localStorage.getItem(localStorages.theme)
 	? parseInt(window.localStorage.getItem(localStorages.theme) as string)
 	: 0;
-export const initSettings = window.localStorage.getItem(localStorages.settings)
-	? JSON.parse(window.localStorage.getItem(localStorages.settings) as string)
+export const initControls = window.localStorage.getItem(localStorages.controls)
+	? JSON.parse(window.localStorage.getItem(localStorages.controls) as string)
 	: {
 			pauseGame: "P",
 			moveLeft: "A",
@@ -507,13 +507,13 @@ export const initScale = window.localStorage.getItem(localStorages.scale)
 	: 1;
 window.localStorage.setItem(localStorages.scale, JSON.stringify(initScale));
 window.localStorage.setItem(
-	localStorages.settings,
-	JSON.stringify(initSettings)
+	localStorages.controls,
+	JSON.stringify(initControls)
 );
 window.localStorage.setItem(localStorages.weights, JSON.stringify(initWeights));
 window.localStorage.setItem(localStorages.theme, JSON.stringify(initTheme));
-type settingsType = typeof initSettings;
-export const settingsKeys = Object.keys(initSettings) as (keyof settingsType)[];
+type controlsType = typeof initControls;
+export const controlsKeys = Object.keys(initControls) as (keyof controlsType)[];
 
 export let currentPieceShapes = [];
 export const svg = {
@@ -1404,8 +1404,8 @@ export const svg = {
 };
 
 const URL = "https://weback.jpbhatt.tech";
-const URL2= "http://192.168.137.116:5000"
-export const socket = io(URL2, {
+// const URL2= "http://192.168.137.116:5000"
+export const socket = io(URL, {
 	autoConnect: false,
 	withCredentials: true,
 });

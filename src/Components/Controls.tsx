@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { settingsKeys, svg } from "../constants";
+import { controlsKeys, svg } from "../constants";
 import { useAtom } from "jotai";
-import { settingsAtom, stateAtom } from "../atoms";
+import { controlsAtom, stateAtom } from "../atoms";
 
 let maxScroll=0
 function ControlsScreen() {
   const [key,setKey]=useState(0)
-  const [settings,setSettings]=useAtom(settingsAtom)
+  const [controls,setControls]=useAtom(controlsAtom)
   const [state]=useAtom(stateAtom)
   const titles=[
     "Pause",
@@ -50,11 +50,11 @@ function ControlsScreen() {
           titles.map((x,i)=>{return <div key={"contTitles"+i} className="flex justify-between items-center w-full">
           {x}
           <input
-            defaultValue={settings[settingsKeys[i]]}
+            defaultValue={controls[controlsKeys[i]]}
             className="h-[3.5vmin] w-[10vmin] text-[1.7vmin] cursor-pointer focus:cursor-none duration-200 outline outline-1 outline-[#0000] active:outline-none caret-transparent focus:outline-none focus:border-colors-green bg-bdark bg-opacity-20 border border-[#0000] text-center rounded-[0.5vmin]"
             type="text"
             style={{
-              outlineColor:settings.clash.includes((settings[settingsKeys[i]]).toString())?"#bf616a":"#bf616a00",
+              outlineColor:controls.clash.includes((controls[controlsKeys[i]]).toString())?"#bf616a":"#bf616a00",
               opacity:i==8?"0.5":""
             }}
             onFocus={(e) => {
@@ -63,12 +63,12 @@ function ControlsScreen() {
                     e.currentTarget.blur()
             }}
             onChange={(e) => {
-              e.currentTarget.value = (settings[settingsKeys[i]]).toString();
+              e.currentTarget.value = (controls[controlsKeys[i]]).toString();
             }}
             onKeyDown={(e) => {
-              setSettings((prevSettings: any) => {
-                prevSettings[settingsKeys[i]]=e.key !== " " ? e.key.toUpperCase() : "SPACE";
-                return prevSettings
+              setControls((prevControls: any) => {
+                prevControls[controlsKeys[i]]=e.key !== " " ? e.key.toUpperCase() : "SPACE";
+                return prevControls
               });
               e.currentTarget.value = e.key; 
               e.currentTarget.blur();

@@ -19,7 +19,7 @@ import {
 	nextShapeAtom,
 	pageAtom,
 	scoreAtom,
-	settingsAtom,
+	controlsAtom,
 	speedAtom,
 	stateAtom,
 	themeAtom,
@@ -28,7 +28,7 @@ import {
 	userAtom,
 } from "../atoms";
 import { useEffect } from "react";
-import { activePos, initSettings, socket } from "../constants";
+import { activePos, initControls, socket } from "../constants";
 import { automatic, checkCollision, rotate } from "../Functionality/helper";
 import Rect from "./Rect";
 let keys = {
@@ -114,7 +114,7 @@ function getThs() {
 	return ths;
 }
 let speed = 960;
-let settings = initSettings;
+let controls = initControls;
 let intervals: any = {
 	rotate: null,
 	softDrop: null,
@@ -198,7 +198,7 @@ let moveFunctions = {
 	hold: () => {},
 };
 window.addEventListener("keydown", (e) => {
-	settings = getThs().settings;
+	controls = getThs().controls;
 	let key = e.key.toUpperCase();
 	if (key === " ") {
 		key = "SPACE";
@@ -206,7 +206,7 @@ window.addEventListener("keydown", (e) => {
 
 	if (!ths.autoplay) {
 		e.preventDefault();
-		if (key === settings.moveLeft) {
+		if (key === controls.moveLeft) {
 			keys.moveLeft = true;
 			if (!intervals.moveLeft)
 				intervals.moveLeft = setInterval(() => {
@@ -217,7 +217,7 @@ window.addEventListener("keydown", (e) => {
 						moveFunctions.moveLeft();
 				}, 0);
 		}
-		if (key === settings.moveRight) {
+		if (key === controls.moveRight) {
 			keys.moveRight = true;
 			if (!intervals.moveRight)
 				intervals.moveRight = setInterval(() => {
@@ -228,7 +228,7 @@ window.addEventListener("keydown", (e) => {
 						moveFunctions.moveRight();
 				}, 0);
 		}
-		if (key === settings.softDrop) {
+		if (key === controls.softDrop) {
 			keys.softDrop = true;
 			if (!intervals.softDrop)
 				intervals.softDrop = setInterval(() => {
@@ -239,7 +239,7 @@ window.addEventListener("keydown", (e) => {
 						moveFunctions.softDrop();
 				}, 0);
 		}
-		if (key === settings.hardDrop) {
+		if (key === controls.hardDrop) {
 			if (!intervals.hardDrop)
 				intervals.hardDrop = setInterval(() => {
 					if (
@@ -249,7 +249,7 @@ window.addEventListener("keydown", (e) => {
 						moveFunctions.hardDrop();
 				}, 0);
 		}
-		if (key === settings.rotateCW) {
+		if (key === controls.rotateCW) {
 			keys.rotateCW = true;
 			if (!intervals.rotateCW)
 				intervals.rotateCW = setInterval(() => {
@@ -261,7 +261,7 @@ window.addEventListener("keydown", (e) => {
 						moveFunctions.rotate(1);
 				}, 0);
 		}
-		if (key === settings.rotateCCW) {
+		if (key === controls.rotateCCW) {
 			keys.rotateCCW = true;
 			if (!intervals.rotateCCW)
 				intervals.rotateCCW = setInterval(() => {
@@ -273,63 +273,63 @@ window.addEventListener("keydown", (e) => {
 						moveFunctions.rotate(-1);
 				}, 0);
 		}
-		if (key === settings.holdPiece) {
+		if (key === controls.holdPiece) {
 			moveFunctions.hold();
 		}
 	}
 });
 window.addEventListener("keyup", (e) => {
 	e.preventDefault();
-	settings = getThs().settings;
+	controls = getThs().controls;
 	let key = e.key.toUpperCase();
 	if (key === " ") {
 		key = "SPACE";
 	}
 
-	if (key === settings.pauseGame && ths.state === "pause") {
+	if (key === controls.pauseGame && ths.state === "pause") {
 		ths.setState("play");
 	} else if (
-		key == settings.pauseGame &&
+		key == controls.pauseGame &&
 		ths.state === "play" &&
 		ths.page == "single"
 	) {
 		ths.setState("pause");
-	} else if (key === settings.closeMenu) {
+	} else if (key === controls.closeMenu) {
 		if (ths.state === "game over") return;
 		if (ths.state == "settings" && ths.page == "single")
 			ths.setState("pause");
 		else ths.setState("play");
 	}
-	if (key === settings.moveLeft) {
+	if (key === controls.moveLeft) {
 		intervals.moveLeft && clearInterval(intervals.moveLeft);
 		intervals.moveLeft = null;
 		keys.moveLeft = false;
 		prevTickTime.moveLeft -= ticker.moveLRSpeed;
 	}
-	if (key === settings.moveRight) {
+	if (key === controls.moveRight) {
 		intervals.moveRight && clearInterval(intervals.moveRight);
 		intervals.moveRight = null;
 		keys.moveRight = false;
 		prevTickTime.moveRight -= ticker.moveLRSpeed;
 	}
-	if (key === settings.softDrop) {
+	if (key === controls.softDrop) {
 		intervals.softDrop && clearInterval(intervals.softDrop);
 		intervals.softDrop = null;
 		keys.softDrop = false;
 		prevTickTime.softDrop -= ticker.softDrop;
 	}
-	if (key === settings.hardDrop) {
+	if (key === controls.hardDrop) {
 		intervals.hardDrop && clearInterval(intervals.hardDrop);
 		intervals.hardDrop = null;
 		prevTickTime.hardDrop -= ticker.hardDrop;
 	}
-	if (key === settings.rotateCW) {
+	if (key === controls.rotateCW) {
 		intervals.rotateCW && clearInterval(intervals.rotateCW);
 		intervals.rotateCW = null;
 		prevTickTime.rotate -= ticker.rotate;
 		keys.rotateCW = false;
 	}
-	if (key === settings.rotateCCW) {
+	if (key === controls.rotateCCW) {
 		intervals.rotateCCW && clearInterval(intervals.rotateCCW);
 		intervals.rotateCCW = null;
 		prevTickTime.rotate -= ticker.rotate;
@@ -349,7 +349,7 @@ function MainBoard() {
 	const [, bagRand] = useAtom(bagRandAtom);
 	const [, init] = useAtom(initAtom);
 	const [, setSpeed] = useAtom(speedAtom);
-	const [settings] = useAtom(settingsAtom);
+	const [controls] = useAtom(controlsAtom);
 	const [board, setBoard] = useAtom(boardAtom);
 	const [active, setActive] = useAtom(activePieceAtom);
 	const [ghost, setGhost] = useAtom(ghostPieceAtom);
@@ -373,8 +373,8 @@ function MainBoard() {
 		ths.state = state;
 		ths.autoplaySpeed = autoplaySpeed;
 		ths.page = page;
-		ths.settings = settings;
-	}, [autoplay, state, autoplaySpeed, page, settings]);
+		ths.controls = controls;
+	}, [autoplay, state, autoplaySpeed, page, controls]);
 	function startMainGameLoop() {
 		moveFunctions.rotate = (dir) => {
 			if (ths.state === "play" && !ths.npc) {

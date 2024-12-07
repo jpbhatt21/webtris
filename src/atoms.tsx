@@ -2,7 +2,7 @@ import { atom, createStore } from "jotai";
 import {
 	activePos,
 	initScale,
-	initSettings,
+	initControls,
 	initTheme,
 	initWeights,
 	localStorages,
@@ -281,11 +281,11 @@ export const scaleAtom = atom(
 		window.localStorage.setItem(localStorages.scale, update.toString());
 	}
 );
-const settings = atom(initSettings);
-export const settingsAtom = atom(
-	(get) => get(settings),
+const controls = atom(initControls);
+export const controlsAtom = atom(
+	(get) => get(controls),
 	(_get, set, update: any) => {
-		let temp = update(_get(settings));
+		let temp = update(_get(controls));
 		let values = Object.values(temp);
 		let prev: any = [];
 		let clash: any = [];
@@ -299,8 +299,8 @@ export const settingsAtom = atom(
 		}
 		temp.clash = clash;
 
-		set(settings, temp);
-		window.localStorage.setItem(localStorages.settings, JSON.stringify(temp));
+		set(controls, temp);
+		window.localStorage.setItem(localStorages.controls, JSON.stringify(temp));
 	}
 );
 const lineDissapear = atom([]);
