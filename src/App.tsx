@@ -160,12 +160,8 @@ function App() {
 										body: "",
 									});
 									setUser({
-										name: "Guest",
-										sid: -1,
-										count: "-",
 										room: "",
 									});
-									socket.disconnect();
 									setPage("home");
 									setAutoplay(true);
 									setReset();

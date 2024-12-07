@@ -519,8 +519,8 @@ export let currentPieceShapes = [];
 export const svg = {
 	loader: (
 		<svg
-			height="full"
-			className="animate-spin"
+			
+			className="animate-spin h-full"
 			viewBox="0 0 24 24"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg">
@@ -1404,8 +1404,8 @@ export const svg = {
 };
 
 const URL = "https://weback.jpbhatt.tech";
-// const URL2= "http://192.168.137.116:5000"
-export const socket = io(URL, {
+const URL2= "http://192.168.137.116:5000"
+export const socket = io(URL2, {
 	autoConnect: false,
 	withCredentials: true,
 });

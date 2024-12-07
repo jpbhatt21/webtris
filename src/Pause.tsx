@@ -124,14 +124,11 @@ function PauseScreen() {
 						onClick={() => {
 							if (state == "play") return;
 							if (message.active) {
-								socket.disconnect();
 								
 								setUser({
-									name: "Guest",
-									sid: -1,
-									count: "-",
-									room: "",
+									room: ""
 								});
+								socket.emit("joinQueue")
 								setAutoplay(true);
 								setReset();
 								setMessage({
@@ -185,11 +182,7 @@ function PauseScreen() {
 						onClick={() => {
 							if (state == "play") return;
 							if (user.name !== "Guest") {
-								socket.disconnect();
 								setUser({
-									name: "Guest",
-									sid: -1,
-									count: "-",
 									room: "",
 								});
 								setAutoplay(true);

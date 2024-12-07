@@ -76,7 +76,7 @@ const tetrisFacts = [
 	"Tetris is a testament to innovative and elegant game design.",
 ];
 let inter: any = null;
-let localUser = { name: "Guest", sid: -1, count: "-", room: "", opponent: "" };
+let localUser = { name: "Guest", sid: "-1", count: "-", room: "", opponent: "" };
 function OnlineSearch() {
 	const [selected, setSelected] = useState(0);
 	const [tried, setTried] = useState(false);
@@ -90,79 +90,77 @@ function OnlineSearch() {
 	const setNextBag = useAtom(nextBagAtom)[1];
 	const [factTimer, setFactTimer] = useState(0);
 	const setTimer = useAtom(timerAtom)[1];
+	const [inQueue, setInQueue] = useState(false);
 	useEffect(() => {
-		if (state == "onlineSearch") {
-			if (inter) inter.map((x: any) => clearInterval(x));
-			inter = [
-				setInterval(() => {
-					setFactTimer((timer) => timer + 1);
-				}, 1000),
-				setInterval(() => {
-					setSelected(Math.floor(Math.random() * tetrisFacts.length));
-				}, 5000),
-			];
-			if (!socket.connected) {
-				socket.connect();
+		if (inter) inter.map((x: any) => clearInterval(x));
+		inter = [
+			setInterval(() => {
+				setFactTimer((timer) => timer + 1);
+			}, 1000),
+			setInterval(() => {
+				setSelected(Math.floor(Math.random() * tetrisFacts.length));
+			}, 5000),
+		];
+		if (!socket.connected) {
+			socket.connect();
 
-				socket.on("initUser", (data: any) => {
-					if (data.name == "Guest") {
-						socket.disconnect();
+			socket.on("initUser", (data: any) => {
+				if (data.name == "Guest") {
+					socket.disconnect();
+				} else {
+					localUser = { ...localUser, ...data };
+					setUser(localUser);
+					socket.emit("online");
+				}
+				setTried(true);
+			});
+			socket.on("online", (data: any) => {
+				setUser(data);
+			});
+			socket.on("joinRoom", (data: any) => {
+				setTimeout(() => {
+					localUser.room = data.room;
+					if (data.users[0] == localUser.name) {
+						localUser.opponent = data.users[1];
 					} else {
-						localUser = { ...localUser, ...data };
-						setUser(localUser);
-						socket.emit("online");
+						localUser.opponent = data.users[0];
 					}
-					setTried(true);
-				});
-				socket.on("online", (data: any) => {
-					setUser(data);
-				});
-				socket.on("joinRoom", (data: any) => {
+					setUser(localUser);
 					setTimeout(() => {
-						localUser.room = data.room;
-						if (data.users[0] == localUser.name) {
-							localUser.opponent = data.users[1];
-						} else {
-							localUser.opponent = data.users[0];
-						}
-						setUser(localUser);
+						setAutoplay(false);
+						setBag(data.bag);
+						setNextBag(data.nextBag);
+						setPage("multi");
+						reset(false);
 						setTimeout(() => {
-							setAutoplay(false);
-							setBag(data.bag);
-							setNextBag(data.nextBag);
-							setPage("multi");
-							reset(false);
+							setTimer(3);
 							setTimeout(() => {
-								setTimer(3);
-								setTimeout(() => {
-									setState("play");
-								}, 4000);
-							}, 500);
+								setState("play");
+							}, 4000);
 						}, 500);
-					}, 1000);
-					// if(data.users[0]==localUser.name){
-					//     socket.emit("roomCom",data)
-					// }
-				});
-			}
-		} else {
+					}, 500);
+				}, 1000);
+				// if(data.users[0]==localUser.name){
+				//     socket.emit("roomCom",data)
+				// }
+			});
+		}
+	}, []);
+	useEffect(() => {
+		if (state != "onlineSearch") {
+			socket.emit("leaveQueue")
 			clearInterval(inter);
 			setFactTimer(0);
 			// console.log(state);
-			if (localUser.room == "" && state == "play") {
-				setUser(localUser);
-				socket.disconnect();
-			}
 			setTried(false);
-			localUser = {
-				name: "Guest",
-				sid: -1,
-				count: "-",
-				room: "",
-				opponent: "",
-			};
 		}
-	}, [state]);
+		else if(localUser.room==""){
+			console.log("joining queue")
+			socket.emit("joinQueue")
+
+		}
+		localUser = user;
+	}, [state,user]);
 	return (
 		<>
 			{state == "onlineSearch" && (
