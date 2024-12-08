@@ -1,9 +1,9 @@
 import { useAtom } from "jotai";
 import { nextShapeAtom, themeAtom, timerAtom } from "../atoms";
 import { shapeGrid } from "../constants";
-import Rect from "./Rect";
+import ElementTetrisBlock from "./ElementTetrisBlockSVG";
 
-function Next() {
+function PieceDisplayNext() {
     const [theme] = useAtom(themeAtom);
     const [nextShape] = useAtom(nextShapeAtom);
 	const [timer]=useAtom(timerAtom);
@@ -26,7 +26,7 @@ function Next() {
 											className=" w-[4vmin] h-[4vmin] tms duration-200  mb-0 "
 											viewBox="0 0 105 105"
 											fill="none">
-											<Rect
+											<ElementTetrisBlock
 												x={-520}
 												y={5}
 												fill={
@@ -52,4 +52,4 @@ function Next() {
 	);
 }
 
-export default Next;
+export default PieceDisplayNext;

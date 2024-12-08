@@ -4,7 +4,7 @@ import { useAtom } from "jotai";
 import { svg, themeKeys, themes } from "../constants";
 
 let maxScroll = 0;
-function ThemeScreen() {
+function SubsettingPageTheme() {
 
   const titles = [
     "Nord-ish",
@@ -96,4 +96,4 @@ function ThemeScreen() {
   );
 }
 
-export default ThemeScreen;
+export default SubsettingPageTheme;

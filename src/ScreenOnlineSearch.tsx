@@ -84,7 +84,7 @@ let localUser = {
 	opponent: "",
 };
 let curState=""
-function OnlineSearch() {
+function ScreenOnlineSearch() {
 	const [selected, setSelected] = useState(0);
 	const [tried, setTried] = useState(false);
 	const [theme] = useAtom(themeAtom);
@@ -275,4 +275,4 @@ function OnlineSearch() {
 	);
 }
 
-export default OnlineSearch;
+export default ScreenOnlineSearch;

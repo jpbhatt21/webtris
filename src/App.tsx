@@ -10,13 +10,13 @@ import {
 	timerAtom,
 	userAtom,
 } from "./atoms";
-import StartScreen from "./Components/Start";
-import Single from "./Single";
-import SettingsScreen from "./Settings";
-import PauseScreen from "./Pause";
-import OnlineSearch from "./OnlineSearch";
-import Multi from "./Multi";
-import Player2Board from "./Components/Player2Board";
+import PageHome from "./PageHome";
+import PageSingleplayer from "./PageSingleplayer";
+import ScreenSettings from "./ScreenSettings";
+import ScreenPause from "./ScreenPause";
+import ScreenOnlineSearch from "./ScreenOnlineSearch";
+import PageMultiplayer from "./PageMultiplayer";
+import GameBoardOpponent from "./Components/GameBoardOpponent";
 import { useEffect, useState } from "react";
 
 function App() {
@@ -87,7 +87,7 @@ function App() {
 						}}
 						>
 							
-						<Player2Board />
+						<GameBoardOpponent />
 					</div>
 				)}
 				<div
@@ -111,8 +111,8 @@ function App() {
 							}
 						}
 					}}>
-					{page != "multi" && <Single />}
-					{page == "multi" && <Multi />}
+					{page != "multi" && <PageSingleplayer />}
+					{page == "multi" && <PageMultiplayer />}
 				</div>
 
 				{(
@@ -174,10 +174,10 @@ function App() {
 							else setState("play");
 						}}
 					/>
-					{(page == "single" || message.active) && <PauseScreen />}
-					<StartScreen />
-					<SettingsScreen />
-					{<OnlineSearch />}
+					{(page == "single" || message.active) && <ScreenPause />}
+					<PageHome />
+					<ScreenSettings />
+					{<ScreenOnlineSearch />}
 				</div>
 				<div
 						className="fixed  pointer-events-none duration-500 w-full h-full  "

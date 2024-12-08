@@ -1,7 +1,7 @@
 import { useAtom } from "jotai";
 import { pageAtom, suggestMovesAtom, themeAtom } from "../atoms";
 
-function SuggestMoves() {
+function PanelSuggestMoves() {
     const [theme] = useAtom(themeAtom);
     const [suggestMoves,setSuggestMoves]=useAtom(suggestMovesAtom);
     const [page]=useAtom(pageAtom);
@@ -48,4 +48,4 @@ function SuggestMoves() {
 	);
 }
 
-export default SuggestMoves;
+export default PanelSuggestMoves;

@@ -7,7 +7,7 @@ import {
 	weightsAtom,
 } from "../atoms";
 
-function Autoplay() {
+function PanelAutoplay() {
 	const [theme] = useAtom(themeAtom);
 	const [autoplay, setAutoplay] = useAtom(autoplayAtom);
 	const [page] = useAtom(pageAtom);
@@ -274,4 +274,4 @@ function Autoplay() {
 	);
 }
 
-export default Autoplay;
+export default PanelAutoplay;

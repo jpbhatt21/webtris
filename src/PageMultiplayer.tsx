@@ -1,12 +1,12 @@
 import { useAtom } from "jotai";
-import MainBoard from "./Components/MainBoard";
+import GameBoardUser from "./Components/GameBoardUser";
 import { pageAtom, stateAtom } from "./atoms";
-import SpeedLvAndLine from "./Components/SpeedLvAndLine";
-import Hold from "./Components/Hold";
-import Next from "./Components/Next";
-import TimeScoreAndLineCounter from "./Components/TimeScoreAndLineCounter";
+import PanelSpeedLvAndLine from "./Components/PanelSpeedLvAndLine";
+import PieceDisplayHold from "./Components/PieceDisplayHold";
+import PieceDisplayNext from "./Components/PieceDisplayNext";
+import PanelTimeScoreAndLineCounter from "./Components/PanelTimeScoreAndLineCounter";
 
-function Multi() {
+function PageMultiplayer() {
 	const [state] = useAtom(stateAtom);
 	const [page] = useAtom(pageAtom);
 	return (
@@ -24,10 +24,10 @@ function Multi() {
 							: "125vmin",
 				}}>
 				<div className="h-full w-full flex flex-col items-center justify-center ">
-					<Hold />
+					<PieceDisplayHold />
 				</div>
 				<div className="h-full w-full flex flex-col items-center justify-center ">
-					<SpeedLvAndLine />
+					<PanelSpeedLvAndLine />
 				</div>
 			</div>
 
@@ -36,7 +36,7 @@ function Multi() {
 				style={{
 					opacity: page == "multi" || state == "play" ? 1 : 0,
 				}}>
-				<MainBoard />
+				<GameBoardUser />
 			</div>
 			
             <div
@@ -46,17 +46,17 @@ function Multi() {
 					marginTop: page == "multi" ? "0" : "10vmin",
 				}}>
 				<div className="h-full w-full flex flex-col items-center justify-center ">
-					<Next />
+					<PieceDisplayNext />
 				</div>
 				<div className="h-full w-full flex flex-col items-center justify-center ">
 					<div id="scrf" className=" text-[1.9vmin] text-center mb-[2vmin] duration-300">
 						Score Finalized. Wait for opponent to finish.
 					</div>
-					<TimeScoreAndLineCounter />
+					<PanelTimeScoreAndLineCounter />
 				</div>
 			</div>
 		</>
 	);
 }
 
-export default Multi;
+export default PageMultiplayer;

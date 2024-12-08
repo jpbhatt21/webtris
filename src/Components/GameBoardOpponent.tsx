@@ -9,7 +9,7 @@ import {
 	timerAtom,
 	userAtom,
 } from "../atoms";
-import Rect from "./Rect";
+import ElementTetrisBlock from "./ElementTetrisBlockSVG";
 import { useEffect, useState } from "react";
 import { socket, svg } from "../constants";
 let animTimeout: any = null;
@@ -22,7 +22,7 @@ let localUser = {
 	room: "",
 	opponent: "",
 };
-function Player2Board() {
+function GameBoardOpponent() {
 	const [board, setBoard] = useState(
 		Array.from({ length: 20 }, (_) =>
 			Array.from({ length: 10 }, (_) => ({
@@ -136,7 +136,7 @@ function Player2Board() {
 					<svg
 						id="mainboard2"
 						xmlns="http://www.w3.org/2000/svg"
-						className=" w-full  fadein h-full tms duration-200  mb -[2vmin] h-[2vmin] "
+						className=" w-full  fadein h-full tms duration-200  mb -[2vmin] "
 						viewBox="0 0 1670 2215"
 						fill="none">
 						<rect
@@ -149,7 +149,7 @@ function Player2Board() {
 						/>
 						{board.map((row, i) =>
 							row.map((_, j) => (
-								<Rect
+								<ElementTetrisBlock
 									x={5 + j * 105}
 									y={20 + i * 105}
 									fill={theme.backpop}
@@ -162,7 +162,7 @@ function Player2Board() {
 							row.map(
 								(cell, j) =>
 									cell.occupied && (
-										<Rect
+										<ElementTetrisBlock
 											x={5 + j * 105}
 											y={20 + i * 105}
 											fill={theme.accents[cell.color]}
@@ -189,7 +189,7 @@ function Player2Board() {
 						{lineDissapear.length == 0 &&
 							timer == 0 &&
 							active.map((pos: any, ind: any) => (
-								<Rect
+								<ElementTetrisBlock
 									className="duration-[25ms] fadein shadow-xl"
 									x={5 + pos[1] * 105}
 									y={20 + pos[0] * 105}
@@ -223,4 +223,4 @@ function Player2Board() {
 	);
 }
 
-export default Player2Board;
+export default GameBoardOpponent;

@@ -1,7 +1,7 @@
 import { useAtom } from "jotai";
 import { linesAtom, lineStackAtom, scoreAtom, themeAtom, timeAtom } from "../atoms";
 
-function TimeScoreAndLineCounter() {
+function PanelTimeScoreAndLineCounter() {
     const [score] = useAtom(scoreAtom)
 	const [time] = useAtom(timeAtom);
 	const [lineStack] = useAtom(lineStackAtom);
@@ -86,4 +86,4 @@ function TimeScoreAndLineCounter() {
 	);
 }
 
-export default TimeScoreAndLineCounter;
+export default PanelTimeScoreAndLineCounter;

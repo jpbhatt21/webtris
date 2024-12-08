@@ -5,9 +5,9 @@ import {
 	resetAtom,
 	stateAtom,
 	themeAtom,
-} from "../atoms";
+} from "./atoms";
 
-function StartScreen() {
+function PageHome() {
 	const [theme] = useAtom(themeAtom);
 	const [page, setPage] = useAtom(pageAtom);
 	const setAutoplay = useAtom(autoplayAtom)[1];
@@ -111,4 +111,4 @@ function StartScreen() {
 	);
 }
 
-export default StartScreen;
+export default PageHome;

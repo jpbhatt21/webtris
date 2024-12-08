@@ -32,7 +32,7 @@ import {
 import { useEffect, useState } from "react";
 import { activePos, initControls, socket } from "../constants";
 import { automatic, checkCollision, rotate } from "../Functionality/helper";
-import Rect from "./Rect";
+import ElementTetrisBlock from "./ElementTetrisBlockSVG";
 let keys = {
 	moveLeft: false,
 	moveRight: false,
@@ -346,7 +346,7 @@ let lineBar = 10;
 let held = false;
 
 let holdCalculated = [0, 0, 0, 0];
-function MainBoard() {
+function GameBoardUser() {
 	const [, setLineStack] = useAtom(lineStackAtom);
 	const [, setHoldShape] = useAtom(holdShapeAtom);
 	const [, setNextShape] = useAtom(nextShapeAtom);
@@ -820,7 +820,7 @@ function MainBoard() {
 				/>
 				{board.map((row, i) =>
 					row.map((_, j) => (
-						<Rect
+						<ElementTetrisBlock
 							x={5 + j * 105}
 							y={20 + i * 105}
 							fill={theme.backpop}
@@ -832,7 +832,7 @@ function MainBoard() {
 					row.map(
 						(cell, j) =>
 							cell.occupied && (
-								<Rect
+								<ElementTetrisBlock
 									x={5 + j * 105}
 									y={20 + i * 105}
 									fill={theme.accents[cell.color]}
@@ -854,7 +854,7 @@ function MainBoard() {
 				{timer == 0 &&
 					!autoplay &&
 					ghost.map((pos: any, ind: any) => (
-						<Rect
+						<ElementTetrisBlock
 							className="duration-[15ms] fadein brightness-75 "
 							style={{
 								transitionDuration: autoplay
@@ -873,7 +873,7 @@ function MainBoard() {
 					))}
 				{timer == 0 &&
 					active.map((pos: any, ind: any) => (
-						<Rect
+						<ElementTetrisBlock
 							className="duration-[15ms] fadein shadow-xl"
 							style={{
 								transitionDuration: autoplay
@@ -890,7 +890,7 @@ function MainBoard() {
 					))}
 				{timer == 0 && suggestMoves && !autoplay &&
 					suggested.map((pos: any, ind: any) => (
-						<Rect
+						<ElementTetrisBlock
 							className=" transition-colors fadein opaci ty-80"
 							style={{
 								transitionDuration: Math.min(25, speed) + "ms",
@@ -917,4 +917,4 @@ function MainBoard() {
 	);
 }
 
-export default MainBoard;
+export default GameBoardUser;

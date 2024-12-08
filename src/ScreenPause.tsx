@@ -10,7 +10,7 @@ import {
 } from "./atoms";
 import { socket } from "./constants";
 
-function PauseScreen() {
+function ScreenPause() {
 	const [theme] = useAtom(themeAtom);
 	const [state, setState] = useAtom(stateAtom);
 	const [, setPage] = useAtom(pageAtom);
@@ -212,4 +212,4 @@ function PauseScreen() {
 	);
 }
 
-export default PauseScreen;
+export default ScreenPause;

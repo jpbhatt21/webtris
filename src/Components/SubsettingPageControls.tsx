@@ -4,7 +4,7 @@ import { useAtom } from "jotai";
 import { controlsAtom, stateAtom } from "../atoms";
 
 let maxScroll=0
-function ControlsScreen() {
+function SubsettingPageControls() {
   const [key,setKey]=useState(0)
   const [controls,setControls]=useAtom(controlsAtom)
   const [state]=useAtom(stateAtom)
@@ -90,4 +90,4 @@ function ControlsScreen() {
   );
 }
 
-export default ControlsScreen;
+export default SubsettingPageControls;

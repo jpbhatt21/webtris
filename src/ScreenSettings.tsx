@@ -1,10 +1,10 @@
 import { useState } from "react";
-import ThemeScreen from "./Components/Theme";
+import SubsettingPageTheme from "./Components/SubsettingPageTheme";
 import { useAtom } from "jotai";
 import { pageAtom, stateAtom, themeAtom } from "./atoms";
-import ControlsScreen from "./Components/Controls";
+import SubsettingPageControls from "./Components/SubsettingPageControls";
 
-function SettingsScreen() {
+function ScreenSettings() {
     const [selected,setSelected] = useState(0);
     const [theme] = useAtom(themeAtom);
     const [state] = useAtom(stateAtom);
@@ -77,12 +77,12 @@ function SettingsScreen() {
                         }
                     </div>
                     <div className="w-[calc(100%-8vmin)] h-[45vmin] mts  mt-[2vmin] py-[0.5vmin] ">
-                        {selected === 0 && <ControlsScreen />}
-                        {selected === 2 && <ThemeScreen />}
+                        {selected === 0 && <SubsettingPageControls />}
+                        {selected === 2 && <SubsettingPageTheme />}
                     </div>
                 </div>
 		</>
 	);
 }
 
-export default SettingsScreen;
+export default ScreenSettings;

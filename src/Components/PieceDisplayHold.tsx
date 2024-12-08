@@ -1,9 +1,9 @@
 import { useAtom } from "jotai";
 import { holdShapeAtom, suggestHoldAtom, themeAtom } from "../atoms";
 import { shapeGrid } from "../constants";
-import Rect from "./Rect";
+import ElementTetrisBlock from "./ElementTetrisBlockSVG";
 
-function Hold() {
+function PieceDisplayHold() {
 	const [theme] = useAtom(themeAtom);
 	const [holdShape] = useAtom(holdShapeAtom);
 	const [suggestHold] = useAtom(suggestHoldAtom);
@@ -29,7 +29,7 @@ function Hold() {
 											className=" w-[4vmin] h-[4vmin] tms duration-200  mb-0 "
 											viewBox="0 0 105 105"
 											fill="none">
-											<Rect
+											<ElementTetrisBlock
 												x={-520}
 												y={5}
 												fill={
@@ -55,4 +55,4 @@ function Hold() {
 	);
 }
 
-export default Hold;
+export default PieceDisplayHold;

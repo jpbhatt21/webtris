@@ -1,15 +1,15 @@
 import { useAtom } from "jotai";
 import { autoplayAtom, pageAtom, stateAtom } from "./atoms";
-import Hold from "./Components/Hold";
-import SpeedLvAndLine from "./Components/SpeedLvAndLine";
-import Next from "./Components/Next";
-import Autoplay from "./Components/Autoplay";
-import TimeScoreAndLineCounter from "./Components/TimeScoreAndLineCounter";
-import MainBoard from "./Components/MainBoard";
+import PieceDisplayHold from "./Components/PieceDisplayHold";
+import PanelSpeedLvAndLine from "./Components/PanelSpeedLvAndLine";
+import PieceDisplayNext from "./Components/PieceDisplayNext";
+import PanelAutoplay from "./Components/PanelAutoplay";
+import PanelTimeScoreAndLineCounter from "./Components/PanelTimeScoreAndLineCounter";
+import GameBoardUser from "./Components/GameBoardUser";
 import { svg } from "./constants";
-import SuggestMoves from "./Components/SuggestMoves";
+import PanelSuggestMoves from "./Components/PanelSuggestMoves";
 
-function Single() {
+function PageSingleplayer() {
 	const [state, setState] = useAtom(stateAtom);
 	const [page] = useAtom(pageAtom);
 	const [autoplay] = useAtom(autoplayAtom);
@@ -40,7 +40,7 @@ function Single() {
 						</div>
 						<label className="">Pause</label>{" "}
 					</div>
-					<Hold />
+					<PieceDisplayHold />
 				</div>
 				<div className="h-full w-full flex flex-col items-center justify-evenly ">
 					<div className="w-[18vmin] h-[18vmin] duration-300 flex flex-col items-center justify-end"
@@ -48,10 +48,10 @@ function Single() {
 						opacity:autoplay?0:1
 					}}
 					>
-						<SuggestMoves />
+						<PanelSuggestMoves />
 					</div>
 					<div className="w-[18vmin]  h-[20vmin] flex flex-col items-center justify-center">
-						<SpeedLvAndLine />
+						<PanelSpeedLvAndLine />
 					</div>
 				</div>
 			</div>
@@ -60,7 +60,7 @@ function Single() {
 				style={{
 					opacity: page == "single" || state == "play" ? 1 : 0,
 				}}>
-				<MainBoard />
+				<GameBoardUser />
 			</div>
 			<div
 				className="h-full w-[18vmin]  flex flex-col duration-500 justify-center items-center  "
@@ -69,14 +69,14 @@ function Single() {
 					marginTop: page == "single" ? "0" : "10vmin",
 				}}>
 				<div className="h-full w-full flex flex-col items-center justify-center ">
-					<Next />
+					<PieceDisplayNext />
 				</div>
 				<div className="h-full w-full flex flex-col items-center justify-evenly ">
 					<div className="w-[18vmin] h-[18vmin] flex flex-col items-center justify-end">
-						<Autoplay />
+						<PanelAutoplay />
 					</div>
 					<div className="w-[18vmin]  h-[20vmin] flex flex-col items-center justify-center">
-						<TimeScoreAndLineCounter />
+						<PanelTimeScoreAndLineCounter />
 					</div>
 				</div>
 			</div>
@@ -84,4 +84,4 @@ function Single() {
 	);
 }
 
-export default Single;
+export default PageSingleplayer;

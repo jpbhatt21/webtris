@@ -2,7 +2,7 @@ import { useAtom } from "jotai";
 import { allStatsAtom, themeAtom, userAtom } from "../atoms";
 import { useEffect } from "react";
 let lineBar=10
-function SpeedLvAndLine() {
+function PanelSpeedLvAndLine() {
     const [theme] = useAtom(themeAtom);
     const [[level,,lines]] = useAtom(allStatsAtom);
 	const [user] = useAtom(userAtom);
@@ -62,4 +62,4 @@ function SpeedLvAndLine() {
 	);
 }
 
-export default SpeedLvAndLine;
+export default PanelSpeedLvAndLine;
