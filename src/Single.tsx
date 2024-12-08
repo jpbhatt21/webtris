@@ -1,5 +1,5 @@
 import { useAtom } from "jotai";
-import { pageAtom, stateAtom } from "./atoms";
+import { autoplayAtom, pageAtom, stateAtom } from "./atoms";
 import Hold from "./Components/Hold";
 import SpeedLvAndLine from "./Components/SpeedLvAndLine";
 import Next from "./Components/Next";
@@ -7,10 +7,12 @@ import Autoplay from "./Components/Autoplay";
 import TimeScoreAndLineCounter from "./Components/TimeScoreAndLineCounter";
 import MainBoard from "./Components/MainBoard";
 import { svg } from "./constants";
+import SuggestMoves from "./Components/SuggestMoves";
 
 function Single() {
 	const [state, setState] = useAtom(stateAtom);
 	const [page] = useAtom(pageAtom);
+	const [autoplay] = useAtom(autoplayAtom);
 
 	return (
 		<>
@@ -40,8 +42,17 @@ function Single() {
 					</div>
 					<Hold />
 				</div>
-				<div className="h-full w-full flex flex-col items-center justify-center ">
-					<SpeedLvAndLine />
+				<div className="h-full w-full flex flex-col items-center justify-evenly ">
+					<div className="w-[18vmin] h-[18vmin] duration-300 flex flex-col items-center justify-end"
+					style={{
+						opacity:autoplay?0:1
+					}}
+					>
+						<SuggestMoves />
+					</div>
+					<div className="w-[18vmin]  h-[20vmin] flex flex-col items-center justify-center">
+						<SpeedLvAndLine />
+					</div>
 				</div>
 			</div>
 			<div
@@ -60,9 +71,13 @@ function Single() {
 				<div className="h-full w-full flex flex-col items-center justify-center ">
 					<Next />
 				</div>
-				<div className="h-full w-full flex flex-col items-center justify-center ">
-					<Autoplay />
-					<TimeScoreAndLineCounter />
+				<div className="h-full w-full flex flex-col items-center justify-evenly ">
+					<div className="w-[18vmin] h-[18vmin] flex flex-col items-center justify-end">
+						<Autoplay />
+					</div>
+					<div className="w-[18vmin]  h-[20vmin] flex flex-col items-center justify-center">
+						<TimeScoreAndLineCounter />
+					</div>
 				</div>
 			</div>
 		</>

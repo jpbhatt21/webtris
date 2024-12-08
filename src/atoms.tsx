@@ -85,6 +85,20 @@ export const autoplayAtom = atom(
 // 	];
 // 	return temp;
 // });
+const suggestHold = atom(false);
+export const suggestHoldAtom = atom(
+	(get) => get(suggestHold),
+	(_get, set, update: boolean) => {
+		set(suggestHold, update);
+	}
+);
+const suggestMoves = atom(false);
+export const suggestMovesAtom = atom(
+	(get) => get(suggestMoves),
+	(_get, set, update: boolean) => {
+		set(suggestMoves, update);
+	}
+);
 const holdShape = atom(7);
 export const holdShapeAtom = atom(
 	(get) => get(holdShape),

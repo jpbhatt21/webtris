@@ -1,18 +1,19 @@
 import { useAtom } from "jotai";
-import { holdShapeAtom, themeAtom } from "../atoms";
+import { holdShapeAtom, suggestHoldAtom, themeAtom } from "../atoms";
 import { shapeGrid } from "../constants";
 import Rect from "./Rect";
 
 function Hold() {
 	const [theme] = useAtom(themeAtom);
 	const [holdShape] = useAtom(holdShapeAtom);
-
+	const [suggestHold] = useAtom(suggestHoldAtom);
 	return (
 		<>
 			<div
-				className="w-full aspect-square border  rounded-[2vmin] flex flex-col items-center justify-evenly "
+				className="w-full aspect-square border rounded-[2vmin] flex flex-col items-center justify-evenly "
 				style={{
-					borderColor: theme.text,
+					borderColor: suggestHold?theme.accents[4]:theme.text,
+					animation: suggestHold?"wgl 0.35s  cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite":"none",
 				}}>
 				<div className="w-full flex flex-col h-2/3 items-center justify-center" key={"held"+holdShape}>
 					{shapeGrid[holdShape].split(" ").map((row,i) => {

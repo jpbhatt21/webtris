@@ -26,8 +26,10 @@ import {
 	timeAtom,
 	timerAtom,
 	userAtom,
+	suggestHoldAtom,
+	suggestMovesAtom,
 } from "../atoms";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { activePos, initControls, socket } from "../constants";
 import { automatic, checkCollision, rotate } from "../Functionality/helper";
 import Rect from "./Rect";
@@ -341,6 +343,9 @@ window.addEventListener("keyup", (e) => {
 });
 let inter: any = null;
 let lineBar = 10;
+let held = false;
+
+let holdCalculated = [0, 0, 0, 0];
 function MainBoard() {
 	const [, setLineStack] = useAtom(lineStackAtom);
 	const [, setHoldShape] = useAtom(holdShapeAtom);
@@ -366,16 +371,71 @@ function MainBoard() {
 	const [level, setLevel] = useAtom(levelAtom);
 	const [lineDissapear, setLineDissapear] = useAtom(lineDissapearAtom);
 	const [moveDown, setMoveDown] = useAtom(moveDownAtom);
+	const [suggestHold, setSuggestHold] = useAtom(suggestHoldAtom);
+	const [suggestMoves]=useAtom(suggestMovesAtom);
+	const [suggested, setSuggested] = useState([
+		[-10, -10],
+		[-10, -10],
+		[-10, -10],
+		[-10, -10],
+	]);
 	const [user] = useAtom(userAtom);
 	const [timer] = useAtom(timerAtom);
 	useEffect(() => {
 		ths.autoplay = autoplay;
 		ths.state = state;
+		ths.suggestMoves = suggestMoves && !autoplay&&user.room=="";
+		setSuggestHold(suggestHold&&ths.suggestMoves)
+		if(ths.suggestMoves){
+			suggestMove(!held);
+		}
 		ths.autoplaySpeed = autoplaySpeed;
 		ths.page = page;
 		ths.controls = controls;
-	}, [autoplay, state, autoplaySpeed, page, controls]);
+	}, [autoplay, state, autoplaySpeed, page, controls,suggestMoves]);
+	function suggestMove(hldr=true) {
+		let sc1, sc2, act1, pc2, shp2;
+		[act1, , , sc1] = automatic(
+			JSON.parse(JSON.stringify(ths.board)),
+			JSON.parse(JSON.stringify(ths.active)),
+			JSON.parse(JSON.stringify(ths.currentShape)),
+			0
+		);
+		let res = act1;
+		setSuggestHold(false);
+		if (hldr) {
+			if (ths.holdShape === 7) {
+				pc2 = JSON.parse(JSON.stringify(activePos[ths.nextShape]));
+				shp2 = JSON.parse(JSON.stringify(ths.nextShape));
+			} else {
+				pc2 = JSON.parse(JSON.stringify(activePos[ths.holdShape]));
+				shp2 = JSON.parse(JSON.stringify(ths.holdShape));
+			}
+			[holdCalculated, , , sc2] = automatic(
+				JSON.parse(JSON.stringify(ths.board)),
+				JSON.parse(JSON.stringify(pc2)),
+				JSON.parse(JSON.stringify(shp2)),
+				0
+			);
+
+			if (sc2 > sc1) {
+				setSuggestHold(true);
+			}
+		}
+
+		while (
+			!checkCollision(
+				ths.board,
+				res.map((el: any) => [el[0] + 1, el[1]])
+			)
+		) {
+			res = res.map((el: any) => [el[0] + 1, el[1]]);
+		}
+		ths.suggested = res;
+		setSuggested(res);
+	}
 	function startMainGameLoop() {
+		ths.suggestMoves = suggestMoves;
 		moveFunctions.rotate = (dir) => {
 			if (ths.state === "play" && !ths.npc) {
 				[ths.active, ths.rot] = rotate(
@@ -389,6 +449,7 @@ function MainBoard() {
 				prevTickTime.rotate = new Date().getTime();
 			}
 		};
+		holdCalculated = [0, 0, 0, 0];
 		moveFunctions.hold = () => {
 			if (ths.holdShape == 7) {
 				ths.holdShape = JSON.parse(JSON.stringify(ths.currentShape));
@@ -406,12 +467,26 @@ function MainBoard() {
 				setHoldShape(ths.holdShape);
 				setCurrentShape(ths.currentShape);
 				setActive(JSON.parse(JSON.stringify(ths.active)));
+				if(!ths.suggestMoves)
+					return
+				let act1: any = holdCalculated;
+				while (
+					!checkCollision(
+						ths.board,
+						act1.map((el: any) => [el[0] + 1, el[1]])
+					)
+				) {
+					act1 = act1.map((el: any) => [el[0] + 1, el[1]]);
+				}
+				ths.suggested = act1;
+				setSuggested(act1);
 			}
 
 			held = true;
+			setSuggestHold(false);
 		};
 		let x = init();
-		let held = false;
+		held = false;
 		ths.npc = false;
 		ths.board = JSON.parse(JSON.stringify(board));
 		ths.active = JSON.parse(JSON.stringify(activePos[x[0]]));
@@ -441,6 +516,36 @@ function MainBoard() {
 		let scrf = document.getElementById("scrf");
 		if (scrf) scrf.style.opacity = "0";
 		ths.lineStack = [0, 0, 0, 0];
+		
+		function makeMove() {
+			let sc1, sc2, act2;
+			[ths.active, ths.currentShape, ths.rot, sc1] = automatic(
+				JSON.parse(JSON.stringify(ths.board)),
+				JSON.parse(JSON.stringify(ths.active)),
+				JSON.parse(JSON.stringify(ths.currentShape)),
+				0
+			);
+			if (ths.holdShape === 7) {
+				held = true;
+				ths.holdShape = JSON.parse(JSON.stringify(ths.currentShape));
+				setHoldShape(ths.currentShape);
+				createNewPiece(false);
+			}
+			[act2, , , sc2] = automatic(
+				JSON.parse(JSON.stringify(ths.board)),
+				JSON.parse(JSON.stringify(activePos[ths.holdShape])),
+				JSON.parse(JSON.stringify(ths.holdShape)),
+				0
+			);
+			if (sc2 > sc1) {
+				let temp = JSON.parse(JSON.stringify(ths.holdShape));
+				ths.holdShape = JSON.parse(JSON.stringify(ths.currentShape));
+				ths.currentShape = temp;
+				ths.active = JSON.parse(JSON.stringify(act2));
+				setCurrentShape(temp);
+				setHoldShape(ths.holdShape);
+			}
+		}
 		async function createNewPiece(hldr: boolean = true) {
 			let line = 0;
 			ths.npc = true;
@@ -458,6 +563,13 @@ function MainBoard() {
 					[-10, -10],
 					[-10, -10],
 				]);
+				ths.suggested = [
+					[-10, -10],
+					[-10, -10],
+					[-10, -10],
+					[-10, -10],
+				];
+				setSuggested(ths.suggested);
 				held = false;
 				ths.active.forEach((pos: number[]) => {
 					ths.board[pos[0]][pos[1]].occupied = true;
@@ -551,36 +663,33 @@ function MainBoard() {
 				setSpeed(speed);
 			}
 
-				if (
-					checkCollision(ths.board,activePos[ths.nextShape])
-				) {
-					setActive([
-						[-10, -10],
-						[-10, -10],
-						[-10, -10],
-						[-10, -10],
-					]);
-					setCurrentShape(7);
-					clearInterval(inter);
-					inter = -0;
-					if (ths.page == "single") {
-						ths.state = "game over";
-						ths.setState("game over");
-					} else if (ths.page == "multi") {
-						setTimeout(() => {
-							socket.emit("gameOver", {
-								room: user.room,
-								name: user.name,
-								score: ths.score,
-							});
-						}, 100);
-						if (scrf) scrf.style.opacity = "1";
-					
-					}
-
-					return;
+			if (checkCollision(ths.board, activePos[ths.nextShape])) {
+				setActive([
+					[-10, -10],
+					[-10, -10],
+					[-10, -10],
+					[-10, -10],
+				]);
+				setCurrentShape(7);
+				clearInterval(inter);
+				inter = -0;
+				if (ths.page == "single") {
+					ths.state = "game over";
+					ths.setState("game over");
+				} else if (ths.page == "multi") {
+					setTimeout(() => {
+						socket.emit("gameOver", {
+							room: user.room,
+							name: user.name,
+							score: ths.score,
+						});
+					}, 100);
+					if (scrf) scrf.style.opacity = "1";
 				}
-			
+
+				return;
+			}
+
 			// setOds(analyze(JSON.parse(JSON.stringify(board))));
 			ths.currentShape = ths.nextShape;
 			ths.active = JSON.parse(
@@ -594,8 +703,12 @@ function MainBoard() {
 			setNextShape(ths.nextShape);
 
 			ths.npc = false;
+			if (ths.autoplay) {
+				makeMove();
+			} else if(ths.suggestMoves) {
+				suggestMove(hldr);
+			}
 		}
-		let move = false;
 		ths.time = 0;
 
 		let cur: any,
@@ -613,6 +726,11 @@ function MainBoard() {
 
 		let diff = 0;
 		if (inter) clearInterval(inter);
+		if (ths.autoplay) {
+			makeMove();
+		} else if(ths.suggestMoves) {
+			suggestMove();
+		}
 		inter = setInterval(async () => {
 			cur = new Date().getTime();
 			diff = cur - prev;
@@ -629,7 +747,10 @@ function MainBoard() {
 					(ths.autoplay
 						? Math.min(ths.autoplaySpeed, speed)
 						: speed) &&
-						!checkCollision(ths.board, ths.active.map((el: any) => [el[0]+1, el[1]])) &&
+				!checkCollision(
+					ths.board,
+					ths.active.map((el: any) => [el[0] + 1, el[1]])
+				) &&
 				(ths.autoplay || !keys.softDrop || speed < ticker.softDrop)
 			) {
 				ths.active[0][0]++;
@@ -646,50 +767,17 @@ function MainBoard() {
 					(ths.autoplay ? Math.min(ths.autoplaySpeed, 1000) : 1000)
 			) {
 				await createNewPiece();
-				move = false;
 				// justspawned = true;
 				prevTickTime.gravity = cur;
-			}
-			if (!move && ths.autoplay) {
-				let sc1, sc2, act2;
-				[ths.active, ths.currentShape, ths.rot, sc1] = automatic(
-					JSON.parse(JSON.stringify(ths.board)),
-					JSON.parse(JSON.stringify(ths.active)),
-					JSON.parse(JSON.stringify(ths.currentShape)),
-					0
-				);
-				if (ths.holdShape === 7) {
-					held = true;
-					ths.holdShape = JSON.parse(
-						JSON.stringify(ths.currentShape)
-					);
-					setHoldShape(ths.currentShape);
-					createNewPiece(false);
-				}
-				[act2, , , sc2] = automatic(
-					JSON.parse(JSON.stringify(ths.board)),
-					JSON.parse(JSON.stringify(activePos[ths.holdShape])),
-					JSON.parse(JSON.stringify(ths.holdShape)),
-					0
-				);
-				if (sc2 > sc1) {
-					let temp = JSON.parse(JSON.stringify(ths.holdShape));
-					ths.holdShape = JSON.parse(
-						JSON.stringify(ths.currentShape)
-					);
-					ths.currentShape = temp;
-					ths.active = JSON.parse(JSON.stringify(act2));
-					setCurrentShape(temp);
-					setHoldShape(ths.holdShape);
-					move = true;
-				}
-				move = true;
 			}
 
 			setActive(JSON.parse(JSON.stringify(ths.active)));
 			let ghos = JSON.parse(JSON.stringify(ths.active));
 			while (
-				!checkCollision(ths.board,ghos.map((el: any) => [el[0]+1, el[1]]))
+				!checkCollision(
+					ths.board,
+					ghos.map((el: any) => [el[0] + 1, el[1]])
+				)
 			) {
 				ghos[0][0]++;
 				ghos[1][0]++;
@@ -697,21 +785,13 @@ function MainBoard() {
 				ghos[3][0]++;
 			}
 			setGhost(() => JSON.parse(JSON.stringify(ghos)));
-
+			
 			ths.time += diff / 1000;
 			setTime(ths.time);
 			prev = cur;
 		}, 0);
 		stInterval(inter);
 	}
-
-	useEffect(() => {
-		if (user.name == "Guest") {
-			lineBar = 10;
-		} else {
-			lineBar = 10;
-		}
-	}, [user]);
 	useEffect(() => {
 		ths.garbageLines = garbageLines;
 	}, [garbageLines]);
@@ -803,6 +883,30 @@ function MainBoard() {
 							x={5 + pos[1] * 105}
 							y={20 + pos[0] * 105}
 							fill={theme.accents[currentShape]}
+							key={
+								"active" + ind + "" + currentShape + "" + score
+							}
+						/>
+					))}
+				{timer == 0 && suggestMoves && !autoplay &&
+					suggested.map((pos: any, ind: any) => (
+						<Rect
+							className=" transition-colors fadein opaci ty-80"
+							style={{
+								transitionDuration: Math.min(25, speed) + "ms",
+								
+							}}
+							x={5 + pos[1] * 105}
+							y={20 + pos[0] * 105}
+							stroke={theme.text + (JSON.stringify(suggested) ==
+								JSON.stringify(ghost)
+									? "9C"
+									: "9C")}
+							fill={theme.background+ (JSON.stringify(suggested) ==
+								JSON.stringify(ghost)
+									? "55"
+									: "55")}
+							strokeWidth={3}
 							key={
 								"active" + ind + "" + currentShape + "" + score
 							}

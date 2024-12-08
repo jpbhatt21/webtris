@@ -16,8 +16,8 @@ function SpeedLvAndLine() {
 	
 	return (
 		<>
-			<div className="text-[2vmin]">Speed Lv. {level + 1}</div>
-			<div className="w-full text-[3vmin] mt-[2vmin] flex flex-col items-center justify-center aspect-square">
+			<div className="text-[2vmin] h-[2vmin]">Speed Lv. {level + 1}</div>
+			<div className="w-[18vmin] h-[18vmin] text-[3vmin] mt-[2vmin] flex flex-col items-center justify-center aspect-square">
 				<svg
 					className="w-[18vmin] h-[18vmin] absolute"
 					viewBox="0 0 200 200"

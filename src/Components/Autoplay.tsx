@@ -16,7 +16,7 @@ function Autoplay() {
 	return (
 		<>
 			<div
-				className="text-[2vmin] duration-200 "
+				className="text-[2vmin] h-[4vmin] duration-200 "
 				style={{
 					marginTop:
 						!autoplay || page != "single"
@@ -66,6 +66,7 @@ function Autoplay() {
 							? // && started
 							  "12.25vmin"
 							: "0vmin",
+					marginBottom: autoplay && page == "single" ? "0.75vmin" : "0",
 					overflow: "hidden",
 					opacity:
 						autoplay && page == "single"
@@ -217,13 +218,14 @@ function Autoplay() {
 				</div>
 			</div>
 			<div
-				className="flex min-h-fit text-[2vmin] gap-[0.25vmin] duration-200 flex-col mb-[2vmin] items-center"
+				className="flex  text-[2vmin] gap-[0.25vmin] duration-200 flex-col mb- [2vmin] items-center"
 				style={{
 					height:
 						autoplay && page == "single"
 							? // && started
-							  ""
+							  "5vmin"
 							: "0vmin",
+					
 					overflow: "hidden",
 					opacity:
 						autoplay && page == "single"
@@ -244,7 +246,7 @@ function Autoplay() {
 						);
 					}}
 				/>
-				<div className="w-[14vmin] min-h-fit pointer-events-none px-[1vmin] -mt-[2vmin] overflow-visible  ">
+				<div className="w-[14vmin] h-[2vmin] pointer-events-none px-[1vmin] -mt-[2vmin] overflow-visible  ">
 					<div
 						className="w-full h-[2vmin] pointer-events-none rounded-full border-y-[0.9vmin]"
 						style={{
