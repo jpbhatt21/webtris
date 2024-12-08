@@ -372,7 +372,7 @@ function GameBoardUser() {
 	const [lineDissapear, setLineDissapear] = useAtom(lineDissapearAtom);
 	const [moveDown, setMoveDown] = useAtom(moveDownAtom);
 	const [suggestHold, setSuggestHold] = useAtom(suggestHoldAtom);
-	const [suggestMoves]=useAtom(suggestMovesAtom);
+	const [suggestMoves] = useAtom(suggestMovesAtom);
 	const [suggested, setSuggested] = useState([
 		[-10, -10],
 		[-10, -10],
@@ -384,16 +384,16 @@ function GameBoardUser() {
 	useEffect(() => {
 		ths.autoplay = autoplay;
 		ths.state = state;
-		ths.suggestMoves = suggestMoves && !autoplay&&user.room=="";
-		setSuggestHold(suggestHold&&ths.suggestMoves)
-		if(ths.suggestMoves){
+		ths.suggestMoves = suggestMoves && !autoplay && user.room == "";
+		setSuggestHold(suggestHold && ths.suggestMoves);
+		if (ths.suggestMoves) {
 			suggestMove(!held);
 		}
 		ths.autoplaySpeed = autoplaySpeed;
 		ths.page = page;
 		ths.controls = controls;
-	}, [autoplay, state, autoplaySpeed, page, controls,suggestMoves]);
-	function suggestMove(hldr=true) {
+	}, [autoplay, state, autoplaySpeed, page, controls, suggestMoves]);
+	function suggestMove(hldr = true) {
 		let sc1, sc2, act1, pc2, shp2;
 		[act1, , , sc1] = automatic(
 			JSON.parse(JSON.stringify(ths.board)),
@@ -467,8 +467,7 @@ function GameBoardUser() {
 				setHoldShape(ths.holdShape);
 				setCurrentShape(ths.currentShape);
 				setActive(JSON.parse(JSON.stringify(ths.active)));
-				if(!ths.suggestMoves)
-					return
+				if (!ths.suggestMoves) return;
 				let act1: any = holdCalculated;
 				while (
 					!checkCollision(
@@ -516,7 +515,7 @@ function GameBoardUser() {
 		let scrf = document.getElementById("scrf");
 		if (scrf) scrf.style.opacity = "0";
 		ths.lineStack = [0, 0, 0, 0];
-		
+
 		function makeMove() {
 			let sc1, sc2, act2;
 			[ths.active, ths.currentShape, ths.rot, sc1] = automatic(
@@ -705,7 +704,7 @@ function GameBoardUser() {
 			ths.npc = false;
 			if (ths.autoplay) {
 				makeMove();
-			} else if(ths.suggestMoves) {
+			} else if (ths.suggestMoves) {
 				suggestMove(hldr);
 			}
 		}
@@ -728,7 +727,7 @@ function GameBoardUser() {
 		if (inter) clearInterval(inter);
 		if (ths.autoplay) {
 			makeMove();
-		} else if(ths.suggestMoves) {
+		} else if (ths.suggestMoves) {
 			suggestMove();
 		}
 		inter = setInterval(async () => {
@@ -785,7 +784,7 @@ function GameBoardUser() {
 				ghos[3][0]++;
 			}
 			setGhost(() => JSON.parse(JSON.stringify(ghos)));
-			
+
 			ths.time += diff / 1000;
 			setTime(ths.time);
 			prev = cur;
@@ -818,6 +817,19 @@ function GameBoardUser() {
 					fill={theme.background}
 					stroke={theme.text}
 				/>
+				<defs>
+					{theme.accents.map((color, i) => (
+						<linearGradient
+							id={"grad" + i}
+							x1="0%"
+							x2="100%"
+							y1="0%"
+							y2="100%">
+							<stop offset="0%" stopColor={color + "FF"} />
+							<stop offset="100%" stopColor={color + "66"} />
+						</linearGradient>
+					))}
+				</defs>
 				{board.map((row, i) =>
 					row.map((_, j) => (
 						<ElementTetrisBlock
@@ -825,6 +837,7 @@ function GameBoardUser() {
 							y={20 + i * 105}
 							fill={theme.backpop}
 							key={`${i * 10 + j}blockblank`}
+							filter={false}
 						/>
 					))
 				)}
@@ -835,7 +848,7 @@ function GameBoardUser() {
 								<ElementTetrisBlock
 									x={5 + j * 105}
 									y={20 + i * 105}
-									fill={theme.accents[cell.color]}
+									fill={"url(#grad" + cell.color + ")"}
 									style={{
 										animation:
 											(lineDissapear.filter((x) => x == i)
@@ -863,11 +876,7 @@ function GameBoardUser() {
 							}}
 							x={5 + pos[1] * 105}
 							y={20 + pos[0] * 105}
-							fill={
-								theme.accents[
-									autoplay ? currentShape : currentShape
-								]
-							}
+							fill={"url(#grad" + currentShape + ")"}
 							key={"ghos" + ind + "" + currentShape}
 						/>
 					))}
@@ -882,30 +891,38 @@ function GameBoardUser() {
 							}}
 							x={5 + pos[1] * 105}
 							y={20 + pos[0] * 105}
-							fill={theme.accents[currentShape]}
+							fill={"url(#grad" + currentShape + ")"}
+
 							key={
 								"active" + ind + "" + currentShape + "" + score
 							}
 						/>
 					))}
-				{timer == 0 && suggestMoves && !autoplay &&
+				{timer == 0 &&
+					suggestMoves &&
+					!autoplay &&
 					suggested.map((pos: any, ind: any) => (
 						<ElementTetrisBlock
 							className=" transition-colors fadein opaci ty-80"
 							style={{
 								transitionDuration: Math.min(25, speed) + "ms",
-								
 							}}
 							x={5 + pos[1] * 105}
 							y={20 + pos[0] * 105}
-							stroke={theme.text + (JSON.stringify(suggested) ==
+							stroke={
+								theme.text +
+								(JSON.stringify(suggested) ==
 								JSON.stringify(ghost)
 									? "9C"
-									: "9C")}
-							fill={theme.background+ (JSON.stringify(suggested) ==
+									: "9C")
+							}
+							fill={
+								theme.background +
+								(JSON.stringify(suggested) ==
 								JSON.stringify(ghost)
 									? "55"
-									: "55")}
+									: "55")
+							}
 							strokeWidth={3}
 							key={
 								"active" + ind + "" + currentShape + "" + score
