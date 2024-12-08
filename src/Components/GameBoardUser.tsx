@@ -826,7 +826,7 @@ function GameBoardUser() {
 							y1="0%"
 							y2="100%">
 							<stop offset="0%" stopColor={color + "FF"} />
-							<stop offset="100%" stopColor={color + "66"} />
+							<stop offset="100%" stopColor={color + "85"} />
 						</linearGradient>
 					))}
 				</defs>

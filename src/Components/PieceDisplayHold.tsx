@@ -36,9 +36,9 @@ function PieceDisplayHold() {
 											<defs>
 												<linearGradient
 													id={"grad"}
-													x1="0%"
+													x1="25%"
 													x2="100%"
-													y1="0%"
+													y1="25%"
 													y2="100%">
 													<stop
 														offset="0%"
@@ -53,7 +53,7 @@ function PieceDisplayHold() {
 														stopColor={
 															theme.accents[
 																holdShape
-															] + "66"
+															] + "85"
 														}
 													/>
 												</linearGradient>

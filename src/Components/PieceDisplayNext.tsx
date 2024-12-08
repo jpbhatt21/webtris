@@ -31,11 +31,12 @@ function PieceDisplayNext() {
 												className=" w-[4vmin] h-[4vmin] tms duration-200  mb-0 "
 												viewBox="0 0 105 105"
 												fill="none">
+												<defs>
 												<linearGradient
-													id={"grad"}
-													x1="0%"
+													id={"grad2x"}
+													x1="25%"
 													x2="100%"
-													y1="0%"
+													y1="25%"
 													y2="100%">
 													<stop
 														offset="0%"
@@ -50,14 +51,15 @@ function PieceDisplayNext() {
 														stopColor={
 															theme.accents[
 																nextShape
-															] + "66"
+															] + "85"
 														}
 													/>
 												</linearGradient>
+											</defs>
 												<ElementTetrisBlock
 													x={-520}
 													y={5}
-													fill={"url(#grad)"}
+													fill={"url(#grad2x)"}
 												/>
 											</svg>
 										) : (
