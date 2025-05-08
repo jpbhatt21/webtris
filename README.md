@@ -30,7 +30,7 @@
 1. Clone the repo:  
    ```bash
    git clone https://github.com/jpbhatt21/webtris.git
-   cd cengine
+   cd webtris
    ```
 2. Install dependencies:  
    ```bash
