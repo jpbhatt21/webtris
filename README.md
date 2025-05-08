@@ -29,7 +29,7 @@
 
 1. Clone the repo:  
    ```bash
-   git clone https://github.com/jpbhatt21/cengine.git
+   git clone https://github.com/jpbhatt21/webtris.git
    cd cengine
    ```
 2. Install dependencies:  
