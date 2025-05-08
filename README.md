@@ -1,50 +1,60 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+[![logo](./public/logo.png)](https://tetris.jpbhatt.tech/)  
 
-Currently, two official plugins are available:
+### A modern web-based Tetris app featuring classic gameplay, advanced move suggestions, online multiplayer, and full customization options.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+#### Try Webtris [here](https://tetris.jpbhatt.tech/).
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- **Modern Tetris Gameplay**  
+  Enjoy fast, fluid play with the latest Tetris mechanics (SRS rotation, 7-bag randomizer, hold piece, ghost piece, and more).
 
-- Configure the top-level `parserOptions` property like this:
+- **Move Suggestions**  
+  Get real-time hints for optimal piece placement and strategy.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+- **Adjustable Auto Play**  
+  Let the AI play for you at customizable speeds-perfect for learning or just watching the action.
+
+- **Online Player vs Player**  
+  Challenge random opponents in real-time online matches.
+
+- **Customizable Controls**  
+  Remap every action (move, rotate, drop, hold, pause) to your preferred keys.
+
+- **Customizable Theme**  
+  Switch between different themes with background and block colors to personalize your experience.
+
+## Installation
+
+1. Clone the repo:  
+   ```bash
+   git clone https://github.com/jpbhatt21/cengine.git
+   cd cengine
+   ```
+2. Install dependencies:  
+   ```bash
+   npm install
+   ```
+
+
+## Usage
+```bash
+npm run dev
 ```
+- ### Select *Singleplayer* for solo play with move suggestions or auto play.
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+    [![logo](./public/sing.png)](https://tetris.jpbhatt.tech/)  
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+- ### Choose *Multiplayer* to join a public match.
+
+    [![logo](./public/mult.png)](https://tetris.jpbhatt.tech/) 
+
+
+- ### Adjust controls and themes in the *Settings* menu.
+
+    [![logo](./public/controls.png)](https://tetris.jpbhatt.tech/)-[![logo](./public/theme.png)](https://tetris.jpbhatt.tech/) 
+
+## License
+Distributed under the MIT License.
