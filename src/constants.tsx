@@ -1403,7 +1403,7 @@ export const svg = {
 	),
 };
 
-const URL = "https://weback.jpbhatt.tech";
+const URL = "https://weback.bhatt.jp";
 // const URL2= "http://192.168.137.116:5000"
 export const socket = io(URL, {
 	autoConnect: false,
